@@ -3,16 +3,15 @@
 import { Mail, MapPin, MessageCircle, Youtube } from 'lucide-react';
 
 const socials = [
-  { name: 'Instagram', href: 'https://instagram.com', label: '@cankz' },
+  { name: 'Instagram', href: 'https://instagram.com', label: '@rafacankz' },
   { name: 'SoundCloud', href: 'https://soundcloud.com', label: 'CANKZ' },
-  { name: 'Spotify', href: 'https://spotify.com', label: 'Artist Profile' },
-  { name: 'TikTok', href: 'https://tiktok.com', label: '@cankz' },
-  { name: 'YouTube', href: 'https://youtube.com', label: 'Live Sets' },
+  { name: 'TikTok', href: 'https://tiktok.com', label: '@rafacankz' },
+  { name: 'YouTube', href: 'https://youtube.com', label: 'CANKZ' },
 ];
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative overflow-hidden bg-slate-950 py-16 sm:py-24">
+    <section id="contact" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
       <div className="absolute left-0 top-10 h-96 w-96 rounded-full bg-amber-400/5 blur-3xl" />
       <div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-slate-700/20 blur-3xl" />
 
@@ -34,7 +33,7 @@ export default function Contact() {
             <h3 className="text-xl sm:text-2xl font-bold text-white text-center sm:text-left">Direct Contact</h3>
             <div className="mt-6 space-y-3.5 sm:space-y-4">
               <a
-                href="https://wa.me/6281234567890?text=Hi%20CANKZ%2C%20I%20want%20to%20book%20an%20event."
+                href="https://wa.me/628174957733?text=Hi%20CANKZ%2C%20I%20want%20to%20book%20an%20event."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-amber-400/25 bg-slate-900/70 p-3.5 sm:p-4 text-amber-200 transition hover:border-amber-300 hover:shadow-md"
@@ -42,18 +41,18 @@ export default function Contact() {
                 <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-white">WhatsApp Booking</span>
-                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">+62 812 3456 7890</span>
+                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">+62 817 495 7733</span>
                 </span>
               </a>
 
               <a
-                href="mailto:booking@cankz.com"
+                href="mailto:contactcankz@gmail.com"
                 className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-amber-400/25 bg-slate-900/70 p-3.5 sm:p-4 text-amber-200 transition hover:border-amber-300 hover:shadow-md"
               >
                 <Mail className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-white">Email Booking</span>
-                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">booking@cankz.com</span>
+                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">contactcankz@gmail.com</span>
                 </span>
               </a>
 
@@ -61,7 +60,7 @@ export default function Contact() {
                 <MapPin className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-amber-200" />
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-white">Based In</span>
-                  <span className="text-xs sm:text-sm">Sleman, Yogyakarta — available worldwide</span>
+                  <span className="text-xs sm:text-sm">Sleman, Yogyakarta</span>
                 </span>
               </div>
             </div>

@@ -16,10 +16,23 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      const isPast = window.scrollY > 20;
+      setScrolled((prev) => (prev !== isPast ? isPast : prev));
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsOpen(false);
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+      window.history.pushState(null, '', href);
+    }
+  };
 
   return (
     <header
@@ -31,7 +44,11 @@ export default function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          <a href="#hero-about" className="flex items-center gap-3">
+          <a
+            href="#hero-about"
+            onClick={(e) => handleNavClick(e, '#hero-about')}
+            className="flex items-center gap-3"
+          >
             <div className="flex h-10 w-10 items-center justify-center rounded-full border border-amber-400/30 bg-slate-900 text-amber-300">
               <Disc className="h-5 w-5" />
             </div>
@@ -43,6 +60,7 @@ export default function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className="text-sm font-medium text-slate-300 transition hover:text-amber-200"
               >
                 {link.name}
@@ -52,6 +70,7 @@ export default function Navbar() {
 
           <a
             href="#contact"
+            onClick={(e) => handleNavClick(e, '#contact')}
             className="hidden items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-slate-950 transition hover:bg-amber-300 md:inline-flex"
           >
             <Calendar className="h-4 w-4" />
@@ -75,7 +94,7 @@ export default function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className="block rounded-xl px-3 py-3 text-base font-semibold text-slate-200 transition hover:bg-white/5 hover:text-amber-200"
               >
                 {link.name}
@@ -84,7 +103,7 @@ export default function Navbar() {
           </div>
           <a
             href="#contact"
-            onClick={() => setIsOpen(false)}
+            onClick={(e) => handleNavClick(e, '#contact')}
             className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 py-3 text-sm font-bold uppercase tracking-wider text-slate-950 transition hover:bg-amber-300"
           >
             <Calendar className="h-4 w-4" />

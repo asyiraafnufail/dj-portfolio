@@ -28,7 +28,7 @@ const genres: Genre[] = [
 
 export default function Genres() {
   return (
-    <section id="genres" className="relative overflow-hidden bg-slate-950 py-16 sm:py-24">
+    <section id="genres" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
       <div className="absolute left-1/2 top-1/3 h-96 w-96 -translate-x-1/2 rounded-full bg-stone-500/10 blur-3xl" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -50,10 +50,10 @@ export default function Genres() {
             return (
               <motion.div
                 key={genre.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.4, delay: index * 0.035 }}
+                viewport={{ once: true, margin: "50px" }}
+                transition={{ duration: 0.25 }}
                 className={`glass-panel group flex h-full flex-col justify-between rounded-2xl border ${genre.tone} bg-slate-900/40 p-3.5 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
               >
                 <div>
