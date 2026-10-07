@@ -90,7 +90,7 @@ export default function Contact() {
           <div className="flex items-center justify-center gap-2 font-bold text-slate-300">
             <Youtube className="h-4 w-4 text-amber-200" /> CANKZ
           </div>
-          <p className="mt-2">© 2026 CANKZ. Designed for clean club nights and focused dance floors.</p>
+          <p className="mt-2">© 2026 CANKZ. All rights reserved.</p>
         </footer>
       </div>
     </section>
