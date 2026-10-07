@@ -31,7 +31,7 @@ const venues: Venue[] = [
     name: 'Five Seven',
     city: 'Yogyakarta',
     tone: 'border-slate-400/25',
-    icon: Music,
+    icon: Coffee,
   },
   {
     id: '4',
@@ -50,7 +50,7 @@ const venues: Venue[] = [
   {
     id: '6',
     name: 'Gaskara Coffee',
-    city: 'Sleman',
+    city: 'Yogyakarta',
     tone: 'border-slate-400/25',
     icon: Coffee,
   },
