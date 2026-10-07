@@ -14,7 +14,7 @@ interface Venue {
 const venues: Venue[] = [
   {
     id: '1',
-    name: 'Peggasus Yogyakarta',
+    name: 'Peggasus',
     city: 'Yogyakarta',
     tone: 'border-amber-400/25',
     icon: Disc,
