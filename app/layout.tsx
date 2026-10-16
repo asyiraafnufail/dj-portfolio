@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "CANKZ | DJ Portfolio",
-  description: "Elegant DJ portfolio landing page for booking, mixtapes, gigs, and sound signature.",
+  description: "DJ portfolio landing page for booking, mixtapes, gigs, and sound signature.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

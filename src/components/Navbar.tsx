@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Calendar, Disc, Menu, X } from 'lucide-react';
+import Image from 'next/image';
+import { Calendar, Menu, X } from 'lucide-react';
+import logoDj from '../../aset/logodj.png';
 
 const navLinks = [
   { name: 'About', href: '#hero-about' },
@@ -49,8 +51,15 @@ export default function Navbar() {
             onClick={(e) => handleNavClick(e, '#hero-about')}
             className="flex items-center gap-3"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-amber-400/30 bg-slate-900 text-amber-300">
-              <Disc className="h-5 w-5" />
+            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-amber-400/30 bg-slate-900">
+              <Image
+                src={logoDj}
+                alt="Logo CANKZ"
+                fill
+                sizes="40px"
+                className="object-cover"
+                priority
+              />
             </div>
             <span className="text-xl font-extrabold tracking-[0.18em] text-white">CANKZ</span>
           </a>
