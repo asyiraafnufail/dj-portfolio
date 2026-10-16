@@ -21,7 +21,7 @@ const genres: Genre[] = [
   { id: 'miami-bass', title: 'Miami Bass', description: '808-heavy low-end & uptempo bounce', tone: 'border-slate-400/25', icon: Zap },
   { id: 'jersey-club', title: 'Jersey Club', description: 'Chopped vocals & frantic 130-140 BPM', tone: 'border-stone-400/25', icon: CircleDot },
   { id: 'gqom', title: 'Gqom', description: 'Raw Durban sound: minimal, dark, driving', tone: 'border-amber-400/25', icon: Waves },
-  { id: 'indo-bounce', title: 'Indo Bounce', description: 'Local flavor: dangdut samples & club energy', tone: 'border-slate-400/25', icon: Disc },
+  { id: 'indo-bounce', title: 'Indo Bounce', description: 'Local flavor: High energy & club energy', tone: 'border-slate-400/25', icon: Disc },
   { id: 'breakbeat', title: 'Breakbeat', description: 'Broken rhythms, syncopated drums & bass', tone: 'border-stone-400/25', icon: Radio },
   { id: 'bassline-bounce', title: 'Bassline Bounce', description: 'UK 4x4 speed garage & wobble bass', tone: 'border-amber-400/25', icon: Zap },
 ];

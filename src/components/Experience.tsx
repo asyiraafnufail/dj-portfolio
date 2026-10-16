@@ -42,7 +42,7 @@ const venues: Venue[] = [
   },
   {
     id: '5',
-    name: 'Billion Coffee',
+    name: 'Tons Good Coffee',
     city: 'Yogyakarta',
     tone: 'border-stone-400/25',
     icon: Coffee,

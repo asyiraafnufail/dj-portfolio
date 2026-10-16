@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Mail, Play } from 'lucide-react';
-import photoPorto from '../../aset/fotoporto.jpeg';
+import photoPorto from '../../aset/mainphotos.jpg';
 
 export default function HeroAbout() {
   return (
