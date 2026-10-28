@@ -3,10 +3,10 @@
 import { Mail, MapPin, MessageCircle, Youtube } from 'lucide-react';
 
 const socials = [
-  { name: 'Instagram', href: 'https://instagram.com', label: '@rafacankz' },
-  { name: 'SoundCloud', href: 'https://soundcloud.com', label: 'CANKZ' },
-  { name: 'TikTok', href: 'https://tiktok.com', label: '@rafacankz' },
-  { name: 'YouTube', href: 'https://youtube.com', label: 'CANKZ' },
+  { name: 'Instagram', href: 'https://instagram.com/rafacankz', label: '@rafacankz' },
+  { name: 'SoundCloud', href: 'https://soundcloud.com/cankz-685282173?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing', label: 'CANKZ' },
+  { name: 'TikTok', href: 'https://tiktok.com/@rafacankz', label: '@rafacankz' },
+  { name: 'YouTube', href: 'https://youtube.com/@rafacankz?si=iylGlp16BNvfYxqo', label: 'CANKZ' },
 ];
 
 export default function Contact() {
