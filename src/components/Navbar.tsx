@@ -11,6 +11,7 @@ const navLinks = [
   { name: 'Genres', href: '#genres' },
   { name: 'Mixtapes', href: '#mixtapes' },
   { name: 'Edits', href: '#edited-songs' },
+  { name: 'Assets', href: '#assets-file' },
   { name: 'Contact', href: '#contact' },
 ];
 

@@ -1,3 +1,4 @@
+import AssetsFile from "@/src/components/AssetsFile";
 import Contact from "@/src/components/Contact";
 import EditedSongs from "@/src/components/EditedSongs";
 import Experience from "@/src/components/Experience";
@@ -15,6 +16,7 @@ export default function Home() {
       <Genres />
       <YouTubePlayer />
       <EditedSongs />
+      <AssetsFile />
       <Contact />
     </main>
   );
