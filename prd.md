@@ -135,3 +135,7 @@ Saat mengeksekusi kode berdasarkan dokumen ini, AI Agent harus mematuhi aturan b
    - Mulai sekarang semua perubahan desain, copy, layout, warna, brand, dan media harus mengacu pada `prd.md` ini.
    - Jika user meminta perubahan yang berpotensi melanggar Design Lock, jelaskan konflik singkat lalu minta konfirmasi sebelum mengubah.
    - Jangan memperkenalkan nama, warna, efek, atau komponen baru yang tidak konsisten dengan konsep simple elegant CANKZ.
+7. **Next.js & Dependencies Lock:**
+   - Versi Next.js dan `eslint-config-next` terkunci di `16.4.3` (exact match, tanpa wildcard `^` atau `~`).
+   - `devIndicators: false` wajib dipertahankan di `next.config.ts` dan CSS override di `app/globals.css` agar indikator dev tidak muncul.
+   - Dilarang meng-upgrade, me-downgrade, atau mengubah konfigurasi Next.js tanpa persetujuan eksplisit dari user.
