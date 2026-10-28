@@ -103,7 +103,20 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 
 ---
 
-### **SECTION 6: CONTACT & BOOKING**
+### **SECTION 6: ASSETS FILE**
+*Scroll ke bawah dari Edited Songs.*
+
+- **Fitur & Konten:**
+  - Header: *"Assets File"*.
+  - Sub-header: *"High-resolution artist photos and official logos for event flyers, club lineups, and promotional artwork"*.
+  - 1 Card box horizontal di bagian atas: *"Electronic Press Kit (EPK)"* (PDF Document: biografi artis, profil sound, rider teknis & hospitality).
+  - 2 Card spesifikasi di bawahnya (Grid 2 kolom): High-Res Photos (JPG/PNG) & Official Logos (Transparent PNG).
+  - Tombol aksi utama: *"Open Google Drive"* menuju link drive aset flyer/promosi.
+  - Tampilan selaras dengan tema gelap elegan, border amber tipis, dan glass-panel.
+
+---
+
+### **SECTION 7: CONTACT & BOOKING**
 *Section paling bawah (Footer & Form).*
 
 - **Fitur & Konten:**
