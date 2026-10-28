@@ -7,14 +7,14 @@ const assetItems = [
     title: 'High-Res Photos',
     desc: 'Official portrait & stage photos for event flyers and promotional posters.',
     icon: ImageIcon,
-    format: 'JPG / PNG (Hi-Res)',
+    format: 'JPG / PNG',
     border: 'border-amber-400/25',
   },
   {
     title: 'Official Logos',
     desc: 'Transparent DJ CANKZ logos ready for club visual backgrounds & print designs.',
     icon: Sparkles,
-    format: 'PNG (Transparent)',
+    format: 'PNG / MP4',
     border: 'border-stone-400/25',
   },
 ];
@@ -42,9 +42,9 @@ export default function AssetsFile() {
           </p>
         </div>
 
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-4xl space-y-3 sm:space-y-5">
           {/* Electronic Press Kit (EPK) Horizontal Card */}
-          <div className="glass-panel group mb-3 sm:mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6 rounded-2xl border border-amber-400/25 bg-slate-900/40 p-4 sm:p-6 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl">
+          <div className="glass-panel group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6 rounded-2xl border border-amber-400/25 bg-slate-900/40 p-4 sm:p-6 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl">
             <div className="flex items-start sm:items-center gap-3.5 sm:gap-4">
               <div className="w-fit shrink-0 rounded-xl border border-white/10 bg-slate-950/80 p-2.5 sm:p-3 text-amber-200 transition group-hover:text-amber-100">
                 <FileText className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -65,7 +65,7 @@ export default function AssetsFile() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:gap-5 mb-6 sm:mb-8">
+          <div className="grid grid-cols-2 gap-3 sm:gap-5">
             {assetItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -100,7 +100,7 @@ export default function AssetsFile() {
                 Download Promotional Assets
               </h4>
               <p className="mt-1 text-xs sm:text-sm text-slate-400">
-                Access official Google Drive folder for raw high-res photos and transparent logos.
+                Access official Google Drive folder.
               </p>
             </div>
             <a
