@@ -4,7 +4,7 @@ import Experience from "@/src/components/Experience";
 import Genres from "@/src/components/Genres";
 import HeroAbout from "@/src/components/HeroAbout";
 import Navbar from "@/src/components/Navbar";
-import YouTubePlayer from "@/src/components/YouTubePlayer";
+import SoundCloudPlayer from "@/src/components/YouTubePlayer";
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
       <HeroAbout />
       <Experience />
       <Genres />
-      <YouTubePlayer />
+      <SoundCloudPlayer />
       <EditedSongs />
       <Contact />
     </main>
