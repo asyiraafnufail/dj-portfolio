@@ -13,7 +13,6 @@ import {
   ExternalLink,
   Flame,
   FolderArchive,
-  GripVertical,
   LogOut,
   Pencil,
   Plus,
@@ -213,83 +212,6 @@ export default function AdminPage() {
   const [editingMixtape, setEditingMixtape] = useState<Mixtape | null>(null);
   const [editingVenue, setEditingVenue] = useState<Venue | null>(null);
   const [editingGenre, setEditingGenre] = useState<Genre | null>(null);
-
-  // Drag and drop states
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-
-  const handleDragStart = (e: React.DragEvent, index: number) => {
-    e.dataTransfer.setData('text/plain', String(index));
-    e.dataTransfer.effectAllowed = 'move';
-    setDraggedIndex(index);
-  };
-
-  const handleDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    if (dragOverIndex !== index) {
-      setDragOverIndex(index);
-    }
-  };
-
-  const handleDragEnd = () => {
-    setDraggedIndex(null);
-    setDragOverIndex(null);
-  };
-
-  const handleDrop = async (toIndex: number) => {
-    if (draggedIndex === null || draggedIndex === toIndex) {
-      setDraggedIndex(null);
-      setDragOverIndex(null);
-      return;
-    }
-
-    const fromIndex = draggedIndex;
-    setDraggedIndex(null);
-    setDragOverIndex(null);
-
-    if (activeTab === 'songs') {
-      const next = [...songs];
-      const [item] = next.splice(fromIndex, 1);
-      next.splice(toIndex, 0, item);
-      const updated = next.map((s, i) => ({ ...s, sort_order: i + 1 }));
-      setSongs(updated);
-      await Promise.all(
-        updated.map((s) => supabase.from('edited_songs').update({ sort_order: s.sort_order }).eq('id', s.id))
-      );
-      showNotice('Tracks order saved!');
-    } else if (activeTab === 'mixtapes') {
-      const next = [...mixtapes];
-      const [item] = next.splice(fromIndex, 1);
-      next.splice(toIndex, 0, item);
-      const updated = next.map((m, i) => ({ ...m, sort_order: i + 1 }));
-      setMixtapes(updated);
-      await Promise.all(
-        updated.map((m) => supabase.from('mixtapes').update({ sort_order: m.sort_order }).eq('id', m.id))
-      );
-      showNotice('Mixtapes order saved!');
-    } else if (activeTab === 'venues') {
-      const next = [...venues];
-      const [item] = next.splice(fromIndex, 1);
-      next.splice(toIndex, 0, item);
-      const updated = next.map((v, i) => ({ ...v, sort_order: i + 1 }));
-      setVenues(updated);
-      await Promise.all(
-        updated.map((v) => supabase.from('venues').update({ sort_order: v.sort_order }).eq('id', v.id))
-      );
-      showNotice('Venues order saved!');
-    } else if (activeTab === 'genres') {
-      const next = [...genres];
-      const [item] = next.splice(fromIndex, 1);
-      next.splice(toIndex, 0, item);
-      const updated = next.map((g, i) => ({ ...g, sort_order: i + 1 }));
-      setGenres(updated);
-      await Promise.all(
-        updated.map((g) => supabase.from('genres').update({ sort_order: g.sort_order }).eq('id', g.id))
-      );
-      showNotice('Genres order saved!');
-    }
-  };
 
   const moveItem = async (index: number, direction: 'up' | 'down') => {
     const targetIndex = direction === 'up' ? index - 1 : index + 1;
@@ -783,61 +705,38 @@ export default function AdminPage() {
             <div className="space-y-3.5 sm:space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Tracks ({songs.length})</h3>
-                <span className="flex items-center gap-1.5 text-[11px] text-amber-200/80">
-                  <GripVertical className="h-3.5 w-3.5" /> Drag or use ▲▼ arrows to reorder
+                <span className="text-[11px] text-amber-200/80">
+                  Use ▲▼ arrows to reorder
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {songs.map((song, index) => (
                   <div
                     key={song.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, index)}
-                    onDragOver={(e) => handleDragOver(e, index)}
-                    onDragEnd={handleDragEnd}
-                    onDrop={() => handleDrop(index)}
-                    className={`glass-panel flex items-center justify-between gap-3 rounded-2xl border bg-slate-900/40 p-3.5 transition duration-150 ${
-                      draggedIndex === index
-                        ? 'opacity-40 border-amber-400/50 border-dashed scale-[0.98]'
-                        : dragOverIndex === index
-                        ? 'border-amber-400 bg-amber-400/10'
-                        : 'border-white/10 hover:border-white/20'
-                    }`}
+                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex items-center gap-0.5 shrink-0 text-slate-500">
-                        <div className="flex flex-col -space-y-1">
-                          <button
-                            type="button"
-                            disabled={index === 0}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              moveItem(index, 'up');
-                            }}
-                            className="rounded p-0.5 hover:text-amber-300 disabled:opacity-20 disabled:hover:text-slate-500 transition"
-                            title="Move up"
-                          >
-                            <ChevronUp className="h-3 w-3" />
-                          </button>
-                          <button
-                            type="button"
-                            disabled={index === songs.length - 1}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              moveItem(index, 'down');
-                            }}
-                            className="rounded p-0.5 hover:text-amber-300 disabled:opacity-20 disabled:hover:text-slate-500 transition"
-                            title="Move down"
-                          >
-                            <ChevronDown className="h-3 w-3" />
-                          </button>
-                        </div>
-                        <div
-                          className="cursor-grab active:cursor-grabbing p-1 hover:text-amber-300 shrink-0"
-                          title="Drag to reorder"
+                      <div className="flex flex-col -space-y-0.5 shrink-0">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() => moveItem(index, 'up')}
+                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          title="Move up"
+                          aria-label="Move up"
                         >
-                          <GripVertical className="h-4 w-4" />
-                        </div>
+                          <ChevronUp className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === songs.length - 1}
+                          onClick={() => moveItem(index, 'down')}
+                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          title="Move down"
+                          aria-label="Move down"
+                        >
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </button>
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
@@ -931,61 +830,38 @@ export default function AdminPage() {
             <div className="space-y-3.5 sm:space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Sets ({mixtapes.length})</h3>
-                <span className="flex items-center gap-1.5 text-[11px] text-amber-200/80">
-                  <GripVertical className="h-3.5 w-3.5" /> Drag or use ▲▼ arrows to reorder
+                <span className="text-[11px] text-amber-200/80">
+                  Use ▲▼ arrows to reorder
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {mixtapes.map((mix, index) => (
                   <div
                     key={mix.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, index)}
-                    onDragOver={(e) => handleDragOver(e, index)}
-                    onDragEnd={handleDragEnd}
-                    onDrop={() => handleDrop(index)}
-                    className={`glass-panel flex items-center justify-between gap-3 rounded-2xl border bg-slate-900/40 p-3.5 transition duration-150 ${
-                      draggedIndex === index
-                        ? 'opacity-40 border-amber-400/50 border-dashed scale-[0.98]'
-                        : dragOverIndex === index
-                        ? 'border-amber-400 bg-amber-400/10'
-                        : 'border-white/10 hover:border-white/20'
-                    }`}
+                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex items-center gap-0.5 shrink-0 text-slate-500">
-                        <div className="flex flex-col -space-y-1">
-                          <button
-                            type="button"
-                            disabled={index === 0}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              moveItem(index, 'up');
-                            }}
-                            className="rounded p-0.5 hover:text-amber-300 disabled:opacity-20 disabled:hover:text-slate-500 transition"
-                            title="Move up"
-                          >
-                            <ChevronUp className="h-3 w-3" />
-                          </button>
-                          <button
-                            type="button"
-                            disabled={index === mixtapes.length - 1}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              moveItem(index, 'down');
-                            }}
-                            className="rounded p-0.5 hover:text-amber-300 disabled:opacity-20 disabled:hover:text-slate-500 transition"
-                            title="Move down"
-                          >
-                            <ChevronDown className="h-3 w-3" />
-                          </button>
-                        </div>
-                        <div
-                          className="cursor-grab active:cursor-grabbing p-1 hover:text-amber-300 shrink-0"
-                          title="Drag to reorder"
+                      <div className="flex flex-col -space-y-0.5 shrink-0">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() => moveItem(index, 'up')}
+                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          title="Move up"
+                          aria-label="Move up"
                         >
-                          <GripVertical className="h-4 w-4" />
-                        </div>
+                          <ChevronUp className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === mixtapes.length - 1}
+                          onClick={() => moveItem(index, 'down')}
+                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          title="Move down"
+                          aria-label="Move down"
+                        >
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </button>
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-bold text-white truncate">{mix.title}</p>
@@ -1068,61 +944,38 @@ export default function AdminPage() {
             <div className="space-y-3.5 sm:space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Venues ({venues.length})</h3>
-                <span className="flex items-center gap-1.5 text-[11px] text-amber-200/80">
-                  <GripVertical className="h-3.5 w-3.5" /> Drag or use ▲▼ arrows to reorder
+                <span className="text-[11px] text-amber-200/80">
+                  Use ▲▼ arrows to reorder
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {venues.map((venue, index) => (
                   <div
                     key={venue.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, index)}
-                    onDragOver={(e) => handleDragOver(e, index)}
-                    onDragEnd={handleDragEnd}
-                    onDrop={() => handleDrop(index)}
-                    className={`glass-panel flex items-center justify-between gap-3 rounded-2xl border bg-slate-900/40 p-3.5 transition duration-150 ${
-                      draggedIndex === index
-                        ? 'opacity-40 border-amber-400/50 border-dashed scale-[0.98]'
-                        : dragOverIndex === index
-                        ? 'border-amber-400 bg-amber-400/10'
-                        : 'border-white/10 hover:border-white/20'
-                    }`}
+                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex items-center gap-0.5 shrink-0 text-slate-500">
-                        <div className="flex flex-col -space-y-1">
-                          <button
-                            type="button"
-                            disabled={index === 0}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              moveItem(index, 'up');
-                            }}
-                            className="rounded p-0.5 hover:text-amber-300 disabled:opacity-20 disabled:hover:text-slate-500 transition"
-                            title="Move up"
-                          >
-                            <ChevronUp className="h-3 w-3" />
-                          </button>
-                          <button
-                            type="button"
-                            disabled={index === venues.length - 1}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              moveItem(index, 'down');
-                            }}
-                            className="rounded p-0.5 hover:text-amber-300 disabled:opacity-20 disabled:hover:text-slate-500 transition"
-                            title="Move down"
-                          >
-                            <ChevronDown className="h-3 w-3" />
-                          </button>
-                        </div>
-                        <div
-                          className="cursor-grab active:cursor-grabbing p-1 hover:text-amber-300 shrink-0"
-                          title="Drag to reorder"
+                      <div className="flex flex-col -space-y-0.5 shrink-0">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() => moveItem(index, 'up')}
+                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          title="Move up"
+                          aria-label="Move up"
                         >
-                          <GripVertical className="h-4 w-4" />
-                        </div>
+                          <ChevronUp className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === venues.length - 1}
+                          onClick={() => moveItem(index, 'down')}
+                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          title="Move down"
+                          aria-label="Move down"
+                        >
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </button>
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-bold text-white truncate">{venue.name}</p>
@@ -1195,61 +1048,38 @@ export default function AdminPage() {
             <div className="space-y-3.5 sm:space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
                 <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Genres ({genres.length})</h3>
-                <span className="flex items-center gap-1.5 text-[11px] text-amber-200/80">
-                  <GripVertical className="h-3.5 w-3.5" /> Drag or use ▲▼ arrows to reorder
+                <span className="text-[11px] text-amber-200/80">
+                  Use ▲▼ arrows to reorder
                 </span>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {genres.map((genre, index) => (
                   <div
                     key={genre.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, index)}
-                    onDragOver={(e) => handleDragOver(e, index)}
-                    onDragEnd={handleDragEnd}
-                    onDrop={() => handleDrop(index)}
-                    className={`glass-panel flex items-center justify-between gap-3 rounded-2xl border bg-slate-900/40 p-3.5 transition duration-150 ${
-                      draggedIndex === index
-                        ? 'opacity-40 border-amber-400/50 border-dashed scale-[0.98]'
-                        : dragOverIndex === index
-                        ? 'border-amber-400 bg-amber-400/10'
-                        : 'border-white/10 hover:border-white/20'
-                    }`}
+                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex items-center gap-0.5 shrink-0 text-slate-500">
-                        <div className="flex flex-col -space-y-1">
-                          <button
-                            type="button"
-                            disabled={index === 0}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              moveItem(index, 'up');
-                            }}
-                            className="rounded p-0.5 hover:text-amber-300 disabled:opacity-20 disabled:hover:text-slate-500 transition"
-                            title="Move up"
-                          >
-                            <ChevronUp className="h-3 w-3" />
-                          </button>
-                          <button
-                            type="button"
-                            disabled={index === genres.length - 1}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              moveItem(index, 'down');
-                            }}
-                            className="rounded p-0.5 hover:text-amber-300 disabled:opacity-20 disabled:hover:text-slate-500 transition"
-                            title="Move down"
-                          >
-                            <ChevronDown className="h-3 w-3" />
-                          </button>
-                        </div>
-                        <div
-                          className="cursor-grab active:cursor-grabbing p-1 hover:text-amber-300 shrink-0"
-                          title="Drag to reorder"
+                      <div className="flex flex-col -space-y-0.5 shrink-0">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() => moveItem(index, 'up')}
+                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          title="Move up"
+                          aria-label="Move up"
                         >
-                          <GripVertical className="h-4 w-4" />
-                        </div>
+                          <ChevronUp className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === genres.length - 1}
+                          onClick={() => moveItem(index, 'down')}
+                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          title="Move down"
+                          aria-label="Move down"
+                        >
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </button>
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-bold text-white truncate">{genre.title}</p>
