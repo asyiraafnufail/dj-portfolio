@@ -57,14 +57,14 @@ const venues: Venue[] = [
   {
     id: '7',
     name: 'Gaskara',
-    city: 'Klaten',
+    city: 'Yogyakarta',
     tone: 'border-slate-400/25',
     icon: Coffee,
   },
   {
     id: '8',
     name: '31 Bloc',
-    city: 'Klaten',
+    city: 'Yogyakarta',
     tone: 'border-slate-400/25',
     icon: Coffee,
   },
