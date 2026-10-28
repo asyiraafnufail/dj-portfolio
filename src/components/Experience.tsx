@@ -1,14 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Building2, Coffee, Disc, Flame, MapPin, Music, Sparkles } from 'lucide-react';
+import { CircleDot, Coffee, Dumbbell, Flame, MapPin, Martini, Wine } from 'lucide-react';
 
 interface Venue {
   id: string;
   name: string;
   city: string;
   tone: string;
-  icon: typeof Building2;
+  icon: typeof Coffee;
 }
 
 const venues: Venue[] = [
@@ -17,14 +17,14 @@ const venues: Venue[] = [
     name: 'Peggasus',
     city: 'Yogyakarta',
     tone: 'border-amber-400/25',
-    icon: Disc,
+    icon: Wine,
   },
   {
     id: '2',
     name: '23 White House',
     city: 'Yogyakarta',
     tone: 'border-stone-400/25',
-    icon: Sparkles,
+    icon: Martini,
   },
   {
     id: '3',
@@ -38,21 +38,49 @@ const venues: Venue[] = [
     name: 'The Gardens',
     city: 'Yogyakarta',
     tone: 'border-amber-400/25',
-    icon: Building2,
+    icon: CircleDot,
   },
   {
     id: '5',
-    name: 'Tons Good Coffee',
+    name: 'Maison Favor',
     city: 'Yogyakarta',
     tone: 'border-stone-400/25',
     icon: Coffee,
   },
   {
     id: '6',
-    name: 'Gaskara Coffee',
+    name: 'Tons Good',
     city: 'Yogyakarta',
     tone: 'border-slate-400/25',
     icon: Coffee,
+  },
+  {
+    id: '7',
+    name: 'Gaskara',
+    city: 'Klaten',
+    tone: 'border-slate-400/25',
+    icon: Coffee,
+  },
+  {
+    id: '8',
+    name: '31 Bloc',
+    city: 'Klaten',
+    tone: 'border-slate-400/25',
+    icon: Coffee,
+  },
+  {
+    id: '9',
+    name: 'Cobar',
+    city: 'Yogyakarta',
+    tone: 'border-slate-400/25',
+    icon: Coffee,
+  },
+  {
+    id: '10',
+    name: 'Flexzone GYM',
+    city: 'Klaten',
+    tone: 'border-slate-400/25',
+    icon: Dumbbell,
   },
 ];
 
