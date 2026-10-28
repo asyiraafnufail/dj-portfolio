@@ -33,6 +33,7 @@ const nextConfig: NextConfig = {
     agentFeedback: true,
     agentUpgrade: "security",
   },
+  devIndicators: false,
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {
