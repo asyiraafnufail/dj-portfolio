@@ -7,6 +7,7 @@ interface EditedSong {
   title: string;
   originalArtist: string;
   genre: string;
+  quality: string;
   link: string;
   border: string;
 }
@@ -17,6 +18,7 @@ const editedSongs: EditedSong[] = [
     title: 'Hotline Bling',
     originalArtist: 'Drake',
     genre: 'Amapiano',
+    quality: 'WAV',
     link: 'https://soundcloud.com',
     border: 'border-amber-400/25',
   },
@@ -25,6 +27,7 @@ const editedSongs: EditedSong[] = [
     title: 'Goosebumps',
     originalArtist: 'Travis Scott',
     genre: 'Afro House',
+    quality: 'MP3 (320Kbps)',
     link: 'https://soundcloud.com',
     border: 'border-stone-400/25',
   },
@@ -33,6 +36,7 @@ const editedSongs: EditedSong[] = [
     title: 'Not Like Us',
     originalArtist: 'Kendrick Lamar',
     genre: 'UK Garage (UKG)',
+    quality: 'WAV',
     link: 'https://soundcloud.com',
     border: 'border-slate-400/25',
   },
@@ -41,6 +45,7 @@ const editedSongs: EditedSong[] = [
     title: 'Doja',
     originalArtist: 'Central Cee',
     genre: 'Indo Bounce',
+    quality: 'MP3 (320Kbps)',
     link: 'https://soundcloud.com',
     border: 'border-amber-400/25',
   },
@@ -49,6 +54,7 @@ const editedSongs: EditedSong[] = [
     title: 'Snooze',
     originalArtist: 'SZA',
     genre: 'Bassline Bounce',
+    quality: 'WAV',
     link: 'https://soundcloud.com',
     border: 'border-stone-400/25',
   },
@@ -57,6 +63,7 @@ const editedSongs: EditedSong[] = [
     title: 'FE!N',
     originalArtist: 'Travis Scott ft. Playboi Carti',
     genre: 'Jersey Club',
+    quality: 'MP3 (320Kbps)',
     link: 'https://soundcloud.com',
     border: 'border-slate-400/25',
   },
@@ -106,6 +113,9 @@ export default function EditedSongs() {
                   </h3>
                   <p className="line-clamp-1 mt-0.5 text-[11px] sm:text-xs text-slate-400">
                     Orig. {song.originalArtist}
+                  </p>
+                  <p className="mt-1 text-[10px] sm:text-[11px] font-medium text-amber-200/90">
+                    Quality: {song.quality}
                   </p>
                 </div>
               </div>
