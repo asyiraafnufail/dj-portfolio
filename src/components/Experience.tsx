@@ -99,7 +99,7 @@ export default function Experience() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+        <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
           {venues.map((venue) => {
             const Icon = venue.icon;
             return (

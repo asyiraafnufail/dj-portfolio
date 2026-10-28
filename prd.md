@@ -20,6 +20,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 - **Mobile First & Responsive:** Layout harus otomatis menyesuaikan dari tampilan layar HP (`< 768px`) hingga Desktop (`>= 1024px`).
 - **Warna & Tema Terkunci:** Background gelap (`bg-slate-950` / `bg-slate-900`), teks terang (`text-white`, `text-slate-300`, `text-slate-400`), aksen utama amber kalem (`bg-amber-400`, `text-amber-200`, `text-amber-300`, `border-amber-400/25`). Hindari warna neon mencolok seperti cyan terang, magenta, pink, purple glow, gradient ramai, efek bling, emoji, atau visual yang terasa generatif/AI.
 - **Design Lock:** Konsep visual wajib simple elegant: gelap, bersih, profesional, whitespace cukup, radius lembut, border tipis, glassmorphism ringan, shadow halus. Jangan menambah efek berlebihan, animasi heboh, badge bouncing, ping indicator, atau glow kuat.
+- **Universal 2-Column Grid Lock:** Layout card box pada section **Experience**, **Genres**, dan **My Edited Songs** terkunci mutlak pada **2 card horizontal (`grid-cols-2`)** di seluruh perangkat (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac). Dilarang beralih ke 3 kolom (`lg:grid-cols-3`) atau 4 kolom (`lg:grid-cols-4`). Kontainer grid dibatasi `max-w-4xl mx-auto` agar proporsi 2 kartu tetap seimbang, padat, dan elegan di layar lebar.
 - **Card Box Radius Lock (`rounded-2xl`):** Seluruh content card box di semua section (Experience, Genres, YouTube Mixtape Player, Edited Songs, Assets File, dan sub-item Direct Contact) terkunci seragam menggunakan radius `rounded-2xl`. Kotak pembungkus icon di dalam card terkunci `rounded-xl` (satu tingkat di bawah card). Kontainer video iframe di dalam card player terkunci `rounded-xl`.
 - **Background Clean Solid Lock:** Seluruh section wajib mempertahankan latar belakang hitam/gelap solid murni (`bg-slate-950`). Dilarang menambahkan elemen dekoratif lingkaran blur / ambient gradient liar (`bg-slate-700/20`, `blur-3xl`, dsb.) yang menyebabkan noda gradasi tipis, warna belang, atau garis patahan terpotong (`overflow-hidden`) saat ukuran kontainer berubah dinamis.
 - **Spacing Vertikal Section Header Lock:** Jarak bawah container header (`badge`, `title`, `description`) menuju container card box atau konten di bawahnya terkunci rapi pada `mb-6 sm:mb-8` di semua section (Experience, Genres, Mixtapes, Edited Songs, Assets File, Contact). Dilarang memakai margin renggang berlebih (`mb-10 sm:mb-16`) agar ritme vertikal tetap proporsional dan padat.
@@ -54,8 +55,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Header: *"Where I've Played"* atau *"Gig Experience"*.
   - Sub-header: Daftar klub, festival, dan venue yang pernah diisi.
 - **Tampilan Grid:**
-  - **Desktop:** Grid 3 kolom (`lg:grid-cols-3`).
-  - **Mobile & Tablet (Portrait & Landscape):** Grid 2 kolom (`grid-cols-2`) konsisten tanpa beralih ke 3 kolom saat landscape.
+  - Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`) di seluruh perangkat dan ukuran layar (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac).
 - **Setiap Card Venue Berisi:**
   - Foto Venue/Klub saat acara (background card).
   - Overlay gradient gelap agar teks terbaca.
@@ -72,7 +72,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Koreksi otomatis penulisan genre/subgenre agar mengikuti ejaan umum industri musik (contoh: `komersial edm` → `Commercial EDM`, `hip hop` → `Hip-Hop`, `rnb` → `R&B`, `afrohouse` → `Afro House`, `ukg` → `UK Garage (UKG)`).
 - **Tampilan:**
   - Card minimalis ringkas rata tengah (centered layout): icon di kotak tengah dan nama genre di bawahnya rata tengah (`text-center`, `items-center`), tanpa teks deskripsi tambahan.
-  - Tampilan Grid: Grid 2 kolom di mobile/landscape (`grid-cols-2`) dan 4 kolom di desktop (`lg:grid-cols-4`).
+  - Tampilan Grid: Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`) di seluruh perangkat dan ukuran layar (Mobile, Tablet, Desktop).
   - Card interaktif dengan hover halus (border amber lembut / shadow ringan), bukan neon glow.
   - Jangan tampilkan BPM atau Crowd Energy. Genre cukup berupa card singkat. Dilarang menggunakan animasi pop-up scroll fade-in, bouncing badge, ping indicator, emoji, atau animasi mencolok. Render statis instan.
 
@@ -99,8 +99,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Sub-header: Custom edits, bootlegs, dan flips garapan CANKZ.
   - **Fitur Pencarian (Search Bar):** Search input bar minimalis di bawah header (`bg-slate-900/60`, border amber halus `border-amber-400/25`, icon `Search`). Memfilter track secara real-time berdasarkan judul lagu, nama artis, dan genre. Dilengkapi tombol reset silang (`X`) dan tampilan *empty state* bersih bila tidak ada track yang cocok.
 - **Tampilan Grid:**
-  - **Desktop:** Grid 4 kolom (`lg:grid-cols-4`).
-  - **Mobile & Tablet (Portrait & Landscape):** Grid 2 kolom (`grid-cols-2`) konsisten tanpa beralih ke 3 kolom saat landscape.
+  - Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`) di seluruh perangkat dan ukuran layar (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac).
 - **Setiap Card Track Berisi:**
   - Judul lagu dan nama artist original (compact, langsung nama artist tanpa prefix 'Orig.').
   - Label kualitas audio (contoh: `Quality: WAV` atau `Quality: MP3 (320Kbps)`).
