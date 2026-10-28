@@ -93,13 +93,13 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Header: *"My Edited Songs"*.
   - Sub-header: Custom edits, bootlegs, dan flips garapan CANKZ.
 - **Tampilan Grid:**
-  - **Desktop:** Grid 2 atau 3 kolom (`md:grid-cols-2 lg:grid-cols-3`).
-  - **Mobile:** Grid 1 kolom.
+  - **Desktop:** Grid 3 atau 4 kolom (`md:grid-cols-3 lg:grid-cols-4`).
+  - **Mobile:** Grid 2 kolom (`grid-cols-2`).
 - **Setiap Card Track Berisi:**
-  - Judul lagu dan artist original.
+  - Judul lagu dan artist original (compact).
   - Badge genre sesuai Sound Signature.
-  - Tombol aksi: *"Download Track"* di posisi tengah card.
-  - Desain card *glass-panel* selaras dengan tema gelap elegan & aksen amber.
+  - Tombol aksi: *"Download"* di posisi tengah card.
+  - Desain card *glass-panel* kompak selaras dengan tema gelap elegan & aksen amber.
 
 ---
 
