@@ -73,21 +73,21 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 
 ---
 
-### **SECTION 4: SOUNDCLOUD MIXTAPE PLAYER**
+### **SECTION 4: YOUTUBE MIXTAPE PLAYER**
 *Scroll ke bawah dari Genre.*
 
 - **Fitur & Konten:**
   - Header: *"Latest Mixtapes & Sets"*.
-  - Sub-header: *"Listen directly on SoundCloud"*.
+  - Sub-header: *"Watch live recordings and club sets directly on YouTube"*.
 - **Tampilan Integrasi:**
-  - Menyediakan *container* responsif untuk menampung **SoundCloud Embed Player** (iFrame).
-  - **Desktop:** Player lebar penuh (full-width) atau grid 2 player bersisian.
-  - **Mobile:** Player bertumpuk vertikal dengan lebar 100% mengikuti lebar layar HP.
+  - Menyediakan *container* responsif untuk menampung **YouTube Embed Player** (iFrame).
+  - **Desktop:** Grid 2 player bersisian atau lebar penuh responsif.
+  - **Mobile:** Player bertumpuk vertikal dengan rasio aspek 16:9 (`aspect-video`).
 
 ---
 
 ### **SECTION 5: MY EDITED SONGS**
-*Scroll ke bawah dari SoundCloud / Mixtape Player.*
+*Scroll ke bawah dari YouTube / Mixtape Player.*
 
 - **Fitur & Konten:**
   - Header: *"My Edited Songs"*.
