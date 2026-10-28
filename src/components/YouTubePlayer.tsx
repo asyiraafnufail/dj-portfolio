@@ -47,13 +47,13 @@ export default function YouTubePlayer() {
           {mixtapes.map((mixtape) => (
             <div
               key={mixtape.id}
-              className={`glass-panel flex flex-col justify-between space-y-4 rounded-3xl border ${mixtape.border} p-5 sm:p-6 transition hover:border-amber-400/35 hover:shadow-xl`}
+              className={`glass-panel flex flex-col justify-between space-y-4 rounded-2xl border ${mixtape.border} p-5 sm:p-6 transition hover:border-amber-400/35 hover:shadow-xl`}
             >
               <h3 className="line-clamp-2 text-base sm:text-lg font-bold text-white">
                 {mixtape.title}
               </h3>
 
-              <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-lg">
+              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-slate-900 shadow-lg">
                 <iframe
                   width="100%"
                   height="100%"
@@ -61,7 +61,7 @@ export default function YouTubePlayer() {
                   title={mixtape.title}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  className="h-full w-full rounded-2xl"
+                  className="h-full w-full rounded-xl"
                 />
               </div>
 

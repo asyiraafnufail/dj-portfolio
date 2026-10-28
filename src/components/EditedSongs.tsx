@@ -151,11 +151,11 @@ export default function EditedSongs() {
             {filteredSongs.map((song) => (
               <div
                 key={song.id}
-                className={`glass-panel group flex flex-col justify-between rounded-xl border ${song.border} bg-slate-900/40 p-3 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
+                className={`glass-panel group flex flex-col justify-between rounded-2xl border ${song.border} bg-slate-900/40 p-3 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-1">
-                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg border border-white/10 bg-slate-950/80 text-amber-200 transition group-hover:text-amber-100">
+                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 text-amber-200 transition group-hover:text-amber-100">
                       <Disc3 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
                     <span className="truncate rounded-full border border-amber-400/20 bg-amber-400/10 px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold text-amber-200">
