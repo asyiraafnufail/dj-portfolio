@@ -20,6 +20,8 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 - **Mobile First & Responsive:** Layout harus otomatis menyesuaikan dari tampilan layar HP (`< 768px`) hingga Desktop (`>= 1024px`).
 - **Warna & Tema Terkunci:** Background gelap (`bg-slate-950` / `bg-slate-900`), teks terang (`text-white`, `text-slate-300`, `text-slate-400`), aksen utama amber kalem (`bg-amber-400`, `text-amber-200`, `text-amber-300`, `border-amber-400/25`). Hindari warna neon mencolok seperti cyan terang, magenta, pink, purple glow, gradient ramai, efek bling, emoji, atau visual yang terasa generatif/AI.
 - **Design Lock:** Konsep visual wajib simple elegant: gelap, bersih, profesional, whitespace cukup, radius lembut, border tipis, glassmorphism ringan, shadow halus. Jangan menambah efek berlebihan, animasi heboh, badge bouncing, ping indicator, atau glow kuat.
+- **Background Clean Solid Lock:** Seluruh section wajib mempertahankan latar belakang hitam/gelap solid murni (`bg-slate-950`). Dilarang menambahkan elemen dekoratif lingkaran blur / ambient gradient liar (`bg-slate-700/20`, `blur-3xl`, dsb.) yang menyebabkan noda gradasi tipis, warna belang, atau garis patahan terpotong (`overflow-hidden`) saat ukuran kontainer berubah dinamis.
+- **Spacing Vertikal Section Header Lock:** Jarak bawah container header (`badge`, `title`, `description`) menuju container card box atau konten di bawahnya terkunci rapi pada `mb-6 sm:mb-8` di semua section (Experience, Genres, Mixtapes, Edited Songs, Assets File, Contact). Dilarang memakai margin renggang berlebih (`mb-10 sm:mb-16`) agar ritme vertikal tetap proporsional dan padat.
 - **Brand Lock:** Semua nama panggung, metadata, copy, footer, social label, dan pesan booking wajib memakai nama **CANKZ**. Jangan memakai nama placeholder lain seperti DJ Vortex, Alex, atau nama buatan baru.
 - **Lokasi Lock:** Lokasi utama artis wajib **Sleman, Yogyakarta**.
 - **Foto Hero Lock:** Foto hero utama wajib memakai aset lokal `aset/fotoporto.jpeg`. Jangan ganti dengan Unsplash/placeholder kecuali user eksplisit meminta.
@@ -51,8 +53,8 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Header: *"Where I've Played"* atau *"Gig Experience"*.
   - Sub-header: Daftar klub, festival, dan venue yang pernah diisi.
 - **Tampilan Grid:**
-  - **Desktop:** Grid 3 atau 4 kolom (`md:grid-cols-2 lg:grid-cols-3` atau `4`).
-  - **Mobile:** Carousel horisontal swipable atau Grid 1 kolom.
+  - **Desktop:** Grid 3 kolom (`lg:grid-cols-3`).
+  - **Mobile & Tablet (Portrait & Landscape):** Grid 2 kolom (`grid-cols-2`) konsisten tanpa beralih ke 3 kolom saat landscape.
 - **Setiap Card Venue Berisi:**
   - Foto Venue/Klub saat acara (background card).
   - Overlay gradient gelap agar teks terbaca.
@@ -68,8 +70,10 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Tampilan visual badge / card daftar genre musik yang dimainkan. Genre terkunci: *Commercial EDM, Hip-Hop, R&B, Amapiano, Afrobeats, Afro House, Miami Bass, Jersey Club, Gqom, Indo Bounce, Breakbeat, Bassline Bounce, UK Garage (UKG)*.
   - Koreksi otomatis penulisan genre/subgenre agar mengikuti ejaan umum industri musik (contoh: `komersial edm` → `Commercial EDM`, `hip hop` → `Hip-Hop`, `rnb` → `R&B`, `afrohouse` → `Afro House`, `ukg` → `UK Garage (UKG)`).
 - **Tampilan:**
+  - Card minimalis ringkas rata tengah (centered layout): icon di kotak tengah dan nama genre di bawahnya rata tengah (`text-center`, `items-center`), tanpa teks deskripsi tambahan.
+  - Tampilan Grid: Grid 2 kolom di mobile/landscape (`grid-cols-2`) dan 4 kolom di desktop (`lg:grid-cols-4`).
   - Card interaktif dengan hover halus (border amber lembut / shadow ringan), bukan neon glow.
-  - Jangan tampilkan BPM atau Crowd Energy. Genre cukup berupa card/badge singkat berisi nama genre/subgenre. Jangan gunakan bouncing badge, ping indicator, emoji, atau animasi mencolok.
+  - Jangan tampilkan BPM atau Crowd Energy. Genre cukup berupa card singkat. Dilarang menggunakan animasi pop-up scroll fade-in, bouncing badge, ping indicator, emoji, atau animasi mencolok. Render statis instan.
 
 ---
 
@@ -92,14 +96,17 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 - **Fitur & Konten:**
   - Header: *"My Edited Songs"*.
   - Sub-header: Custom edits, bootlegs, dan flips garapan CANKZ.
+  - **Fitur Pencarian (Search Bar):** Search input bar minimalis di bawah header (`bg-slate-900/60`, border amber halus `border-amber-400/25`, icon `Search`). Memfilter track secara real-time berdasarkan judul lagu, nama artis, dan genre. Dilengkapi tombol reset silang (`X`) dan tampilan *empty state* bersih bila tidak ada track yang cocok.
 - **Tampilan Grid:**
-  - **Desktop:** Grid 3 atau 4 kolom (`md:grid-cols-3 lg:grid-cols-4`).
-  - **Mobile:** Grid 2 kolom (`grid-cols-2`).
+  - **Desktop:** Grid 4 kolom (`lg:grid-cols-4`).
+  - **Mobile & Tablet (Portrait & Landscape):** Grid 2 kolom (`grid-cols-2`) konsisten tanpa beralih ke 3 kolom saat landscape.
 - **Setiap Card Track Berisi:**
-  - Judul lagu dan artist original (compact).
+  - Judul lagu dan nama artist original (compact, langsung nama artist tanpa prefix 'Orig.').
+  - Label kualitas audio (contoh: `Quality: WAV` atau `Quality: MP3 (320Kbps)`).
   - Badge genre sesuai Sound Signature.
-  - Tombol aksi: *"Download"* di posisi tengah card.
-  - Desain card *glass-panel* kompak selaras dengan tema gelap elegan & aksen amber.
+  - Tombol aksi: *"Download"* di posisi tengah card, bersih tanpa underline.
+  - Interaksi Download Modal Pop-up: Klik *"Download"* membuka modal pop-up backdrop transparan blur (`bg-slate-950/80 backdrop-blur-sm`) menampilkan detail lengkap tanpa terpotong (judul lengkap, artis, genre, quality indicator) serta tombol final *"Download Track"* menuju tautan file unduhan. Mendukung penutupan via tombol close (X), klik backdrop luar, atau tombol Escape keyboard.
+  - Desain card *glass-panel* kompak selaras dengan tema gelap elegan & aksen amber, render statis instan tanpa animasi scroll fade-in.
 
 ---
 
@@ -140,15 +147,20 @@ Saat mengeksekusi kode berdasarkan dokumen ini, AI Agent harus mematuhi aturan b
 3. **Responsive Utilities:**
    - Gunakan Tailwind breakpoint `sm:`, `md:`, `lg:`, `xl:` untuk memastikan tampilan mobile (`<768px`) dan desktop (`>=1024px`) sesuai dengan spesifikasi di atas.
 4. **Media:**
-   - Hero wajib memakai aset lokal `aset/fotoporto.jpeg`.
+   - Hero wajib memakai aset lokal (`aset/1.jpg` / `aset/fotoporto.jpeg`).
    - Foto venue boleh memakai Unsplash resolusi tinggi kategori *Nightclub* atau *Festival* selama tetap selaras dengan tema gelap elegant.
-5. **SoundCloud Integration:**
-   - Sertakan URL SoundCloud iFrame embed standar agar pemutar musik langsung berfungsi secara visual.
+5. **YouTube & Media Integration:**
+   - Gunakan YouTube Embed Player (iFrame) responsif dengan rasio `aspect-video`.
 6. **Single Source of Truth:**
-   - Mulai sekarang semua perubahan desain, copy, layout, warna, brand, dan media harus mengacu pada `prd.md` ini.
+   - Semua perubahan desain, copy, layout, warna, brand, dan media harus mengacu pada `prd.md` ini.
    - Jika user meminta perubahan yang berpotensi melanggar Design Lock, jelaskan konflik singkat lalu minta konfirmasi sebelum mengubah.
    - Jangan memperkenalkan nama, warna, efek, atau komponen baru yang tidak konsisten dengan konsep simple elegant CANKZ.
 7. **Next.js & Dependencies Lock:**
    - Versi Next.js dan `eslint-config-next` terkunci di `16.4.3` (exact match, tanpa wildcard `^` atau `~`).
    - `devIndicators: false` wajib dipertahankan di `next.config.ts` dan CSS override di `app/globals.css` agar indikator dev tidak muncul.
    - Dilarang meng-upgrade, me-downgrade, atau mengubah konfigurasi Next.js tanpa persetujuan eksplisit dari user.
+8. **Change & PRD Locking Protocol (Alur Konfirmasi Wajib):**
+   - Setiap ada permintaan perubahan baru, AI Agent WAJIB:
+     1. Menjelaskan dan menyimpulkan rencana/hasil perubahannya terlebih dahulu kepada user.
+     2. Menunggu konfirmasi dari user sebelum mengunci perubahan ke dalam `prd.md`.
+     3. Hanya meng-update dan mengunci `prd.md` setelah perubahan terbukti fix dan telah disetujui oleh user.
