@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { CircleDot, Coffee, Dumbbell, Flame, MapPin, Martini, Wine } from 'lucide-react';
 
 interface Venue {
@@ -103,15 +102,11 @@ export default function Experience() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
-          {venues.map((venue, index) => {
+          {venues.map((venue) => {
             const Icon = venue.icon;
             return (
-              <motion.div
+              <div
                 key={venue.id}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "50px" }}
-                transition={{ duration: 0.25 }}
                 className={`glass-panel group flex flex-col rounded-2xl border ${venue.tone} bg-slate-900/40 p-4 sm:p-6 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
               >
                 <div>
@@ -128,7 +123,7 @@ export default function Experience() {
                     {venue.name}
                   </h3>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

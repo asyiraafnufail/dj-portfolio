@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Activity, CircleDot, Disc, Radio, Waves, Zap } from 'lucide-react';
 
 interface Genre {
@@ -45,15 +44,11 @@ export default function Genres() {
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {genres.map((genre, index) => {
+          {genres.map((genre) => {
             const Icon = genre.icon;
             return (
-              <motion.div
+              <div
                 key={genre.id}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "50px" }}
-                transition={{ duration: 0.25 }}
                 className={`glass-panel group flex h-full flex-col justify-between rounded-2xl border ${genre.tone} bg-slate-900/40 p-3.5 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
               >
                 <div>
@@ -67,7 +62,7 @@ export default function Genres() {
                 <p className="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">
                   {genre.description}
                 </p>
-              </motion.div>
+              </div>
             );
           })}
         </div>

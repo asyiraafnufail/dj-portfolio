@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Disc3, Download, Music2 } from 'lucide-react';
 
 interface EditedSong {
@@ -87,12 +86,8 @@ export default function EditedSongs() {
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
           {editedSongs.map((song) => (
-            <motion.div
+            <div
               key={song.id}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '50px' }}
-              transition={{ duration: 0.25 }}
               className={`glass-panel group flex flex-col justify-between rounded-xl border ${song.border} bg-slate-900/40 p-3 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
             >
               <div>
@@ -126,7 +121,7 @@ export default function EditedSongs() {
                   Download
                 </a>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
