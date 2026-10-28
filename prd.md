@@ -21,6 +21,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 - **Warna & Tema Terkunci:** Background gelap (`bg-slate-950` / `bg-slate-900`), teks terang (`text-white`, `text-slate-300`, `text-slate-400`), aksen utama amber kalem (`bg-amber-400`, `text-amber-200`, `text-amber-300`, `border-amber-400/25`). Hindari warna neon mencolok seperti cyan terang, magenta, pink, purple glow, gradient ramai, efek bling, emoji, atau visual yang terasa generatif/AI.
 - **Design Lock:** Konsep visual wajib simple elegant: gelap, bersih, profesional, whitespace cukup, radius lembut, border tipis, glassmorphism ringan, shadow halus. Jangan menambah efek berlebihan, animasi heboh, badge bouncing, ping indicator, atau glow kuat.
 - **Universal 2-Column Grid Lock:** Layout card box pada section **Experience**, **Genres**, dan **My Edited Songs** terkunci mutlak pada **2 card horizontal (`grid-cols-2`)** di seluruh perangkat (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac). Dilarang beralih ke 3 kolom (`lg:grid-cols-3`) atau 4 kolom (`lg:grid-cols-4`). Kontainer grid dibatasi `max-w-4xl mx-auto` agar proporsi 2 kartu tetap seimbang, padat, dan elegan di layar lebar.
+- **Universal Grid Gap & Alignment Symmetry Lock:** Seluruh container card grid pada 5 section utama (**Experience**, **Genres**, **YouTube Player**, **My Edited Songs**, dan **Assets File**) terkunci seragam pada batas lebar maksimal **`mx-auto max-w-4xl`**, sehingga batas tepi kiri dan kanan kartu sejajar lurus secara vertikal dari atas ke bawah pada layar desktop. Jarak gap (horizontal antar-kolom dan vertikal antar-baris kartu) terkunci seragam dan simetris pada **`gap-3 sm:gap-5`** (12px di mobile, 20px di desktop/tablet). Dilarang memakai gap berbeda seperti `gap-4`.
 - **Card Box Radius Lock (`rounded-2xl`):** Seluruh content card box di semua section (Experience, Genres, YouTube Mixtape Player, Edited Songs, Assets File, dan sub-item Direct Contact) terkunci seragam menggunakan radius `rounded-2xl`. Kotak pembungkus icon di dalam card terkunci `rounded-xl` (satu tingkat di bawah card). Kontainer video iframe di dalam card player terkunci `rounded-xl`.
 - **Background Clean Solid Lock:** Seluruh section wajib mempertahankan latar belakang hitam/gelap solid murni (`bg-slate-950`). Dilarang menambahkan elemen dekoratif lingkaran blur / ambient gradient liar (`bg-slate-700/20`, `blur-3xl`, dsb.) yang menyebabkan noda gradasi tipis, warna belang, atau garis patahan terpotong (`overflow-hidden`) saat ukuran kontainer berubah dinamis.
 - **Spacing Vertikal Section Header Lock:** Jarak bawah container header (`badge`, `title`, `description`) menuju container card box atau konten di bawahnya terkunci rapi pada `mb-6 sm:mb-8` di semua section (Experience, Genres, Mixtapes, Edited Songs, Assets File, Contact). Dilarang memakai margin renggang berlebih (`mb-10 sm:mb-16`) agar ritme vertikal tetap proporsional dan padat.
@@ -85,9 +86,10 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Header: *"Latest Mixtapes & Sets"*.
   - Sub-header: *"Watch live recordings and club sets directly on YouTube"*.
 - **Tampilan Integrasi:**
-  - Menyediakan *container* responsif untuk menampung **YouTube Embed Player** (iFrame).
-  - **Desktop:** Grid 2 player bersisian atau lebar penuh responsif.
-  - **Mobile:** Player bertumpuk vertikal dengan rasio aspek 16:9 (`aspect-video`).
+  - Menyediakan *container* responsif untuk menampung **YouTube Embed Player** (iFrame) dengan rasio aspek 16:9 (`aspect-video`), border radius `rounded-xl`, dan pembungkus card `rounded-2xl`.
+  - Terkunci pada kontainer `mx-auto max-w-4xl` dengan grid `gap-3 sm:gap-5` selaras dengan section lainnya.
+  - **Desktop:** Grid 2 player bersisian (`lg:grid-cols-2`).
+  - **Mobile:** Player bertumpuk vertikal (`grid-cols-1`).
 
 ---
 
@@ -133,6 +135,26 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
     - Tombol Direct WhatsApp.
     - Email Booking.
     - Link Ikon Sosial Media: Instagram, SoundCloud, Spotify, TikTok, YouTube.
+
+---
+
+### **SECTION 8: HEADLESS CMS & CONTROL PANEL (`/login` & `/admin`)**
+*Sistem manajemen konten cloud-based menggunakan Supabase PostgreSQL + Auth.*
+
+- **Fitur & Arsitektur:**
+  - **Autentikasi & Proteksi Rute:**
+    - Endpoint login di `/login` dengan Next.js Edge Middleware (`middleware.ts`) memproteksi `/admin/*`.
+    - User terautentikasi otomatis diarahkan dari `/login` ke `/admin`, dan user tanpa sesi dialihkan ke `/login`.
+  - **Control Panel Dashboard (`/admin`):**
+    - 5 Tab navigasi: `songs`, `mixtapes`, `venues`, `genres`, `settings`.
+    - **Operasi CRUD Lengkap:** Tambah baru, hapus item, dan edit item via modal pop-up interaktif untuk setiap kategori data.
+    - **Edited Songs:** Input text bebas untuk genre (agar fleksibel memasukkan kombinasi/subgenre), pemilihan audio quality (`WAV` / `MP3`), judul, artist, dan link download/drive.
+    - **Custom Dropdown Lock:** Semua select dropdown menggunakan komponen React `CustomSelect` custom dengan icon panah `ChevronDown` presisi, bebas dari bug displacement OS/Safari WebKit.
+    - **Admin Tab Bar & Form Layout Symmetry Lock:** Tab navigation bar terkunci `py-3.5 sm:py-4 border-b border-white/10`, button tabs berukuran seragam `h-10 shrink-0 whitespace-nowrap px-4 rounded-xl`, kontainer `main` memakai `pt-0 pb-8 sm:pb-12` agar jarak garis atas (header) dan garis bawah (tab) presisi dan simetris. Spacing form terkunci konsisten (label `mb-1.5`, input `px-3.5 py-2`, separator tombol aksi `pt-2 border-t border-white/5`, list header `pb-1.5 border-b border-white/10`).
+    - **Hybrid Reordering Lock (Desktop Drag + 1-Click Arrows):** Urutan item diatur manual dengan dukungan ganda: Drag & Drop W3C native (`dataTransfer.setData('text/plain', ...)` dan `effectAllowed = 'move'`) untuk mengatasi bug pembatalan drag Safari/WebKit, ditambah kontrol panah 1-klik (`ChevronUp` / `ChevronDown`) di samping grip handle untuk kemudahan navigasi di trackpad Mac & mobile. Urutan otomatis disimpan ke kolom `sort_order` di Supabase.
+    - **Site Settings:** Pengaturan dinamis link folder Google Drive aset promosi, nomor WhatsApp booking, pesan template WhatsApp, email booking, dan lokasi artis.
+  - **Resilient Fallback Data Fetching:** Komponen publik memuat data lokal instan saat hidrasi agar nol kedip (*zero loading flash*), kemudian melakukan silent sync dengan Supabase cloud.
+  - **Keep-Alive Automation:** GitHub Actions workflow (`.github/workflows/keep-alive-supabase.yml`) melakukan ping terjadwal tiap 3 hari untuk menjaga proyek Supabase tier gratis tetap aktif (*anti-inactivity pause*).
 
 ---
 

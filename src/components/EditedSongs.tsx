@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Disc3, Download, ExternalLink, Music2, Search, X } from 'lucide-react';
+import { createClient } from '@/src/lib/supabase/client';
 
 interface EditedSong {
   id: string;
@@ -71,10 +72,34 @@ const editedSongs: EditedSong[] = [
 ];
 
 export default function EditedSongs() {
+  const [songList, setSongList] = useState<EditedSong[]>(editedSongs);
   const [selectedSong, setSelectedSong] = useState<EditedSong | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredSongs = editedSongs.filter((song) => {
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('edited_songs')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setSongList(
+            data.map((d) => ({
+              id: d.id,
+              title: d.title,
+              originalArtist: d.original_artist,
+              genre: d.genre,
+              quality: d.quality,
+              link: d.link,
+              border: d.border || 'border-amber-400/25',
+            }))
+          );
+        }
+      });
+  }, []);
+
+  const filteredSongs = songList.filter((song) => {
     const q = searchQuery.toLowerCase().trim();
     if (!q) return true;
     return (
@@ -147,7 +172,7 @@ export default function EditedSongs() {
         </div>
 
         {filteredSongs.length > 0 ? (
-          <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
             {filteredSongs.map((song) => (
               <div
                 key={song.id}

@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { CircleDot, Coffee, Dumbbell, Flame, MapPin, Martini, Wine } from 'lucide-react';
+import { createClient } from '@/src/lib/supabase/client';
 
 interface Venue {
   id: string;
@@ -10,7 +12,15 @@ interface Venue {
   icon: typeof Coffee;
 }
 
-const venues: Venue[] = [
+const iconMap: Record<string, typeof Coffee> = {
+  Wine,
+  Martini,
+  Coffee,
+  CircleDot,
+  Dumbbell,
+};
+
+const defaultVenues: Venue[] = [
   {
     id: '1',
     name: 'Peggasus',
@@ -84,6 +94,29 @@ const venues: Venue[] = [
 ];
 
 export default function Experience() {
+  const [venueList, setVenueList] = useState<Venue[]>(defaultVenues);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('venues')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setVenueList(
+            data.map((d) => ({
+              id: d.id,
+              name: d.name,
+              city: d.city,
+              tone: d.tone || 'border-slate-400/25',
+              icon: iconMap[d.icon] || Coffee,
+            }))
+          );
+        }
+      });
+  }, []);
+
   return (
     <section id="experience" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -100,7 +133,7 @@ export default function Experience() {
         </div>
 
         <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
-          {venues.map((venue) => {
+          {venueList.map((venue) => {
             const Icon = venue.icon;
             return (
               <div

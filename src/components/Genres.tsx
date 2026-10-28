@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Activity, CircleDot, Disc, Radio, Waves, Zap } from 'lucide-react';
+import { createClient } from '@/src/lib/supabase/client';
 
 interface Genre {
   id: string;
@@ -9,7 +11,15 @@ interface Genre {
   icon: typeof Disc;
 }
 
-const genres: Genre[] = [
+const iconMap: Record<string, typeof Disc> = {
+  Zap,
+  Disc,
+  Radio,
+  CircleDot,
+  Waves,
+};
+
+const defaultGenres: Genre[] = [
   { id: 'commercial-edm', title: 'Commercial EDM', tone: 'border-amber-400/25', icon: Zap },
   { id: 'hip-hop', title: 'Hip-Hop', tone: 'border-stone-400/25', icon: Disc },
   { id: 'r-and-b', title: 'R&B', tone: 'border-slate-400/25', icon: Radio },
@@ -25,6 +35,28 @@ const genres: Genre[] = [
 ];
 
 export default function Genres() {
+  const [genreList, setGenreList] = useState<Genre[]>(defaultGenres);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('genres')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setGenreList(
+            data.map((d) => ({
+              id: d.id,
+              title: d.title,
+              tone: d.tone || 'border-amber-400/25',
+              icon: iconMap[d.icon] || Disc,
+            }))
+          );
+        }
+      });
+  }, []);
+
   return (
     <section id="genres" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -40,8 +72,8 @@ export default function Genres() {
           </p>
         </div>
 
-        <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-4">
-          {genres.map((genre) => {
+        <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
+          {genreList.map((genre) => {
             const Icon = genre.icon;
             return (
               <div

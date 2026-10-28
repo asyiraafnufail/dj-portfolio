@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { ExternalLink, FileText, FolderArchive, Image as ImageIcon, Sparkles } from 'lucide-react';
+import { createClient } from '@/src/lib/supabase/client';
 
 const assetItems = [
   {
@@ -20,7 +22,23 @@ const assetItems = [
 ];
 
 export default function AssetsFile() {
-  const driveUrl = 'https://drive.google.com/drive/folders/1xBZMS4b2Qhd0a0qb-IdmIKTD8HG1-fbz?usp=drive_link'; // Ganti dengan link Google Drive Anda
+  const [driveUrl, setDriveUrl] = useState(
+    'https://drive.google.com/drive/folders/1xBZMS4b2Qhd0a0qb-IdmIKTD8HG1-fbz?usp=drive_link'
+  );
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('site_settings')
+      .select('google_drive_url')
+      .eq('id', 'general')
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.google_drive_url) {
+          setDriveUrl(data.google_drive_url);
+        }
+      });
+  }, []);
 
   return (
     <section

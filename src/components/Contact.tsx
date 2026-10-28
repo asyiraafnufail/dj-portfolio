@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Mail, MapPin, MessageCircle, Youtube } from 'lucide-react';
+import { createClient } from '@/src/lib/supabase/client';
 
 const socials = [
   { name: 'Instagram', href: 'https://instagram.com/rafacankz', label: '@rafacankz' },
@@ -10,6 +12,38 @@ const socials = [
 ];
 
 export default function Contact() {
+  const [settings, setSettings] = useState({
+    whatsapp_number: '628174957733',
+    whatsapp_message: 'Hi CANKZ, I want to book an event.',
+    booking_email: 'contactcankz@gmail.com',
+    location: 'Sleman, Yogyakarta',
+  });
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('site_settings')
+      .select('whatsapp_number, whatsapp_message, booking_email, location')
+      .eq('id', 'general')
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) {
+          setSettings((prev) => ({
+            whatsapp_number: data.whatsapp_number || prev.whatsapp_number,
+            whatsapp_message: data.whatsapp_message || prev.whatsapp_message,
+            booking_email: data.booking_email || prev.booking_email,
+            location: data.location || prev.location,
+          }));
+        }
+      });
+  }, []);
+
+  const cleanWaNumber = settings.whatsapp_number.replace(/\D/g, '');
+  const waUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(settings.whatsapp_message)}`;
+  const displayWaNumber = settings.whatsapp_number.startsWith('+')
+    ? settings.whatsapp_number
+    : `+${settings.whatsapp_number}`;
+
   return (
     <section id="contact" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -30,7 +64,7 @@ export default function Contact() {
             <h3 className="text-xl sm:text-2xl font-bold text-white text-center sm:text-left">Direct Contact</h3>
             <div className="mt-6 space-y-3.5 sm:space-y-4">
               <a
-                href="https://wa.me/628174957733?text=Hi%20CANKZ%2C%20I%20want%20to%20book%20an%20event."
+                href={waUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-amber-400/25 bg-slate-900/70 p-3.5 sm:p-4 text-amber-200 transition hover:border-amber-300 hover:shadow-md"
@@ -38,18 +72,18 @@ export default function Contact() {
                 <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-white">WhatsApp Booking</span>
-                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">+62 817 495 7733</span>
+                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">{displayWaNumber}</span>
                 </span>
               </a>
 
               <a
-                href="mailto:contactcankz@gmail.com"
+                href={`mailto:${settings.booking_email}`}
                 className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-amber-400/25 bg-slate-900/70 p-3.5 sm:p-4 text-amber-200 transition hover:border-amber-300 hover:shadow-md"
               >
                 <Mail className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-white">Email Booking</span>
-                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">contactcankz@gmail.com</span>
+                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">{settings.booking_email}</span>
                 </span>
               </a>
 
@@ -57,7 +91,7 @@ export default function Contact() {
                 <MapPin className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-amber-200" />
                 <span className="min-w-0">
                   <span className="block text-sm font-bold text-white">Based In</span>
-                  <span className="text-xs sm:text-sm">Sleman, Yogyakarta</span>
+                  <span className="text-xs sm:text-sm">{settings.location}</span>
                 </span>
               </div>
             </div>

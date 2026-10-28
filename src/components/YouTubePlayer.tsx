@@ -1,6 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Youtube } from 'lucide-react';
+import { createClient } from '@/src/lib/supabase/client';
 
 interface Mixtape {
   id: string;
@@ -28,6 +30,29 @@ const mixtapes: Mixtape[] = [
 ];
 
 export default function YouTubePlayer() {
+  const [mixtapeList, setMixtapeList] = useState<Mixtape[]>(mixtapes);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('mixtapes')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setMixtapeList(
+            data.map((d) => ({
+              id: d.id,
+              title: d.title,
+              embedUrl: d.embed_url,
+              youtubeUrl: d.youtube_url,
+              border: d.border || 'border-amber-400/25',
+            }))
+          );
+        }
+      });
+  }, []);
+
   return (
     <section id="mixtapes" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -43,8 +68,8 @@ export default function YouTubePlayer() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:gap-5 lg:grid-cols-2">
-          {mixtapes.map((mixtape) => (
+        <div className="mx-auto max-w-4xl grid grid-cols-1 gap-3 sm:gap-5 lg:grid-cols-2">
+          {mixtapeList.map((mixtape) => (
             <div
               key={mixtape.id}
               className={`glass-panel flex flex-col justify-between space-y-4 rounded-2xl border ${mixtape.border} p-5 sm:p-6 transition hover:border-amber-400/35 hover:shadow-xl`}
