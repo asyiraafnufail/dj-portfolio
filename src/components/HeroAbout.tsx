@@ -11,9 +11,6 @@ export default function HeroAbout() {
       id="hero-about"
       className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 pb-16 pt-24 sm:pt-28 lg:py-32 scroll-mt-0"
     >
-      <div className="absolute left-10 top-1/4 h-72 w-72 rounded-full bg-amber-400/5 blur-3xl" />
-      <div className="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-slate-700/20 blur-3xl" />
-
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <motion.div

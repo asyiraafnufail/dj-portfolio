@@ -27,10 +27,8 @@ const genres: Genre[] = [
 export default function Genres() {
   return (
     <section id="genres" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
-      <div className="absolute left-1/2 top-1/3 h-96 w-96 -translate-x-1/2 rounded-full bg-stone-500/10 blur-3xl" />
-
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-10 sm:mb-16 max-w-3xl text-center">
+        <div className="mx-auto mb-6 sm:mb-8 max-w-3xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-slate-900/80 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-200">
             <Activity className="h-3.5 w-3.5" /> Sonic Identity
           </div>
@@ -48,9 +46,9 @@ export default function Genres() {
             return (
               <div
                 key={genre.id}
-                className={`glass-panel group flex flex-col rounded-2xl border ${genre.tone} bg-slate-900/40 p-3.5 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
+                className={`glass-panel group flex flex-col items-center justify-center text-center rounded-2xl border ${genre.tone} bg-slate-900/40 p-4 sm:p-5 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
               >
-                <div className="mb-2.5 sm:mb-3 w-fit rounded-xl border border-white/10 bg-slate-950/80 p-2 sm:p-2.5 text-amber-200 transition group-hover:text-amber-100">
+                <div className="mb-2.5 sm:mb-3 flex items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 p-2 sm:p-2.5 text-amber-200 transition group-hover:text-amber-100">
                   <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
                 <h3 className="text-sm sm:text-base font-bold text-white transition group-hover:text-amber-100">
