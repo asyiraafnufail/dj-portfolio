@@ -123,7 +123,7 @@ Saat mengeksekusi kode berdasarkan dokumen ini, AI Agent harus mematuhi aturan b
 1. **State Management:**
    - Gunakan directive `'use client';` untuk komponen yang membutuhkan interaktivitas (mobile menu, form handling, SoundCloud embed player).
 2. **Component Separation:**
-   - Pisahkan setiap section ke dalam folder `src/components/` (misal: `HeroAbout.jsx`, `Experience.jsx`, `Genres.jsx`, `SoundCloudPlayer.jsx`, `Contact.jsx`).
+   - Pisahkan setiap section ke dalam folder `src/components/` (misal: `HeroAbout.jsx`, `Experience.jsx`, `Genres.jsx`, `YouTubePlayer.jsx`, `EditedSongs.jsx`, `Contact.jsx`).
 3. **Responsive Utilities:**
    - Gunakan Tailwind breakpoint `sm:`, `md:`, `lg:`, `xl:` untuk memastikan tampilan mobile (`<768px`) dan desktop (`>=1024px`) sesuai dengan spesifikasi di atas.
 4. **Media:**

@@ -27,7 +27,7 @@ const mixtapes: Mixtape[] = [
   },
 ];
 
-export default function SoundCloudPlayer() {
+export default function YouTubePlayer() {
   return (
     <section id="mixtapes" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
       <div className="absolute left-10 top-1/4 h-96 w-96 rounded-full bg-amber-400/5 blur-3xl" />
@@ -36,7 +36,7 @@ export default function SoundCloudPlayer() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-10 sm:mb-16 max-w-3xl text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-slate-900/80 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-200">
-            <Youtube className="h-3.5 w-3.5 text-amber-300" /> Live Sets &amp; Videos
+            <Youtube className="h-3.5 w-3.5 text-red-500" /> YouTube Mixtapes &amp; Sets
           </div>
           <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
             Latest Mixtapes &amp; Sets
