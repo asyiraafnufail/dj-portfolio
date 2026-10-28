@@ -1,4 +1,5 @@
 import Contact from "@/src/components/Contact";
+import EditedSongs from "@/src/components/EditedSongs";
 import Experience from "@/src/components/Experience";
 import Genres from "@/src/components/Genres";
 import HeroAbout from "@/src/components/HeroAbout";
@@ -13,6 +14,7 @@ export default function Home() {
       <Experience />
       <Genres />
       <SoundCloudPlayer />
+      <EditedSongs />
       <Contact />
     </main>
   );

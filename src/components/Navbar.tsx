@@ -10,6 +10,7 @@ const navLinks = [
   { name: 'Experience', href: '#experience' },
   { name: 'Genres', href: '#genres' },
   { name: 'Mixtapes', href: '#mixtapes' },
+  { name: 'Edits', href: '#edited-songs' },
   { name: 'Contact', href: '#contact' },
 ];
 

@@ -86,7 +86,24 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 
 ---
 
-### **SECTION 5: CONTACT & BOOKING**
+### **SECTION 5: MY EDITED SONGS**
+*Scroll ke bawah dari SoundCloud / Mixtape Player.*
+
+- **Fitur & Konten:**
+  - Header: *"My Edited Songs"*.
+  - Sub-header: Custom edits, bootlegs, dan flips garapan CANKZ.
+- **Tampilan Grid:**
+  - **Desktop:** Grid 2 atau 3 kolom (`md:grid-cols-2 lg:grid-cols-3`).
+  - **Mobile:** Grid 1 kolom.
+- **Setiap Card Track Berisi:**
+  - Judul lagu dan artist original.
+  - Badge genre sesuai Sound Signature.
+  - Tombol aksi: *"Download Track"* di posisi tengah card.
+  - Desain card *glass-panel* selaras dengan tema gelap elegan & aksen amber.
+
+---
+
+### **SECTION 6: CONTACT & BOOKING**
 *Section paling bawah (Footer & Form).*
 
 - **Fitur & Konten:**
