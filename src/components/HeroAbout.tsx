@@ -9,6 +9,7 @@ import { createClient } from '@/src/lib/supabase/client';
 export default function HeroAbout() {
   const [heroImage, setHeroImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     // 1. Baca cache client-side
@@ -76,14 +77,17 @@ export default function HeroAbout() {
           >
             <div className="relative aspect-[4/5] w-full max-w-xs sm:max-w-md overflow-hidden rounded-3xl border border-white/10 bg-slate-900 p-1 shadow-2xl transition-transform duration-500 hover:scale-[1.01]">
               <div className="relative h-full w-full overflow-hidden rounded-[22px] bg-slate-900">
-                {loading ? (
-                  <div className="relative h-full w-full bg-slate-950/90 animate-pulse flex flex-col items-center justify-center gap-3">
+                {/* Skeleton Loader: aktif selama fetch data DB ATAU foto belum selesai diunduh browser */}
+                {(!imageLoaded) && (
+                  <div className="absolute inset-0 z-10 bg-slate-950/90 animate-pulse flex flex-col items-center justify-center gap-3">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/5 bg-white/5 text-amber-200/30">
                       <User className="h-7 w-7" />
                     </div>
                     <span className="text-xs font-medium text-slate-500">Loading Profile...</span>
                   </div>
-                ) : heroImage ? (
+                )}
+
+                {heroImage ? (
                   <>
                     <Image
                       key={heroImage}
@@ -94,12 +98,18 @@ export default function HeroAbout() {
                       loading="eager"
                       unoptimized
                       sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 500px"
-                      className="object-cover object-center transition-transform duration-700 hover:scale-105"
-                      onError={() => setHeroImage(null)}
+                      onLoad={() => setImageLoaded(true)}
+                      onError={() => {
+                        setHeroImage(null);
+                        setImageLoaded(true);
+                      }}
+                      className={`object-cover object-center transition-all duration-700 hover:scale-105 ${
+                        imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                      }`}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent z-[5]" />
                   </>
-                ) : (
+                ) : !loading ? (
                   <div className="relative h-full w-full bg-slate-950 flex flex-col items-center justify-center gap-3 p-6 text-center">
                     <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-slate-600">
                       <User className="h-7 w-7" />
@@ -108,7 +118,7 @@ export default function HeroAbout() {
                       Foto profil belum diatur di panel admin.
                     </p>
                   </div>
-                )}
+                ) : null}
 
                 <div className="glass-panel absolute bottom-4 left-4 right-4 rounded-xl border border-white/10 p-3.5 sm:p-4 text-center sm:text-left z-10">
                   <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-amber-200">Based in</p>

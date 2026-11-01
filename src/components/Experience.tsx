@@ -94,15 +94,18 @@ const defaultVenues: Venue[] = [
 ];
 
 export default function Experience() {
-  const [venueList, setVenueList] = useState<Venue[]>(defaultVenues);
+  const [venueList, setVenueList] = useState<Venue[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase
-      .from('venues')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data }) => {
+    const fetchVenues = async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('venues')
+          .select('*')
+          .order('sort_order', { ascending: true });
+
         if (data && data.length > 0) {
           setVenueList(
             data.map((d) => ({
@@ -113,8 +116,17 @@ export default function Experience() {
               icon: iconMap[d.icon] || Coffee,
             }))
           );
+        } else {
+          setVenueList(defaultVenues);
         }
-      });
+      } catch {
+        setVenueList(defaultVenues);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVenues();
   }, []);
 
   return (
@@ -133,30 +145,45 @@ export default function Experience() {
         </div>
 
         <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
-          {venueList.map((venue) => {
-            const Icon = venue.icon;
-            return (
+          {loading ? (
+            Array.from({ length: 6 }).map((_, idx) => (
               <div
-                key={venue.id}
-                className={`glass-panel group flex flex-col justify-center rounded-2xl border ${venue.tone} bg-slate-900/40 p-3 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
+                key={`venue-skel-${idx}`}
+                className="glass-panel rounded-2xl border border-white/5 bg-slate-900/40 p-3 sm:p-4 animate-pulse flex flex-col justify-center"
               >
-                <div>
-                  <div className="mb-2 sm:mb-2.5 flex items-center justify-between">
-                    <div className="w-fit rounded-xl border border-white/10 bg-slate-950/80 p-1.5 sm:p-2 text-amber-200 transition group-hover:text-amber-100">
-                      <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    </div>
-                    <span className="flex items-center gap-1 text-[10px] sm:text-xs font-semibold text-slate-400">
-                      <MapPin className="h-3 w-3 text-amber-300/80" />
-                      {venue.city}
-                    </span>
-                  </div>
-                  <h3 className="text-sm sm:text-base font-bold text-white transition group-hover:text-amber-100">
-                    {venue.name}
-                  </h3>
+                <div className="mb-2 sm:mb-2.5 flex items-center justify-between">
+                  <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-white/5" />
+                  <div className="h-3 w-14 rounded bg-white/5" />
                 </div>
+                <div className="h-4 sm:h-5 w-24 sm:w-32 rounded bg-white/5" />
               </div>
-            );
-          })}
+            ))
+          ) : (
+            venueList.map((venue) => {
+              const Icon = venue.icon;
+              return (
+                <div
+                  key={venue.id}
+                  className={`glass-panel group flex flex-col justify-center rounded-2xl border ${venue.tone} bg-slate-900/40 p-3 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
+                >
+                  <div>
+                    <div className="mb-2 sm:mb-2.5 flex items-center justify-between">
+                      <div className="w-fit rounded-xl border border-white/10 bg-slate-950/80 p-1.5 sm:p-2 text-amber-200 transition group-hover:text-amber-100">
+                        <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                      </div>
+                      <span className="flex items-center gap-1 text-[10px] sm:text-xs font-semibold text-slate-400">
+                        <MapPin className="h-3 w-3 text-amber-300/80" />
+                        {venue.city}
+                      </span>
+                    </div>
+                    <h3 className="text-sm sm:text-base font-bold text-white transition group-hover:text-amber-100">
+                      {venue.name}
+                    </h3>
+                  </div>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </section>

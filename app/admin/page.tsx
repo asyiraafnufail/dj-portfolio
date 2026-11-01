@@ -672,7 +672,8 @@ export default function AdminPage() {
 
       img.onload = () => {
         URL.revokeObjectURL(objectUrl);
-        const MAX_DIM = 1600;
+        // Max 1200px cukup untuk Retina display 3x pada kartu portofolio max 420px
+        const MAX_DIM = 1200;
         let width = img.naturalWidth || img.width;
         let height = img.naturalHeight || img.height;
 
@@ -691,33 +692,38 @@ export default function AdminPage() {
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         if (!ctx) {
-          return resolve({ blob: sourceBlob, ext: 'webp', contentType: 'image/webp' });
+          return resolve({ blob: sourceBlob, ext: 'jpg', contentType: 'image/jpeg' });
         }
 
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
         ctx.drawImage(img, 0, 0, width, height);
 
+        // Coba kompresi WebP; jika browser fallback ke PNG lossless raksasa (Safari), switch ke JPEG 0.78
         canvas.toBlob(
-          (blob) => {
-            if (blob && blob.size > 0) {
-              resolve({ blob, ext: 'webp', contentType: 'image/webp' });
+          (webpBlob) => {
+            if (
+              webpBlob &&
+              webpBlob.type === 'image/webp' &&
+              webpBlob.size < 700 * 1024
+            ) {
+              resolve({ blob: webpBlob, ext: 'webp', contentType: 'image/webp' });
             } else {
               canvas.toBlob(
                 (jpgBlob) => {
                   if (jpgBlob && jpgBlob.size > 0) {
                     resolve({ blob: jpgBlob, ext: 'jpg', contentType: 'image/jpeg' });
                   } else {
-                    resolve({ blob: sourceBlob, ext: 'webp', contentType: 'image/webp' });
+                    resolve({ blob: sourceBlob, ext: 'jpg', contentType: 'image/jpeg' });
                   }
                 },
                 'image/jpeg',
-                0.82
+                0.78
               );
             }
           },
           'image/webp',
-          0.82
+          0.78
         );
       };
 

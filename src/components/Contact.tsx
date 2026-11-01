@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Mail, MapPin, MessageCircle, Youtube } from 'lucide-react';
+import { Mail, MapPin, MessageCircle, Send, Youtube } from 'lucide-react';
 import { createClient } from '@/src/lib/supabase/client';
 
 const socials = [
@@ -19,14 +19,23 @@ export default function Contact() {
     location: 'Sleman, Yogyakarta',
   });
 
+  const [form, setForm] = useState({
+    name: '',
+    eventDate: '',
+    venue: '',
+    notes: '',
+  });
+
   useEffect(() => {
-    const supabase = createClient();
-    supabase
-      .from('site_settings')
-      .select('whatsapp_number, whatsapp_message, booking_email, location')
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => {
+    const fetchSettings = async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('site_settings')
+          .select('whatsapp_number, whatsapp_message, booking_email, location')
+          .limit(1)
+          .maybeSingle();
+
         if (data) {
           setSettings((prev) => ({
             whatsapp_number: data.whatsapp_number || prev.whatsapp_number,
@@ -35,11 +44,31 @@ export default function Contact() {
             location: data.location || prev.location,
           }));
         }
-      });
+      } catch {
+        // Fallback to defaults
+      }
+    };
+
+    fetchSettings();
   }, []);
 
   const cleanWaNumber = settings.whatsapp_number.replace(/\D/g, '');
-  const waUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(settings.whatsapp_message)}`;
+
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = form.name.trim()
+      ? `Halo DJ CANKZ, saya ${form.name.trim()}. Ingin booking performance untuk:\n` +
+        `- Tanggal Event: ${form.eventDate || '-'}\n` +
+        `- Venue / Lokasi: ${form.venue || '-'}\n` +
+        (form.notes ? `- Catatan: ${form.notes}\n` : '') +
+        `Mohon info ketersediaan tanggal & riders. Terima kasih!`
+      : settings.whatsapp_message;
+
+    const url = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const defaultWaUrl = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(settings.whatsapp_message)}`;
   const displayWaNumber = settings.whatsapp_number.startsWith('+')
     ? settings.whatsapp_number
     : `+${settings.whatsapp_number}`;
@@ -59,12 +88,91 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-3xl space-y-6">
+          {/* Quick Booking Inquiry Form */}
+          <div className="glass-panel rounded-3xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-8 shadow-xl">
+            <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+              <MessageCircle className="h-5 w-5 text-amber-300" />
+              Quick Booking Inquiry
+            </h3>
+            <p className="mt-1 text-xs text-slate-400">
+              Isi detail acara Anda di bawah ini untuk langsung generate format pesan WhatsApp resmi CANKZ.
+            </p>
+
+            <form onSubmit={handleBookingSubmit} className="mt-5 space-y-3.5 sm:space-y-4">
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Nama Penyelenggara / Event
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Contoh: Peggasus Club / Sarah"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Rencana Tanggal Event
+                  </label>
+                  <input
+                    type="date"
+                    value={form.eventDate}
+                    onChange={(e) => setForm({ ...form, eventDate: e.target.value })}
+                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Venue / Lokasi Acara
+                </label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Yogyakarta / Rooftop Session / Private Party"
+                  value={form.venue}
+                  onChange={(e) => setForm({ ...form, venue: e.target.value })}
+                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  Catatan Tambahan (Durasi Set / Preferensi Genre)
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="Contoh: 2 jam set, Commercial EDM & Bass House..."
+                  value={form.notes}
+                  onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50 resize-none"
+                />
+              </div>
+
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <span className="text-[11px] text-slate-400">
+                  Pesan terstruktur otomatis terbuka di WhatsApp Anda.
+                </span>
+                <button
+                  type="submit"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 hover:bg-amber-300 transition shadow-md"
+                >
+                  <Send className="h-4 w-4" />
+                  Kirim via WhatsApp
+                </button>
+              </div>
+            </form>
+          </div>
+
           <div className="glass-panel rounded-3xl border border-white/10 p-5 sm:p-8">
             <h3 className="text-xl sm:text-2xl font-bold text-white text-center sm:text-left">Direct Contact</h3>
             <div className="mt-6 space-y-3.5 sm:space-y-4">
               <a
-                href={waUrl}
+                href={defaultWaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-amber-400/25 bg-slate-900/70 p-3.5 sm:p-4 text-amber-200 transition hover:border-amber-300 hover:shadow-md"

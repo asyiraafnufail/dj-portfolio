@@ -16,6 +16,52 @@ interface StageArchiveProps {
   initialPhotos?: StagePhoto[];
 }
 
+function StagePhotoCard({
+  photo,
+  onSelect,
+}: {
+  photo: StagePhoto;
+  onSelect: () => void;
+}) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-label="View photo in full size"
+      className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl focus:outline-none focus:ring-1 focus:ring-amber-400/50"
+    >
+      {/* Skeleton overlay pulsing sampai gambar selesai diunduh & dirender */}
+      {!imageLoaded && (
+        <div className="absolute inset-0 z-10 bg-slate-950/90 animate-pulse flex flex-col items-center justify-center gap-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/5 bg-white/5 text-amber-200/20">
+            <Camera className="h-4 w-4" />
+          </div>
+        </div>
+      )}
+
+      <Image
+        src={photo.imageUrl}
+        alt="DJ CANKZ Stage Performance"
+        fill
+        unoptimized
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 45vw, 440px"
+        onLoad={() => setImageLoaded(true)}
+        className={`object-cover transition-all duration-500 group-hover:scale-105 ${
+          imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+        }`}
+      />
+
+      {/* Hover Dark Vignette & Expand Icon */}
+      <div className="absolute inset-0 bg-slate-950/0 transition-colors duration-300 group-hover:bg-slate-950/25 z-10" />
+      <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 text-slate-300 opacity-0 backdrop-blur-sm transition duration-300 group-hover:opacity-100 group-hover:text-amber-200">
+        <Maximize2 className="h-4 w-4" />
+      </div>
+    </button>
+  );
+}
+
 export default function StageArchive({ isPage = false, initialPhotos = [] }: StageArchiveProps) {
   const [photos, setPhotos] = useState<StagePhoto[]>(initialPhotos);
   const [loading, setLoading] = useState(initialPhotos.length === 0);
@@ -117,28 +163,11 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
             </div>
           ) : (
             displayedPhotos.map((photo) => (
-              <button
+              <StagePhotoCard
                 key={photo.id}
-                type="button"
-                onClick={() => setSelectedPhoto(photo)}
-                aria-label="View photo in full size"
-                className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl focus:outline-none focus:ring-1 focus:ring-amber-400/50"
-              >
-                <Image
-                  src={photo.imageUrl}
-                  alt="DJ CANKZ Stage Performance"
-                  fill
-                  unoptimized
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 45vw, 440px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-
-                {/* Hover Dark Vignette & Expand Icon */}
-                <div className="absolute inset-0 bg-slate-950/0 transition-colors duration-300 group-hover:bg-slate-950/25" />
-                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 text-slate-300 opacity-0 backdrop-blur-sm transition duration-300 group-hover:opacity-100 group-hover:text-amber-200">
-                  <Maximize2 className="h-4 w-4" />
-                </div>
-              </button>
+                photo={photo}
+                onSelect={() => setSelectedPhoto(photo)}
+              />
             ))
           )}
         </div>

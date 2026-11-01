@@ -35,15 +35,18 @@ const defaultGenres: Genre[] = [
 ];
 
 export default function Genres() {
-  const [genreList, setGenreList] = useState<Genre[]>(defaultGenres);
+  const [genreList, setGenreList] = useState<Genre[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase
-      .from('genres')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data }) => {
+    const fetchGenres = async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('genres')
+          .select('*')
+          .order('sort_order', { ascending: true });
+
         if (data && data.length > 0) {
           setGenreList(
             data.map((d) => ({
@@ -53,8 +56,17 @@ export default function Genres() {
               icon: iconMap[d.icon] || Disc,
             }))
           );
+        } else {
+          setGenreList(defaultGenres);
         }
-      });
+      } catch {
+        setGenreList(defaultGenres);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGenres();
   }, []);
 
   return (
@@ -73,22 +85,34 @@ export default function Genres() {
         </div>
 
         <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
-          {genreList.map((genre) => {
-            const Icon = genre.icon;
-            return (
+          {loading ? (
+            Array.from({ length: 6 }).map((_, idx) => (
               <div
-                key={genre.id}
-                className={`glass-panel group flex flex-col items-center justify-center text-center rounded-2xl border ${genre.tone} bg-slate-900/40 p-2.5 sm:p-3.5 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
+                key={`genre-skel-${idx}`}
+                className="glass-panel rounded-2xl border border-white/5 bg-slate-900/40 p-2.5 sm:p-3.5 animate-pulse flex flex-col items-center justify-center text-center"
               >
-                <div className="mb-1.5 sm:mb-2 flex items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 p-1.5 sm:p-2 text-amber-200 transition group-hover:text-amber-100">
-                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                </div>
-                <h3 className="text-xs sm:text-sm font-bold text-white transition group-hover:text-amber-100">
-                  {genre.title}
-                </h3>
+                <div className="mb-1.5 sm:mb-2 h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-white/5" />
+                <div className="h-3.5 sm:h-4 w-20 sm:w-28 rounded bg-white/5" />
               </div>
-            );
-          })}
+            ))
+          ) : (
+            genreList.map((genre) => {
+              const Icon = genre.icon;
+              return (
+                <div
+                  key={genre.id}
+                  className={`glass-panel group flex flex-col items-center justify-center text-center rounded-2xl border ${genre.tone} bg-slate-900/40 p-2.5 sm:p-3.5 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
+                >
+                  <div className="mb-1.5 sm:mb-2 flex items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 p-1.5 sm:p-2 text-amber-200 transition group-hover:text-amber-100">
+                    <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  </div>
+                  <h3 className="text-xs sm:text-sm font-bold text-white transition group-hover:text-amber-100">
+                    {genre.title}
+                  </h3>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </section>
