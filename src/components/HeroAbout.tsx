@@ -1,11 +1,29 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Mail, Play } from 'lucide-react';
+import { createClient } from '@/src/lib/supabase/client';
 import photoPorto from '../../aset/1.jpg';
 
 export default function HeroAbout() {
+  const [heroImage, setHeroImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from('site_settings')
+      .select('hero_image_url')
+      .eq('id', 'general')
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.hero_image_url) {
+          setHeroImage(data.hero_image_url);
+        }
+      });
+  }, []);
+
   return (
     <section
       id="hero-about"
@@ -22,11 +40,12 @@ export default function HeroAbout() {
             <div className="relative aspect-[4/5] w-full max-w-xs sm:max-w-md overflow-hidden rounded-3xl border border-white/10 bg-slate-900 p-1 shadow-2xl transition-transform duration-500 hover:scale-[1.01]">
               <div className="relative h-full w-full overflow-hidden rounded-[22px] bg-slate-900">
                 <Image
-                  src={photoPorto}
+                  src={heroImage || photoPorto}
                   alt="Foto portfolio CANKZ"
                   fill
                   priority
                   loading="eager"
+                  unoptimized={Boolean(heroImage)}
                   sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 500px"
                   className="object-cover object-center transition-transform duration-700 hover:scale-105"
                 />

@@ -11,47 +11,13 @@ interface StagePhoto {
   imageUrl: string;
 }
 
-const defaultPhotos: StagePhoto[] = [
-  {
-    id: '1',
-    imageUrl: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: '2',
-    imageUrl: 'https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: '3',
-    imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: '4',
-    imageUrl: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: '5',
-    imageUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: '6',
-    imageUrl: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: '7',
-    imageUrl: 'https://images.unsplash.com/photo-1545128485-c400e7702796?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: '8',
-    imageUrl: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=800&q=80',
-  },
-];
-
 interface StageArchiveProps {
   isPage?: boolean;
 }
 
 export default function StageArchive({ isPage = false }: StageArchiveProps) {
-  const [photos, setPhotos] = useState<StagePhoto[]>(defaultPhotos);
+  const [photos, setPhotos] = useState<StagePhoto[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedPhoto, setSelectedPhoto] = useState<StagePhoto | null>(null);
 
   useEffect(() => {
@@ -69,6 +35,9 @@ export default function StageArchive({ isPage = false }: StageArchiveProps) {
             }))
           );
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -118,34 +87,52 @@ export default function StageArchive({ isPage = false }: StageArchiveProps) {
 
         {/* 2-Column Photo Grid Lock (3:4 Portrait Aspect Ratio) */}
         <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
-          {displayedPhotos.map((photo) => (
-            <button
-              key={photo.id}
-              type="button"
-              onClick={() => setSelectedPhoto(photo)}
-              aria-label="View photo in full size"
-              className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl focus:outline-none focus:ring-1 focus:ring-amber-400/50"
-            >
-              <Image
-                src={photo.imageUrl}
-                alt="DJ CANKZ Stage Performance"
-                fill
-                unoptimized
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 45vw, 440px"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-
-              {/* Hover Dark Vignette & Expand Icon */}
-              <div className="absolute inset-0 bg-slate-950/0 transition-colors duration-300 group-hover:bg-slate-950/25" />
-              <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 text-slate-300 opacity-0 backdrop-blur-sm transition duration-300 group-hover:opacity-100 group-hover:text-amber-200">
-                <Maximize2 className="h-4 w-4" />
+          {loading ? (
+            Array.from({ length: isPage ? 8 : 4 }).map((_, idx) => (
+              <div
+                key={`skel-${idx}`}
+                className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/5 bg-slate-900/60 animate-pulse flex flex-col items-center justify-center gap-2"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/5 bg-white/5">
+                  <Camera className="h-4 w-4 text-amber-200/20" />
+                </div>
               </div>
-            </button>
-          ))}
+            ))
+          ) : photos.length === 0 ? (
+            <div className="col-span-2 rounded-2xl border border-white/10 bg-slate-900/40 p-8 text-center text-xs sm:text-sm text-slate-400">
+              <Camera className="mx-auto mb-2.5 h-6 w-6 text-slate-600" />
+              Belum ada foto aksi panggung yang diunggah.
+            </div>
+          ) : (
+            displayedPhotos.map((photo) => (
+              <button
+                key={photo.id}
+                type="button"
+                onClick={() => setSelectedPhoto(photo)}
+                aria-label="View photo in full size"
+                className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl focus:outline-none focus:ring-1 focus:ring-amber-400/50"
+              >
+                <Image
+                  src={photo.imageUrl}
+                  alt="DJ CANKZ Stage Performance"
+                  fill
+                  unoptimized
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 45vw, 440px"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+
+                {/* Hover Dark Vignette & Expand Icon */}
+                <div className="absolute inset-0 bg-slate-950/0 transition-colors duration-300 group-hover:bg-slate-950/25" />
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 text-slate-300 opacity-0 backdrop-blur-sm transition duration-300 group-hover:opacity-100 group-hover:text-amber-200">
+                  <Maximize2 className="h-4 w-4" />
+                </div>
+              </button>
+            ))
+          )}
         </div>
 
-        {/* View All Button - only shown on homepage preview */}
-        {!isPage && (
+        {/* View All Button - only shown on homepage preview if there are photos */}
+        {!isPage && !loading && photos.length > 0 && (
           <div className="mt-8 sm:mt-10 flex justify-center">
             <Link
               href="/gallery"

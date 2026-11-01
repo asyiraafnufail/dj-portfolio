@@ -45,7 +45,7 @@ create table if not exists edited_songs (
   created_at timestamp with time zone default timezone('utc'::text, now())
 );
 
--- 5. Table: Site Settings (Contact & Assets Drive Link)
+-- 5. Table: Site Settings (Contact, Assets Drive Link & Profile Photo)
 create table if not exists site_settings (
   id text primary key default 'general',
   google_drive_url text,
@@ -53,8 +53,12 @@ create table if not exists site_settings (
   whatsapp_message text,
   booking_email text,
   location text,
+  hero_image_url text,
   updated_at timestamp with time zone default timezone('utc'::text, now())
 );
+
+-- Migration for existing installations
+alter table site_settings add column if not exists hero_image_url text;
 
 -- ==========================================
 -- ROW LEVEL SECURITY (RLS) POLICIES

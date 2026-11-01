@@ -84,6 +84,7 @@ export default function YouTubePlayer() {
                   height="100%"
                   src={mixtape.embedUrl}
                   title={mixtape.title}
+                  loading="lazy"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="h-full w-full rounded-xl"

@@ -159,6 +159,7 @@ interface SiteSettings {
   whatsapp_message: string;
   booking_email: string;
   location: string;
+  hero_image_url?: string;
 }
 
 interface StagePhotoItem {
@@ -189,12 +190,17 @@ export default function AdminPage() {
     whatsapp_message: '',
     booking_email: '',
     location: '',
+    hero_image_url: '',
   });
 
   // Gallery form state
   const [newPhotoUrl, setNewPhotoUrl] = useState('');
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Hero About Photo state
+  const heroFileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingHero, setUploadingHero] = useState(false);
 
   // New item form states
   const [newSong, setNewSong] = useState({
@@ -561,27 +567,211 @@ export default function AdminPage() {
     }
   };
 
+  const isHeicFile = (file: File) => {
+    return (
+      file.name.match(/\.(heic|heif)$/i) !== null ||
+      file.type === 'image/heic' ||
+      file.type === 'image/heif'
+    );
+  };
+
+  const convertHeicToBlob = async (file: File): Promise<Blob> => {
+    // 1. Native createImageBitmap (Safari Mac & iOS)
+    if (typeof window !== 'undefined' && 'createImageBitmap' in window) {
+      try {
+        const bitmap = await createImageBitmap(file);
+        const canvas = document.createElement('canvas');
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(bitmap, 0, 0);
+          const jpegBlob = await new Promise<Blob | null>((res) =>
+            canvas.toBlob(res, 'image/jpeg', 0.85)
+          );
+          if (jpegBlob && jpegBlob.size > 0) return jpegBlob;
+        }
+      } catch (err) {
+        console.warn('Native HEIC decode failed, trying heic2any fallback:', err);
+      }
+    }
+
+    // 2. Fallback via heic2any CDN (Chrome / Firefox / Edge)
+    if (typeof window !== 'undefined') {
+      const win = window as unknown as {
+        heic2any?: (options: { blob: Blob; toType: string; quality: number }) => Promise<Blob | Blob[]>;
+      };
+
+      if (!win.heic2any) {
+        await new Promise<void>((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error('Gagal memuat library konversi HEIC'));
+          document.head.appendChild(script);
+        });
+      }
+
+      if (win.heic2any) {
+        const converted = await win.heic2any({
+          blob: file,
+          toType: 'image/jpeg',
+          quality: 0.85,
+        });
+        return Array.isArray(converted) ? converted[0] : converted;
+      }
+    }
+
+    throw new Error('Format HEIC tidak dapat didecode browser.');
+  };
+
+  const compressImageForWeb = async (
+    file: File
+  ): Promise<{ blob: Blob; ext: string; contentType: string }> => {
+    let sourceBlob: Blob = file;
+
+    if (isHeicFile(file)) {
+      showNotice('Mengonversi foto HEIC...');
+      sourceBlob = await convertHeicToBlob(file);
+    }
+
+    return new Promise((resolve, reject) => {
+      if (typeof window === 'undefined') {
+        return resolve({ blob: sourceBlob, ext: 'webp', contentType: 'image/webp' });
+      }
+
+      const img = document.createElement('img');
+      const objectUrl = URL.createObjectURL(sourceBlob);
+
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        const MAX_DIM = 1600;
+        let width = img.naturalWidth || img.width;
+        let height = img.naturalHeight || img.height;
+
+        if (width > MAX_DIM || height > MAX_DIM) {
+          if (width > height) {
+            height = Math.round((height * MAX_DIM) / width);
+            width = MAX_DIM;
+          } else {
+            width = Math.round((width * MAX_DIM) / height);
+            height = MAX_DIM;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          return resolve({ blob: sourceBlob, ext: 'webp', contentType: 'image/webp' });
+        }
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob && blob.size > 0) {
+              resolve({ blob, ext: 'webp', contentType: 'image/webp' });
+            } else {
+              canvas.toBlob(
+                (jpgBlob) => {
+                  if (jpgBlob && jpgBlob.size > 0) {
+                    resolve({ blob: jpgBlob, ext: 'jpg', contentType: 'image/jpeg' });
+                  } else {
+                    resolve({ blob: sourceBlob, ext: 'webp', contentType: 'image/webp' });
+                  }
+                },
+                'image/jpeg',
+                0.82
+              );
+            }
+          },
+          'image/webp',
+          0.82
+        );
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error('Gagal memproses gambar. Format tidak didukung browser.'));
+      };
+
+      img.src = objectUrl;
+    });
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
 
-    const { error: uploadError } = await supabase.storage.from('stage-photos').upload(fileName, file);
+    try {
+      const { blob, ext, contentType } = await compressImageForWeb(file);
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
 
-    if (uploadError) {
-      alert('Upload error: ' + uploadError.message + '\n\nTip: Pastikan bucket "stage-photos" sudah dibuat di Supabase Storage & diset Public.');
+      const { error: uploadError } = await supabase.storage
+        .from('stage-photos')
+        .upload(fileName, blob, { contentType, upsert: true });
+
+      if (uploadError) {
+        alert('Upload error: ' + uploadError.message + '\n\nTip: Pastikan bucket "stage-photos" sudah dibuat di Supabase Storage & diset Public.');
+        setUploading(false);
+        return;
+      }
+
+      const { data: publicUrlData } = supabase.storage.from('stage-photos').getPublicUrl(fileName);
+      if (publicUrlData?.publicUrl) {
+        setNewPhotoUrl(publicUrlData.publicUrl);
+        const origKb = (file.size / 1024).toFixed(0);
+        const compKb = (blob.size / 1024).toFixed(0);
+        showNotice(`Foto terkompres (${origKb}KB → ${compKb}KB) & terupload!`);
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Upload gagal';
+      alert('Error saat kompresi/upload: ' + msg);
+    } finally {
       setUploading(false);
-      return;
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
+  };
 
-    const { data: publicUrlData } = supabase.storage.from('stage-photos').getPublicUrl(fileName);
-    if (publicUrlData?.publicUrl) {
-      setNewPhotoUrl(publicUrlData.publicUrl);
-      showNotice('Foto terupload ke Supabase Storage!');
+  const handleHeroUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingHero(true);
+
+    try {
+      const { blob, ext, contentType } = await compressImageForWeb(file);
+      const fileName = `hero-${Date.now()}-${Math.random().toString(36).substring(2, 6)}.${ext}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('stage-photos')
+        .upload(fileName, blob, { contentType, upsert: true });
+
+      if (uploadError) {
+        alert('Upload error: ' + uploadError.message + '\n\nTip: Pastikan bucket "stage-photos" diset Public.');
+        setUploadingHero(false);
+        return;
+      }
+
+      const { data: publicUrlData } = supabase.storage.from('stage-photos').getPublicUrl(fileName);
+      if (publicUrlData?.publicUrl) {
+        const url = publicUrlData.publicUrl;
+        setSettings((prev) => ({ ...prev, hero_image_url: url }));
+        const origKb = (file.size / 1024).toFixed(0);
+        const compKb = (blob.size / 1024).toFixed(0);
+        showNotice(`Foto About terkompres (${origKb}KB → ${compKb}KB) & siap disimpan!`);
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Upload gagal';
+      alert('Error saat kompresi/upload foto About: ' + msg);
+    } finally {
+      setUploadingHero(false);
+      if (heroFileInputRef.current) heroFileInputRef.current.value = '';
     }
-    setUploading(false);
   };
 
   // --- Settings Handler ---
@@ -594,11 +784,23 @@ export default function AdminPage() {
       whatsapp_message: settings.whatsapp_message,
       booking_email: settings.booking_email,
       location: settings.location,
+      hero_image_url: settings.hero_image_url || null,
       updated_at: new Date().toISOString(),
     });
 
-    if (error) alert(error.message);
-    else showNotice('Settings saved successfully!');
+    if (error) {
+      if (error.message.includes('hero_image_url')) {
+        alert(
+          'Kolom hero_image_url belum ada di Supabase database!\n\n' +
+          'Buka Supabase -> SQL Editor, lalu jalankan query ini:\n' +
+          'ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS hero_image_url text;'
+        );
+      } else {
+        alert(error.message);
+      }
+    } else {
+      showNotice('Settings saved successfully!');
+    }
   };
 
   return (
@@ -1230,7 +1432,7 @@ export default function AdminPage() {
                       type="file"
                       ref={fileInputRef}
                       onChange={handleFileUpload}
-                      accept="image/*"
+                      accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/*"
                       className="hidden"
                     />
                     <button
@@ -1369,9 +1571,68 @@ export default function AdminPage() {
         {activeTab === 'settings' && (
           <div className="glass-panel max-w-2xl rounded-2xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-6 shadow-xl">
             <h2 className="mb-4 text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <FolderArchive className="h-4 w-4 text-amber-300" /> Contact &amp; Asset Settings
+              <FolderArchive className="h-4 w-4 text-amber-300" /> Hero Photo, Contact &amp; Asset Settings
             </h2>
             <form onSubmit={handleSaveSettings} className="space-y-4">
+              {/* Hero / About DJ Profile Photo */}
+              <div className="rounded-xl border border-white/10 bg-slate-950/60 p-3.5 space-y-3">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-amber-200">
+                  Hero / About DJ Profile Photo
+                </label>
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                  <div className="relative aspect-[4/5] h-28 w-auto shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-950 shadow-md">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={settings.hero_image_url || '/1.jpg'}
+                      alt="Hero preview"
+                      className="h-full w-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="125" viewBox="0 0 100 125" fill="%231e293b"><rect width="100" height="125"/><text x="50" y="65" fill="%2394a3b8" font-size="10" text-anchor="middle">Default Photo</text></svg>';
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1 space-y-2 w-full">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <input
+                        type="file"
+                        ref={heroFileInputRef}
+                        onChange={handleHeroUpload}
+                        accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/*"
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        disabled={uploadingHero}
+                        onClick={() => heroFileInputRef.current?.click()}
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-amber-400/30 bg-slate-900 px-3.5 py-2 text-xs font-semibold text-amber-200 transition hover:bg-slate-800 disabled:opacity-50"
+                      >
+                        <Upload className="h-3.5 w-3.5" />
+                        {uploadingHero ? 'Compressing & Uploading...' : 'Upload Foto Baru'}
+                      </button>
+                      {settings.hero_image_url && (
+                        <button
+                          type="button"
+                          onClick={() => setSettings({ ...settings, hero_image_url: '' })}
+                          className="inline-flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-400 hover:text-red-400 transition"
+                        >
+                          <X className="h-3.5 w-3.5" /> Reset ke Default
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      type="url"
+                      placeholder="Atau paste URL gambar langsung..."
+                      value={settings.hero_image_url || ''}
+                      onChange={(e) => setSettings({ ...settings, hero_image_url: e.target.value })}
+                      className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    />
+                    <p className="text-[11px] text-slate-400">
+                      Otomatis dikonversi ke WebP &amp; dikompres (~150KB) sebelum upload. Jika dikosongkan, web menggunakan foto bawaan di folder aset.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5">
                   Google Drive Folder URL (Promotional Assets &amp; Flyers)
