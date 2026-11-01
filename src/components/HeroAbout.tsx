@@ -7,10 +7,16 @@ import { Mail, Play } from 'lucide-react';
 import { createClient } from '@/src/lib/supabase/client';
 import photoPorto from '../../aset/1.jpg';
 
-export default function HeroAbout() {
-  const [heroImage, setHeroImage] = useState<string | null>(null);
+interface HeroAboutProps {
+  initialHeroImage?: string | null;
+}
+
+export default function HeroAbout({ initialHeroImage = null }: HeroAboutProps) {
+  const [heroImage, setHeroImage] = useState<string | null>(initialHeroImage);
 
   useEffect(() => {
+    if (initialHeroImage) return;
+
     const supabase = createClient();
     supabase
       .from('site_settings')
@@ -22,7 +28,7 @@ export default function HeroAbout() {
           setHeroImage(data.hero_image_url);
         }
       });
-  }, []);
+  }, [initialHeroImage]);
 
   return (
     <section

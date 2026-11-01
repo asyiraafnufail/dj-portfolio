@@ -591,8 +591,8 @@ export default function AdminPage() {
           );
           if (jpegBlob && jpegBlob.size > 0) return jpegBlob;
         }
-      } catch (err) {
-        console.warn('Native HEIC decode failed, trying heic2any fallback:', err);
+      } catch {
+        // Native HEIC decode unsupported, switch silently to heic2any
       }
     }
 
