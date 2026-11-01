@@ -7,16 +7,19 @@ import { Mail, Play } from 'lucide-react';
 import { createClient } from '@/src/lib/supabase/client';
 import photoPorto from '../../aset/1.jpg';
 
-interface HeroAboutProps {
-  initialHeroImage?: string | null;
-}
-
-export default function HeroAbout({ initialHeroImage = null }: HeroAboutProps) {
-  const [heroImage, setHeroImage] = useState<string | null>(initialHeroImage);
+export default function HeroAbout() {
+  const [heroImage, setHeroImage] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return localStorage.getItem('cankz_hero_image');
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  });
 
   useEffect(() => {
-    if (initialHeroImage) return;
-
     const supabase = createClient();
     supabase
       .from('site_settings')
@@ -26,9 +29,21 @@ export default function HeroAbout({ initialHeroImage = null }: HeroAboutProps) {
       .then(({ data }) => {
         if (data?.hero_image_url) {
           setHeroImage(data.hero_image_url);
+          try {
+            localStorage.setItem('cankz_hero_image', data.hero_image_url);
+          } catch {
+            // Storage unavailable
+          }
+        } else {
+          setHeroImage(null);
+          try {
+            localStorage.removeItem('cankz_hero_image');
+          } catch {
+            // Storage unavailable
+          }
         }
       });
-  }, [initialHeroImage]);
+  }, []);
 
   return (
     <section
