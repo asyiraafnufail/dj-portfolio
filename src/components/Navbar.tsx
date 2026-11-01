@@ -7,8 +7,9 @@ import logoDj from '../../aset/logodj.png';
 
 const navLinks = [
   { name: 'About', href: '#hero-about' },
-  { name: 'Experience', href: '#experience' },
   { name: 'Genres', href: '#genres' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Gallery', href: '#stage-archive' },
   { name: 'Mixtapes', href: '#mixtapes' },
   { name: 'Edits', href: '#edited-songs' },
   { name: 'Assets', href: '#assets-file' },

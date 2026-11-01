@@ -5,6 +5,7 @@ import Experience from "@/src/components/Experience";
 import Genres from "@/src/components/Genres";
 import HeroAbout from "@/src/components/HeroAbout";
 import Navbar from "@/src/components/Navbar";
+import StageArchive from "@/src/components/StageArchive";
 import YouTubePlayer from "@/src/components/YouTubePlayer";
 
 export default function Home() {
@@ -12,8 +13,9 @@ export default function Home() {
     <main className="min-h-screen bg-slate-950 text-white">
       <Navbar />
       <HeroAbout />
-      <Experience />
       <Genres />
+      <Experience />
+      <StageArchive />
       <YouTubePlayer />
       <EditedSongs />
       <AssetsFile />

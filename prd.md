@@ -20,9 +20,9 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 - **Mobile First & Responsive:** Layout harus otomatis menyesuaikan dari tampilan layar HP (`< 768px`) hingga Desktop (`>= 1024px`).
 - **Warna & Tema Terkunci:** Background gelap (`bg-slate-950` / `bg-slate-900`), teks terang (`text-white`, `text-slate-300`, `text-slate-400`), aksen utama amber kalem (`bg-amber-400`, `text-amber-200`, `text-amber-300`, `border-amber-400/25`). Hindari warna neon mencolok seperti cyan terang, magenta, pink, purple glow, gradient ramai, efek bling, emoji, atau visual yang terasa generatif/AI.
 - **Design Lock:** Konsep visual wajib simple elegant: gelap, bersih, profesional, whitespace cukup, radius lembut, border tipis, glassmorphism ringan, shadow halus. Jangan menambah efek berlebihan, animasi heboh, badge bouncing, ping indicator, atau glow kuat.
-- **Universal 2-Column Grid Lock:** Layout card box pada section **Experience**, **Genres**, dan **My Edited Songs** terkunci mutlak pada **2 card horizontal (`grid-cols-2`)** di seluruh perangkat (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac). Dilarang beralih ke 3 kolom (`lg:grid-cols-3`) atau 4 kolom (`lg:grid-cols-4`). Kontainer grid dibatasi `max-w-4xl mx-auto` agar proporsi 2 kartu tetap seimbang, padat, dan elegan di layar lebar.
-- **Universal Grid Gap & Alignment Symmetry Lock:** Seluruh container card grid pada 5 section utama (**Experience**, **Genres**, **YouTube Player**, **My Edited Songs**, dan **Assets File**) terkunci seragam pada batas lebar maksimal **`mx-auto max-w-4xl`**, sehingga batas tepi kiri dan kanan kartu sejajar lurus secara vertikal dari atas ke bawah pada layar desktop. Jarak gap (horizontal antar-kolom dan vertikal antar-baris kartu) terkunci seragam dan simetris pada **`gap-3 sm:gap-5`** (12px di mobile, 20px di desktop/tablet). Dilarang memakai gap berbeda seperti `gap-4`.
-- **Card Box Radius Lock (`rounded-2xl`):** Seluruh content card box di semua section (Experience, Genres, YouTube Mixtape Player, Edited Songs, Assets File, dan sub-item Direct Contact) terkunci seragam menggunakan radius `rounded-2xl`. Kotak pembungkus icon di dalam card terkunci `rounded-xl` (satu tingkat di bawah card). Kontainer video iframe di dalam card player terkunci `rounded-xl`.
+- **Universal 2-Column Grid Lock:** Layout card box pada section **Genres**, **Experience**, **Stage Archive**, dan **My Edited Songs** terkunci mutlak pada **2 card horizontal (`grid-cols-2`)** di seluruh perangkat (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac). Dilarang beralih ke 3 kolom (`lg:grid-cols-3`) atau 4 kolom (`lg:grid-cols-4`). Kontainer grid dibatasi `max-w-4xl mx-auto` agar proporsi 2 kartu tetap seimbang, padat, dan elegan di layar lebar.
+- **Universal Grid Gap & Alignment Symmetry Lock:** Seluruh container card grid pada 6 section utama (**Genres**, **Experience**, **Stage Archive**, **YouTube Player**, **My Edited Songs**, dan **Assets File**) terkunci seragam pada batas lebar maksimal **`mx-auto max-w-4xl`**, sehingga batas tepi kiri dan kanan kartu sejajar lurus secara vertikal dari atas ke bawah pada layar desktop. Jarak gap (horizontal antar-kolom dan vertikal antar-baris kartu) terkunci seragam dan simetris pada **`gap-3 sm:gap-5`** (12px di mobile, 20px di desktop/tablet). Dilarang memakai gap berbeda seperti `gap-4`.
+- **Card Box Radius Lock (`rounded-2xl`):** Seluruh content card box di semua section (Genres, Experience, Stage Archive, YouTube Mixtape Player, Edited Songs, Assets File, dan sub-item Direct Contact) terkunci seragam menggunakan radius `rounded-2xl`. Kotak pembungkus icon di dalam card terkunci `rounded-xl` (satu tingkat di bawah card). Kontainer video iframe di dalam card player terkunci `rounded-xl`.
 - **Background Clean Solid Lock:** Seluruh section wajib mempertahankan latar belakang hitam/gelap solid murni (`bg-slate-950`). Dilarang menambahkan elemen dekoratif lingkaran blur / ambient gradient liar (`bg-slate-700/20`, `blur-3xl`, dsb.) yang menyebabkan noda gradasi tipis, warna belang, atau garis patahan terpotong (`overflow-hidden`) saat ukuran kontainer berubah dinamis.
 - **Spacing Vertikal Section Header Lock:** Jarak bawah container header (`badge`, `title`, `description`) menuju container card box atau konten di bawahnya terkunci rapi pada `mb-6 sm:mb-8` di semua section (Experience, Genres, Mixtapes, Edited Songs, Assets File, Contact). Dilarang memakai margin renggang berlebih (`mb-10 sm:mb-16`) agar ritme vertikal tetap proporsional dan padat.
 - **Brand Lock:** Semua nama panggung, metadata, copy, footer, social label, dan pesan booking wajib memakai nama **CANKZ**. Jangan memakai nama placeholder lain seperti DJ Vortex, Alex, atau nama buatan baru.
@@ -49,23 +49,8 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 
 ---
 
-### **SECTION 2: EXPERIENCE / PERFORMANCE VENUES**
+### **SECTION 2: GENRES & SOUND SIGNATURE**
 *Scroll ke bawah dari Hero/About.*
-
-- **Fitur & Konten:**
-  - Header: *"Where I've Played"* atau *"Gig Experience"*.
-  - Sub-header: Daftar klub, festival, dan venue yang pernah diisi.
-- **Tampilan Grid:**
-  - Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`) di seluruh perangkat dan ukuran layar (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac).
-- **Setiap Card Venue Berisi:**
-  - Foto Venue/Klub saat acara (background card).
-  - Overlay gradient gelap agar teks terbaca.
-  - Nama Tempat / Nama Event / Kota (misal: *Club Dragonfly - Jakarta*, *DDP Festival - Bali*).
-
----
-
-### **SECTION 3: GENRES & SOUND SIGNATURE**
-*Scroll ke bawah dari Experience.*
 
 - **Fitur & Konten:**
   - Header: *"Music Genres"* atau *"Sound Signature"*.
@@ -74,13 +59,53 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 - **Tampilan:**
   - Card minimalis ringkas rata tengah (centered layout): icon di kotak tengah dan nama genre di bawahnya rata tengah (`text-center`, `items-center`), tanpa teks deskripsi tambahan.
   - Tampilan Grid: Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`) di seluruh perangkat dan ukuran layar (Mobile, Tablet, Desktop).
+  - Tinggi card dibuat kompak dan simetris (`p-2.5 sm:p-3.5`, margin icon `mb-1.5 sm:mb-2`, pembungkus icon `p-1.5 sm:p-2`, teks `text-xs sm:text-sm`).
   - Card interaktif dengan hover halus (border amber lembut / shadow ringan), bukan neon glow.
   - Jangan tampilkan BPM atau Crowd Energy. Genre cukup berupa card singkat. Dilarang menggunakan animasi pop-up scroll fade-in, bouncing badge, ping indicator, emoji, atau animasi mencolok. Render statis instan.
 
 ---
 
-### **SECTION 4: YOUTUBE MIXTAPE PLAYER**
-*Scroll ke bawah dari Genre.*
+### **SECTION 3: EXPERIENCE / PERFORMANCE VENUES**
+*Scroll ke bawah dari Genres.*
+
+- **Fitur & Konten:**
+  - Header: *"Where I've Played"* atau *"Gig Experience"*.
+  - Sub-header: Daftar klub, festival, dan venue yang pernah diisi.
+- **Tampilan Grid:**
+  - Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`) di seluruh perangkat dan ukuran layar (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac).
+  - Tinggi card dibuat kompak dan simetris (`p-3 sm:p-4`, margin icon `mb-2 sm:mb-2.5`, pembungkus icon `p-1.5 sm:p-2`, ukuran teks `text-sm sm:text-base`) agar proporsional dan tidak memakan ruang vertikal berlebih.
+- **Setiap Card Venue Berisi:**
+  - Foto Venue/Klub saat acara (background card).
+  - Overlay gradient gelap agar teks terbaca.
+  - Nama Tempat / Nama Event / Kota (misal: *Club Dragonfly - Jakarta*, *DDP Festival - Bali*).
+
+---
+
+### **SECTION 4: STAGE ARCHIVE (LIVE MOMENTS)**
+*Scroll ke bawah dari Experience.*
+
+- **Fitur & Konten:**
+  - Header: *"Stage Archive"*.
+  - Sub-header: *"Raw energy, crowd connection, and stage presence captured across recent gigs"*.
+  - Badge Header: `Live Moments` dengan icon `Camera`.
+  - **Tampilan Beranda (`/`):**
+    - Menampilkan cuplikan 4 foto aksi panggung pilihan.
+    - Rasio foto potret 3:4 (`aspect-[3/4]`), sudut `rounded-2xl`, border `border-white/10` dengan hover amber tipis `border-amber-400/35`.
+    - Murni foto visual bersih tanpa overlay nama tempat, event, atau lokasi agar tampil estetik dan modern.
+    - Hover zoom halus (`scale-105`) dengan icon expand (`Maximize2`) di pojok kanan bawah.
+    - Tombol aksi utama di bawah grid: *"View All Photos"* mengarahkan ke halaman mandiri `/gallery`. Desain seragam tombol Google Drive di Assets File (`inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg transition hover:bg-amber-300 hover:shadow-amber-400/20`, dengan icon `Camera` dan `ArrowRight`).
+  - **Halaman Mandiri Dedicated (`/gallery`):**
+    - Rute mandiri publik bagi pengunjung untuk melihat seluruh arsip foto perform CANKZ.
+    - Sticky top navigation bar minimalis dengan logo CANKZ dan tombol *"Back to Home"* yang kembali dan mendarat presisi di anchor section `/#stage-archive`.
+    - Menampilkan seluruh katalog foto dengan grid 2 kolom (`grid-cols-2`, `max-w-4xl mx-auto`, `gap-3 sm:gap-5`, `rounded-2xl`, `aspect-[3/4]`).
+  - **Interaksi Lightbox Modal (Beranda & `/gallery`):**
+    - Klik pada kartu foto membuka modal lightbox tampilan penuh dengan backdrop blur transparan (`bg-slate-950/90 backdrop-blur-md`).
+    - Mendukung penutupan via tombol close (X), klik backdrop luar, atau tombol Escape keyboard.
+
+---
+
+### **SECTION 5: YOUTUBE MIXTAPE PLAYER**
+*Scroll ke bawah dari Stage Archive.*
 
 - **Fitur & Konten:**
   - Header: *"Latest Mixtapes & Sets"*.
@@ -93,26 +118,33 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 
 ---
 
-### **SECTION 5: MY EDITED SONGS**
+### **SECTION 6: MY EDITED SONGS**
 *Scroll ke bawah dari YouTube / Mixtape Player.*
 
 - **Fitur & Konten:**
   - Header: *"My Edited Songs"*.
   - Sub-header: Custom edits, bootlegs, dan flips garapan CANKZ.
-  - **Fitur Pencarian (Search Bar):** Search input bar minimalis di bawah header (`bg-slate-900/60`, border amber halus `border-amber-400/25`, icon `Search`). Memfilter track secara real-time berdasarkan judul lagu, nama artis, dan genre. Dilengkapi tombol reset silang (`X`) dan tampilan *empty state* bersih bila tidak ada track yang cocok.
-- **Tampilan Grid:**
-  - Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`) di seluruh perangkat dan ukuran layar (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac).
-- **Setiap Card Track Berisi:**
-  - Judul lagu dan nama artist original (compact, langsung nama artist tanpa prefix 'Orig.').
-  - Label kualitas audio (contoh: `Quality: WAV` atau `Quality: MP3 (320Kbps)`).
-  - Badge genre sesuai Sound Signature.
-  - Tombol aksi: *"Download"* di posisi tengah card, bersih tanpa underline.
-  - Interaksi Download Modal Pop-up: Klik *"Download"* membuka modal pop-up backdrop transparan blur (`bg-slate-950/80 backdrop-blur-sm`) menampilkan detail lengkap tanpa terpotong (judul lengkap, artis, genre, quality indicator) serta tombol final *"Download Track"* menuju tautan file unduhan. Mendukung penutupan via tombol close (X), klik backdrop luar, atau tombol Escape keyboard.
-  - Desain card *glass-panel* kompak selaras dengan tema gelap elegan & aksen amber, render statis instan tanpa animasi scroll fade-in.
+  - **Tampilan Beranda (`/`):**
+    - Menampilkan cuplikan 6 lagu teratas (`songList.slice(0, 6)`) agar layout beranda tetap rapi, seimbang, dan tidak terlalu panjang.
+    - Search bar dihilangkan dari beranda untuk mempertahankan kesan bersih dan minimalis.
+    - Di bawah grid kartu terdapat tombol aksi utama: *"View All Edited Songs"* yang mengarahkan ke halaman mandiri `/songs`. Tombol menggunakan desain seragam seperti tombol Google Drive di section Assets File (`inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg transition hover:bg-amber-300 hover:shadow-amber-400/20`, dengan icon `Music2` dan `ArrowRight`).
+  - **Halaman Mandiri Dedicated (`/songs`):**
+    - Rute mandiri publik bagi pengunjung untuk melihat dan mencari seluruh katalog lagu editan CANKZ.
+    - Sticky top navigation bar minimalis dengan logo CANKZ dan tombol *"Back to Home"* yang saat diklik otomatis kembali dan mendarat presisi di anchor section `/#edited-songs`.
+    - **Fitur Pencarian (Search Bar):** Terletak eksklusif di halaman ini (`bg-slate-900/60`, border amber halus `border-amber-400/25`, icon `Search`), memfilter seluruh katalog lagu secara real-time berdasarkan judul lagu, nama artis, dan genre, lengkap dengan tombol reset silang (`X`) dan tampilan *empty state*.
+  - **Tampilan Grid (Beranda & `/songs`):**
+    - Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`, `gap-3 sm:gap-5`) di seluruh perangkat dan ukuran layar (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac).
+  - **Setiap Card Track Berisi:**
+    - Judul lagu dan nama artist original (compact, langsung nama artist tanpa prefix 'Orig.').
+    - Label kualitas audio (contoh: `Quality: WAV` atau `Quality: MP3 (320Kbps)`).
+    - Badge genre sesuai Sound Signature.
+    - Tombol aksi: *"Download"* di posisi tengah card, bersih tanpa underline.
+    - Interaksi Download Modal Pop-up: Klik *"Download"* membuka modal pop-up backdrop transparan blur (`bg-slate-950/80 backdrop-blur-sm`) menampilkan detail lengkap tanpa terpotong (judul lengkap, artis, genre, quality indicator) serta tombol final *"Download Track"* menuju tautan file unduhan. Mendukung penutupan via tombol close (X), klik backdrop luar, atau tombol Escape keyboard.
+    - Desain card *glass-panel* kompak selaras dengan tema gelap elegan & aksen amber, render statis instan tanpa animasi scroll fade-in.
 
 ---
 
-### **SECTION 6: ASSETS FILE**
+### **SECTION 7: ASSETS FILE**
 *Scroll ke bawah dari Edited Songs.*
 
 - **Fitur & Konten:**
@@ -125,7 +157,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 
 ---
 
-### **SECTION 7: CONTACT & BOOKING**
+### **SECTION 8: CONTACT & BOOKING**
 *Section paling bawah (Footer & Form).*
 
 - **Fitur & Konten:**
@@ -138,7 +170,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 
 ---
 
-### **SECTION 8: HEADLESS CMS & CONTROL PANEL (`/login` & `/admin`)**
+### **SECTION 9: HEADLESS CMS & CONTROL PANEL (`/login` & `/admin`)**
 *Sistem manajemen konten cloud-based menggunakan Supabase PostgreSQL + Auth.*
 
 - **Fitur & Arsitektur:**
