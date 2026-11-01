@@ -27,7 +27,8 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 - **Spacing Vertikal Section Header Lock:** Jarak bawah container header (`badge`, `title`, `description`) menuju container card box atau konten di bawahnya terkunci rapi pada `mb-6 sm:mb-8` di semua section (Experience, Genres, Mixtapes, Edited Songs, Assets File, Contact). Dilarang memakai margin renggang berlebih (`mb-10 sm:mb-16`) agar ritme vertikal tetap proporsional dan padat.
 - **Brand Lock:** Semua nama panggung, metadata, copy, footer, social label, dan pesan booking wajib memakai nama **CANKZ**. Jangan memakai nama placeholder lain seperti DJ Vortex, Alex, atau nama buatan baru.
 - **Lokasi Lock:** Lokasi utama artis wajib **Sleman, Yogyakarta**.
-- **Foto Hero Lock:** Foto hero utama wajib memakai aset lokal `aset/fotoporto.jpeg`. Jangan ganti dengan Unsplash/placeholder kecuali user eksplisit meminta.
+- **Foto Hero Lock:** Foto hero utama diambil dinamis dari Supabase Storage (`site_settings.hero_image_url`) yang dikelola langsung via Admin Panel. Dilarang menggunakan foto bawaan lokal (`1.jpg`) agar kepastian perubahan foto di admin dapat diverifikasi secara visual murni.
+- **Hero Skeleton Loading Lock:** Selama proses fetch foto profil dari Supabase, Hero About wajib menampilkan skeleton card rasio 4:5 (`animate-pulse`) dengan icon User redup, bukan foto statis lokal. Jika database kosong, tampilkan state kosong yang rapi.
 
 ---
 
@@ -37,7 +38,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 *Urutan komponen paling atas.*
 
 - **Desktop Layout (`lg:flex-row` / `lg:grid-cols-2`):**
-  - **Sisi Kiri:** 1 Foto Formal DJ dari Supabase Storage dinamis (`site_settings.hero_image_url`) dengan fallback otomatis ke aset lokal `aset/1.jpg` (rasio aspek 4:5 atau 1:1) dengan border tipis dan shadow halus. Foto diambil via Server-Side Rendering (SSR) di `app/page.tsx` dan dipassing via prop `initialHeroImage` guna menjamin nol kedip (*zero-flash architecture*).
+  - **Sisi Kiri:** 1 Foto Formal DJ dari Supabase Storage dinamis (`site_settings.hero_image_url`) dengan Skeleton Loader rasio 4:5 saat data di-fetch. Aset statis lokal `aset/1.jpg` dihapus permanen dari kode dan repositori. Jika foto belum diatur di admin, tampilkan clean placeholder kosong tanpa merusak layout. Pengambilan data menggunakan client-side query resilien (`.limit(1).maybeSingle()`) dengan `key={heroImage}` untuk memastikan remount instan DOM gambar saat URL baru aktif.
   - **Sisi Kanan:** 
     1. Nama Panggung: **CANKZ** (Typography besar, bold, white text, tanpa gradient ramai).
     2. Lokasi / Subtitle: **Sleman, Yogyakarta** (Subtitle sedang).
@@ -212,7 +213,7 @@ Saat mengeksekusi kode berdasarkan dokumen ini, AI Agent harus mematuhi aturan b
 3. **Responsive Utilities:**
    - Gunakan Tailwind breakpoint `sm:`, `md:`, `lg:`, `xl:` untuk memastikan tampilan mobile (`<768px`) dan desktop (`>=1024px`) sesuai dengan spesifikasi di atas.
 4. **Media:**
-   - Hero wajib memakai aset lokal (`aset/1.jpg` / `aset/fotoporto.jpeg`).
+   - Hero foto profil sepenuhnya dinamis dari Supabase Storage (`site_settings.hero_image_url`) dengan Skeleton Loader. Aset lokal `1.jpg` dihapus permanen.
    - Foto venue boleh memakai Unsplash resolusi tinggi kategori *Nightclub* atau *Festival* selama tetap selaras dengan tema gelap elegant.
 5. **YouTube & Media Integration:**
    - Gunakan YouTube Embed Player (iFrame) responsif dengan rasio `aspect-video`.

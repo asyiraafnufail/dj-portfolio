@@ -3,18 +3,21 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Mail, Play } from 'lucide-react';
+import { Mail, Play, User } from 'lucide-react';
 import { createClient } from '@/src/lib/supabase/client';
-import photoPorto from '../../aset/1.jpg';
 
 export default function HeroAbout() {
   const [heroImage, setHeroImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Baca cache client-side setelah hydration selesai (hindari hydration mismatch)
+    // 1. Baca cache client-side
     try {
       const cached = localStorage.getItem('cankz_hero_image');
-      if (cached) setHeroImage(cached);
+      if (cached) {
+        setHeroImage(cached);
+        setLoading(false);
+      }
     } catch {
       // Storage unavailable
     }
@@ -46,6 +49,9 @@ export default function HeroAbout() {
             // Storage unavailable
           }
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -64,19 +70,41 @@ export default function HeroAbout() {
           >
             <div className="relative aspect-[4/5] w-full max-w-xs sm:max-w-md overflow-hidden rounded-3xl border border-white/10 bg-slate-900 p-1 shadow-2xl transition-transform duration-500 hover:scale-[1.01]">
               <div className="relative h-full w-full overflow-hidden rounded-[22px] bg-slate-900">
-                <Image
-                  key={heroImage || 'default'}
-                  src={heroImage || photoPorto}
-                  alt="Foto portfolio CANKZ"
-                  fill
-                  priority
-                  loading="eager"
-                  unoptimized={Boolean(heroImage)}
-                  sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 500px"
-                  className="object-cover object-center transition-transform duration-700 hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent" />
-                <div className="glass-panel absolute bottom-4 left-4 right-4 rounded-xl border border-white/10 p-3.5 sm:p-4 text-center sm:text-left">
+                {loading ? (
+                  <div className="relative h-full w-full bg-slate-950/90 animate-pulse flex flex-col items-center justify-center gap-3">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/5 bg-white/5 text-amber-200/30">
+                      <User className="h-7 w-7" />
+                    </div>
+                    <span className="text-xs font-medium text-slate-500">Loading Profile...</span>
+                  </div>
+                ) : heroImage ? (
+                  <>
+                    <Image
+                      key={heroImage}
+                      src={heroImage}
+                      alt="Foto portfolio CANKZ"
+                      fill
+                      priority
+                      loading="eager"
+                      unoptimized
+                      sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 500px"
+                      className="object-cover object-center transition-transform duration-700 hover:scale-105"
+                      onError={() => setHeroImage(null)}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent" />
+                  </>
+                ) : (
+                  <div className="relative h-full w-full bg-slate-950 flex flex-col items-center justify-center gap-3 p-6 text-center">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-slate-900 text-slate-600">
+                      <User className="h-7 w-7" />
+                    </div>
+                    <p className="text-xs text-slate-400">
+                      Foto profil belum diatur di panel admin.
+                    </p>
+                  </div>
+                )}
+
+                <div className="glass-panel absolute bottom-4 left-4 right-4 rounded-xl border border-white/10 p-3.5 sm:p-4 text-center sm:text-left z-10">
                   <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-amber-200">Based in</p>
                   <p className="text-xs sm:text-sm font-bold text-white">Sleman, Yogyakarta</p>
                 </div>

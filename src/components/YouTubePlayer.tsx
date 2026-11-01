@@ -30,7 +30,8 @@ const mixtapes: Mixtape[] = [
 ];
 
 export default function YouTubePlayer() {
-  const [mixtapeList, setMixtapeList] = useState<Mixtape[]>(mixtapes);
+  const [mixtapeList, setMixtapeList] = useState<Mixtape[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const supabase = createClient();
@@ -49,7 +50,15 @@ export default function YouTubePlayer() {
               border: d.border || 'border-amber-400/25',
             }))
           );
+        } else {
+          setMixtapeList(mixtapes);
         }
+      })
+      .catch(() => {
+        setMixtapeList(mixtapes);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -69,42 +78,60 @@ export default function YouTubePlayer() {
         </div>
 
         <div className="mx-auto max-w-4xl grid grid-cols-1 gap-3 sm:gap-5 lg:grid-cols-2">
-          {mixtapeList.map((mixtape) => (
-            <div
-              key={mixtape.id}
-              className={`glass-panel flex flex-col justify-between space-y-4 rounded-2xl border ${mixtape.border} p-5 sm:p-6 transition hover:border-amber-400/35 hover:shadow-xl`}
-            >
-              <h3 className="line-clamp-2 text-base sm:text-lg font-bold text-white">
-                {mixtape.title}
-              </h3>
-
-              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-slate-900 shadow-lg">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={mixtape.embedUrl}
-                  title={mixtape.title}
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="h-full w-full rounded-xl"
-                />
+          {loading ? (
+            Array.from({ length: 2 }).map((_, idx) => (
+              <div
+                key={`mixtape-skel-${idx}`}
+                className="glass-panel flex flex-col justify-between space-y-4 rounded-2xl border border-white/5 bg-slate-900/40 p-5 sm:p-6 animate-pulse"
+              >
+                <div className="h-6 w-3/4 rounded-md bg-white/10" />
+                <div className="relative aspect-video w-full rounded-xl border border-white/5 bg-slate-950/80 flex items-center justify-center">
+                  <Youtube className="h-10 w-10 text-white/10" />
+                </div>
+                <div className="flex items-center justify-between pt-2">
+                  <div className="h-3 w-28 rounded-md bg-white/5" />
+                  <div className="h-3 w-24 rounded-md bg-white/10" />
+                </div>
               </div>
+            ))
+          ) : (
+            mixtapeList.map((mixtape) => (
+              <div
+                key={mixtape.id}
+                className={`glass-panel flex flex-col justify-between space-y-4 rounded-2xl border ${mixtape.border} p-5 sm:p-6 transition hover:border-amber-400/35 hover:shadow-xl`}
+              >
+                <h3 className="line-clamp-2 text-base sm:text-lg font-bold text-white">
+                  {mixtape.title}
+                </h3>
 
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pt-2 text-xs text-slate-400">
-                <span className="font-medium text-amber-200">Available on YouTube</span>
-                <a
-                  href={mixtape.youtubeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 font-semibold text-white underline underline-offset-4 hover:text-amber-200"
-                >
-                  <Youtube className="h-4 w-4 text-red-500" />
-                  Watch on YouTube &rarr;
-                </a>
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-slate-900 shadow-lg">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={mixtape.embedUrl}
+                    title={mixtape.title}
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="h-full w-full rounded-xl"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pt-2 text-xs text-slate-400">
+                  <span className="font-medium text-amber-200">Available on YouTube</span>
+                  <a
+                    href={mixtape.youtubeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-semibold text-white underline underline-offset-4 hover:text-amber-200"
+                  >
+                    <Youtube className="h-4 w-4 text-red-500" />
+                    Watch on YouTube &rarr;
+                  </a>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </section>

@@ -77,7 +77,8 @@ interface EditedSongsProps {
 }
 
 export default function EditedSongs({ isPage = false }: EditedSongsProps) {
-  const [songList, setSongList] = useState<EditedSong[]>(editedSongs);
+  const [songList, setSongList] = useState<EditedSong[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedSong, setSelectedSong] = useState<EditedSong | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -100,7 +101,15 @@ export default function EditedSongs({ isPage = false }: EditedSongsProps) {
               border: d.border || 'border-amber-400/25',
             }))
           );
+        } else {
+          setSongList(editedSongs);
         }
+      })
+      .catch(() => {
+        setSongList(editedSongs);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -184,7 +193,31 @@ export default function EditedSongs({ isPage = false }: EditedSongsProps) {
           </div>
         )}
 
-        {displayedSongs.length > 0 ? (
+        {loading ? (
+          <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
+            {Array.from({ length: isPage ? 8 : 6 }).map((_, idx) => (
+              <div
+                key={`song-skel-${idx}`}
+                className="glass-panel flex flex-col justify-between rounded-2xl border border-white/5 bg-slate-900/40 p-3 sm:p-4 animate-pulse"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-1">
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl border border-white/5 bg-white/5" />
+                    <div className="h-4 w-16 sm:w-20 rounded-full bg-white/5" />
+                  </div>
+                  <div className="mt-2.5 sm:mt-3 space-y-1.5">
+                    <div className="h-3.5 sm:h-4 w-3/4 rounded-md bg-white/10" />
+                    <div className="h-3 w-1/2 rounded-md bg-white/5" />
+                    <div className="h-2.5 w-1/3 rounded-md bg-amber-400/10" />
+                  </div>
+                </div>
+                <div className="mt-3 sm:mt-4 flex items-center justify-center border-t border-white/5 pt-2.5 sm:pt-3">
+                  <div className="h-3 w-16 rounded-md bg-white/5" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : displayedSongs.length > 0 ? (
           <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
             {displayedSongs.map((song) => (
               <div

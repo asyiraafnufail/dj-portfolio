@@ -1665,14 +1665,21 @@ export default function AdminPage() {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <div className="relative aspect-[4/5] h-28 w-auto shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-950 shadow-md">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={settings.hero_image_url || '/1.jpg'}
-                      alt="Hero preview"
-                      className="h-full w-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="125" viewBox="0 0 100 125" fill="%231e293b"><rect width="100" height="125"/><text x="50" y="65" fill="%2394a3b8" font-size="10" text-anchor="middle">Default Photo</text></svg>';
-                      }}
-                    />
+                    {settings.hero_image_url ? (
+                      <img
+                        src={settings.hero_image_url}
+                        alt="Hero preview"
+                        className="h-full w-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="125" viewBox="0 0 100 125" fill="%231e293b"><rect width="100" height="125"/><text x="50" y="65" fill="%2394a3b8" font-size="10" text-anchor="middle">Broken Image</text></svg>';
+                        }}
+                      />
+                    ) : (
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 p-2 text-center bg-slate-900 text-slate-500">
+                        <Camera className="h-5 w-5" />
+                        <span className="text-[10px]">No Photo</span>
+                      </div>
+                    )}
                   </div>
                   <div className="flex-1 space-y-2 w-full">
                     <div className="flex flex-wrap items-center gap-2">
