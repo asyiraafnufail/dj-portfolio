@@ -565,6 +565,9 @@ export default function AdminPage() {
         const pathWithQuery = url.substring(idx + marker.length);
         return decodeURIComponent(pathWithQuery.split('?')[0]);
       }
+      if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
+        return decodeURIComponent(url.split('?')[0]);
+      }
     } catch {
       // ignore
     }
@@ -577,11 +580,14 @@ export default function AdminPage() {
     // 1. Hapus file fisik dari Supabase Storage jika tersimpan di bucket
     const storagePath = extractStorageFileName(photo.image_url, 'stage-photos');
     if (storagePath) {
-      const { error: storageError } = await supabase.storage
+      const { data: removedData, error: storageError } = await supabase.storage
         .from('stage-photos')
         .remove([storagePath]);
       if (storageError) {
-        console.warn('Storage delete warning:', storageError.message);
+        console.error('Storage delete error:', storageError.message);
+        alert(`Storage Warning: File gagal dihapus dari bucket (${storageError.message}). Cek Storage RLS Policy.`);
+      } else if (!removedData || removedData.length === 0) {
+        console.warn('Storage file not found or skipped by policy:', storagePath);
       }
     }
 

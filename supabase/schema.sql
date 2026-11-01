@@ -148,20 +148,14 @@ create policy "Public view stage photos" on storage.objects
   for select to anon, authenticated
   using (bucket_id = 'stage-photos');
 
--- Authenticated admin can upload photos
+-- Authenticated admin has full access (select, insert, update, delete)
+drop policy if exists "Admin all stage photos storage" on storage.objects;
+drop policy if exists "Admin delete stage photos" on storage.objects;
 drop policy if exists "Authenticated insert stage photos" on storage.objects;
-create policy "Authenticated insert stage photos" on storage.objects
-  for insert to authenticated
-  with check (bucket_id = 'stage-photos');
-
--- Authenticated admin can update photos
 drop policy if exists "Authenticated update stage photos" on storage.objects;
-create policy "Authenticated update stage photos" on storage.objects
-  for update to authenticated
-  using (bucket_id = 'stage-photos');
-
--- Authenticated admin can delete photos
 drop policy if exists "Authenticated delete stage photos" on storage.objects;
-create policy "Authenticated delete stage photos" on storage.objects
-  for delete to authenticated
-  using (bucket_id = 'stage-photos');
+
+create policy "Admin all stage photos storage" on storage.objects
+  for all to authenticated
+  using (bucket_id = 'stage-photos')
+  with check (bucket_id = 'stage-photos');
