@@ -24,28 +24,15 @@ export default function HeroAbout() {
     supabase
       .from('site_settings')
       .select('hero_image_url')
-      .eq('id', 'general')
+      .limit(1)
       .maybeSingle()
       .then(({ data, error }) => {
-        if (error) {
-          // Error query atau kolom belum ada: jangan wipe cache
-          return;
-        }
-        if (data && 'hero_image_url' in data) {
-          if (data.hero_image_url) {
-            setHeroImage(data.hero_image_url);
-            try {
-              localStorage.setItem('cankz_hero_image', data.hero_image_url);
-            } catch {
-              // Storage unavailable
-            }
-          } else {
-            setHeroImage(null);
-            try {
-              localStorage.removeItem('cankz_hero_image');
-            } catch {
-              // Storage unavailable
-            }
+        if (!error && data?.hero_image_url) {
+          setHeroImage(data.hero_image_url);
+          try {
+            localStorage.setItem('cankz_hero_image', data.hero_image_url);
+          } catch {
+            // Storage unavailable
           }
         }
       });

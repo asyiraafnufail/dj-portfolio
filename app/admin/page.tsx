@@ -307,7 +307,7 @@ export default function AdminPage() {
       supabase.from('mixtapes').select('*').order('sort_order', { ascending: true }),
       supabase.from('venues').select('*').order('sort_order', { ascending: true }),
       supabase.from('genres').select('*').order('sort_order', { ascending: true }),
-      supabase.from('site_settings').select('*').eq('id', 'general').maybeSingle(),
+      supabase.from('site_settings').select('*').limit(1).maybeSingle(),
       supabase.from('stage_photos').select('*').order('sort_order', { ascending: true }),
     ]);
 
@@ -762,28 +762,36 @@ export default function AdminPage() {
         const url = publicUrlData.publicUrl;
         setSettings((prev) => ({ ...prev, hero_image_url: url }));
 
+        // Cek baris site_settings yang sudah ada agar tidak bentrok ID
+        const { data: existingSettings } = await supabase
+          .from('site_settings')
+          .select('id')
+          .limit(1)
+          .maybeSingle();
+
+        const targetId = existingSettings?.id || 'general';
+
         // Auto-save langsung ke table site_settings Supabase
         const { error: dbError } = await supabase.from('site_settings').upsert({
-          id: 'general',
-          google_drive_url: settings.google_drive_url,
-          whatsapp_number: settings.whatsapp_number,
-          whatsapp_message: settings.whatsapp_message,
-          booking_email: settings.booking_email,
-          location: settings.location,
+          id: targetId,
+          google_drive_url: settings.google_drive_url || '',
+          whatsapp_number: settings.whatsapp_number || '',
+          whatsapp_message: settings.whatsapp_message || '',
+          booking_email: settings.booking_email || '',
+          location: settings.location || '',
           hero_image_url: url,
           updated_at: new Date().toISOString(),
         });
 
         if (dbError) {
-          if (dbError.message.includes('hero_image_url')) {
-            alert(
-              'PENTING: Kolom hero_image_url belum ada di Supabase database!\n\n' +
-              'Buka Supabase -> SQL Editor, lalu jalankan query ini:\n' +
-              'ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS hero_image_url text;'
-            );
-          } else {
-            alert('Gagal simpan ke database: ' + dbError.message);
-          }
+          console.error('Error saving hero_image_url:', dbError);
+          alert(
+            'FOTO SUDAH MASUK STORAGE, TAPI GAGAL SIMPAN KE DATABASE!\n\n' +
+            'Pesan error database: ' + dbError.message + '\n\n' +
+            'Penyebab umum: Kolom hero_image_url belum ada di Supabase.\n' +
+            'Solusi: Jalankan query ini di Supabase SQL Editor:\n' +
+            'ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS hero_image_url text;'
+          );
         } else {
           try {
             localStorage.setItem('cankz_hero_image', url);
@@ -808,13 +816,21 @@ export default function AdminPage() {
     if (!confirm('Kembalikan foto Hero ke foto default bawaan?')) return;
     setSettings((prev) => ({ ...prev, hero_image_url: '' }));
 
+    const { data: existingSettings } = await supabase
+      .from('site_settings')
+      .select('id')
+      .limit(1)
+      .maybeSingle();
+
+    const targetId = existingSettings?.id || 'general';
+
     const { error: dbError } = await supabase.from('site_settings').upsert({
-      id: 'general',
-      google_drive_url: settings.google_drive_url,
-      whatsapp_number: settings.whatsapp_number,
-      whatsapp_message: settings.whatsapp_message,
-      booking_email: settings.booking_email,
-      location: settings.location,
+      id: targetId,
+      google_drive_url: settings.google_drive_url || '',
+      whatsapp_number: settings.whatsapp_number || '',
+      whatsapp_message: settings.whatsapp_message || '',
+      booking_email: settings.booking_email || '',
+      location: settings.location || '',
       hero_image_url: null,
       updated_at: new Date().toISOString(),
     });
@@ -834,9 +850,25 @@ export default function AdminPage() {
   // --- Settings Handler ---
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const { data: existingSettings } = await supabase
+      .from('site_settings')
+      .select('id')
+      .limit(1)
+      .maybeSingle();
+
+    const targetId = existingSettings?.id || 'general';
+
     const { error } = await supabase.from('site_settings').upsert({
-      id: 'general',
+      id: targetId,
       google_drive_url: settings.google_drive_url,
+      whatsapp_number: settings.whatsapp_number,
+      whatsapp_message: settings.whatsapp_message,
+      booking_email: settings.booking_email,
+      location: settings.location,
+      hero_image_url: settings.hero_image_url || null,
+      updated_at: new Date().toISOString(),
+    });
       whatsapp_number: settings.whatsapp_number,
       whatsapp_message: settings.whatsapp_message,
       booking_email: settings.booking_email,

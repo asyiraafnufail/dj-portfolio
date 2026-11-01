@@ -31,7 +31,7 @@ export default function AssetsFile() {
     supabase
       .from('site_settings')
       .select('google_drive_url')
-      .eq('id', 'general')
+      .limit(1)
       .maybeSingle()
       .then(({ data }) => {
         if (data?.google_drive_url) {

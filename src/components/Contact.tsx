@@ -24,7 +24,7 @@ export default function Contact() {
     supabase
       .from('site_settings')
       .select('whatsapp_number, whatsapp_message, booking_email, location')
-      .eq('id', 'general')
+      .limit(1)
       .maybeSingle()
       .then(({ data }) => {
         if (data) {
