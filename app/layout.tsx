@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://cankz.vercel.app"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.cankz.my.id"
   ),
   title: {
     default: "CANKZ | DJ & Music Producer Yogyakarta",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "/",
+    url: "https://www.cankz.my.id",
     title: "CANKZ | DJ & Music Producer Yogyakarta",
     description:
       "Official portfolio of DJ CANKZ. Club sets, mixtapes, custom edits & booking desk in Sleman, Yogyakarta.",
@@ -61,6 +61,7 @@ const jsonLd = {
   "@type": ["Person", "MusicGroup"],
   name: "CANKZ",
   alternateName: ["DJ CANKZ", "Cankz"],
+  url: "https://www.cankz.my.id",
   description:
     "DJ & Music Producer based in Sleman, Yogyakarta. Available for club bookings, festivals, and private events.",
   jobTitle: "DJ & Music Producer",
