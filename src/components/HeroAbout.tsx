@@ -27,22 +27,23 @@ export default function HeroAbout() {
       .limit(1)
       .maybeSingle()
       .then(({ data, error }) => {
-        if (!error && data) {
-          if (data.hero_image_url) {
-            setHeroImage(data.hero_image_url);
-            try {
-              localStorage.setItem('cankz_hero_image', data.hero_image_url);
-            } catch {
-              // Storage unavailable
-            }
-          } else if (data.hero_image_url === '') {
-            // Hanya hapus jika admin secara eksplisit menekan tombol 'Reset ke Default'
-            setHeroImage(null);
-            try {
-              localStorage.removeItem('cankz_hero_image');
-            } catch {
-              // Storage unavailable
-            }
+        if (error) {
+          console.error('[HeroAbout] Supabase fetch error:', error);
+          return;
+        }
+        if (data?.hero_image_url) {
+          setHeroImage(data.hero_image_url);
+          try {
+            localStorage.setItem('cankz_hero_image', data.hero_image_url);
+          } catch {
+            // Storage unavailable
+          }
+        } else if (data?.hero_image_url === '') {
+          setHeroImage(null);
+          try {
+            localStorage.removeItem('cankz_hero_image');
+          } catch {
+            // Storage unavailable
           }
         }
       });
