@@ -138,19 +138,19 @@ export default function Experience() {
             return (
               <div
                 key={venue.id}
-                className={`glass-panel group flex flex-col rounded-2xl border ${venue.tone} bg-slate-900/40 p-4 sm:p-6 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
+                className={`glass-panel group flex flex-col justify-center rounded-2xl border ${venue.tone} bg-slate-900/40 p-3 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
               >
                 <div>
-                  <div className="mb-3 sm:mb-4 flex items-center justify-between">
-                    <div className="w-fit rounded-xl border border-white/10 bg-slate-950/80 p-2 sm:p-2.5 text-amber-200 transition group-hover:text-amber-100">
-                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <div className="mb-2 sm:mb-2.5 flex items-center justify-between">
+                    <div className="w-fit rounded-xl border border-white/10 bg-slate-950/80 p-1.5 sm:p-2 text-amber-200 transition group-hover:text-amber-100">
+                      <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
-                    <span className="flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-slate-400">
+                    <span className="flex items-center gap-1 text-[10px] sm:text-xs font-semibold text-slate-400">
                       <MapPin className="h-3 w-3 text-amber-300/80" />
                       {venue.city}
                     </span>
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-white transition group-hover:text-amber-100">
+                  <h3 className="text-sm sm:text-base font-bold text-white transition group-hover:text-amber-100">
                     {venue.name}
                   </h3>
                 </div>

@@ -35,6 +35,8 @@ export default function Navbar() {
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
       window.history.pushState(null, '', href);
+    } else {
+      window.location.href = '/' + href;
     }
   };
 

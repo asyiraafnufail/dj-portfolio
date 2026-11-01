@@ -78,12 +78,12 @@ export default function Genres() {
             return (
               <div
                 key={genre.id}
-                className={`glass-panel group flex flex-col items-center justify-center text-center rounded-2xl border ${genre.tone} bg-slate-900/40 p-4 sm:p-5 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
+                className={`glass-panel group flex flex-col items-center justify-center text-center rounded-2xl border ${genre.tone} bg-slate-900/40 p-2.5 sm:p-3.5 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
               >
-                <div className="mb-2.5 sm:mb-3 flex items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 p-2 sm:p-2.5 text-amber-200 transition group-hover:text-amber-100">
-                  <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                <div className="mb-1.5 sm:mb-2 flex items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 p-1.5 sm:p-2 text-amber-200 transition group-hover:text-amber-100">
+                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
-                <h3 className="text-sm sm:text-base font-bold text-white transition group-hover:text-amber-100">
+                <h3 className="text-xs sm:text-sm font-bold text-white transition group-hover:text-amber-100">
                   {genre.title}
                 </h3>
               </div>

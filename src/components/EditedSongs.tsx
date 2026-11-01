@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Disc3, Download, ExternalLink, Music2, Search, X } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, Disc3, Download, ExternalLink, Music2, Search, X } from 'lucide-react';
 import { createClient } from '@/src/lib/supabase/client';
 
 interface EditedSong {
@@ -71,7 +72,11 @@ const editedSongs: EditedSong[] = [
   },
 ];
 
-export default function EditedSongs() {
+interface EditedSongsProps {
+  isPage?: boolean;
+}
+
+export default function EditedSongs({ isPage = false }: EditedSongsProps) {
   const [songList, setSongList] = useState<EditedSong[]>(editedSongs);
   const [selectedSong, setSelectedSong] = useState<EditedSong | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -99,15 +104,17 @@ export default function EditedSongs() {
       });
   }, []);
 
-  const filteredSongs = songList.filter((song) => {
-    const q = searchQuery.toLowerCase().trim();
-    if (!q) return true;
-    return (
-      song.title.toLowerCase().includes(q) ||
-      song.originalArtist.toLowerCase().includes(q) ||
-      song.genre.toLowerCase().includes(q)
-    );
-  });
+  const displayedSongs = isPage
+    ? songList.filter((song) => {
+        const q = searchQuery.toLowerCase().trim();
+        if (!q) return true;
+        return (
+          song.title.toLowerCase().includes(q) ||
+          song.originalArtist.toLowerCase().includes(q) ||
+          song.genre.toLowerCase().includes(q)
+        );
+      })
+    : songList.slice(0, 6);
 
   useEffect(() => {
     if (selectedSong) {
@@ -146,34 +153,36 @@ export default function EditedSongs() {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="mx-auto mb-6 sm:mb-8 max-w-md">
-          <div className="relative flex items-center">
-            <Search className="pointer-events-none absolute left-3.5 h-4 w-4 text-amber-200/70" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search title, artist, or genre..."
-              aria-label="Search edited songs"
-              className="w-full rounded-xl border border-amber-400/25 bg-slate-900/60 py-2.5 pl-10 pr-9 text-xs sm:text-sm text-white placeholder-slate-400 outline-none transition focus:border-amber-400/60 focus:bg-slate-900/90 focus:ring-1 focus:ring-amber-400/40"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
-                className="absolute right-3 rounded-md p-1 text-slate-400 transition hover:text-white"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
+        {/* Search Bar - only shown on dedicated page */}
+        {isPage && (
+          <div className="mx-auto mb-6 sm:mb-8 max-w-md">
+            <div className="relative flex items-center">
+              <Search className="pointer-events-none absolute left-3.5 h-4 w-4 text-amber-200/70" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search title, artist, or genre..."
+                aria-label="Search edited songs"
+                className="w-full rounded-xl border border-amber-400/25 bg-slate-900/60 py-2.5 pl-10 pr-9 text-xs sm:text-sm text-white placeholder-slate-400 outline-none transition focus:border-amber-400/60 focus:bg-slate-900/90 focus:ring-1 focus:ring-amber-400/40"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                  className="absolute right-3 rounded-md p-1 text-slate-400 transition hover:text-white"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
-        {filteredSongs.length > 0 ? (
+        {displayedSongs.length > 0 ? (
           <div className="mx-auto max-w-4xl grid grid-cols-2 gap-3 sm:gap-5">
-            {filteredSongs.map((song) => (
+            {displayedSongs.map((song) => (
               <div
                 key={song.id}
                 className={`glass-panel group flex flex-col justify-between rounded-2xl border ${song.border} bg-slate-900/40 p-3 sm:p-4 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl`}
@@ -226,6 +235,20 @@ export default function EditedSongs() {
             >
               Clear search
             </button>
+          </div>
+        )}
+
+        {/* View All Button - only shown on homepage preview */}
+        {!isPage && (
+          <div className="mt-8 sm:mt-10 flex justify-center">
+            <Link
+              href="/songs"
+              className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg transition hover:bg-amber-300 hover:shadow-amber-400/20"
+            >
+              <Music2 className="h-4 w-4" />
+              View All Edited Songs
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         )}
       </div>
