@@ -6,6 +6,7 @@ import Link from 'next/link';
 import {
   Activity,
   ArrowLeft,
+  Camera,
   Check,
   ChevronDown,
   ChevronUp,
@@ -18,12 +19,13 @@ import {
   Plus,
   Save,
   Trash2,
+  Upload,
   X,
   Youtube,
 } from 'lucide-react';
 import { createClient } from '@/src/lib/supabase/client';
 
-type Tab = 'songs' | 'mixtapes' | 'venues' | 'genres' | 'settings';
+type Tab = 'songs' | 'mixtapes' | 'venues' | 'genres' | 'gallery' | 'settings';
 
 const QUALITY_OPTIONS = [
   { label: 'WAV', value: 'WAV' },
@@ -159,6 +161,13 @@ interface SiteSettings {
   location: string;
 }
 
+interface StagePhotoItem {
+  id: string;
+  image_url: string;
+  sort_order: number;
+  created_at?: string;
+}
+
 export default function AdminPage() {
   const router = useRouter();
   const supabase = createClient();
@@ -172,6 +181,7 @@ export default function AdminPage() {
   const [mixtapes, setMixtapes] = useState<Mixtape[]>([]);
   const [venues, setVenues] = useState<Venue[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
+  const [photos, setPhotos] = useState<StagePhotoItem[]>([]);
   const [settings, setSettings] = useState<SiteSettings>({
     id: 'general',
     google_drive_url: '',
@@ -180,6 +190,11 @@ export default function AdminPage() {
     booking_email: '',
     location: '',
   });
+
+  // Gallery form state
+  const [newPhotoUrl, setNewPhotoUrl] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // New item form states
   const [newSong, setNewSong] = useState({
@@ -260,6 +275,17 @@ export default function AdminPage() {
         updated.map((g) => supabase.from('genres').update({ sort_order: g.sort_order }).eq('id', g.id))
       );
       showNotice('Order updated!');
+    } else if (activeTab === 'gallery') {
+      if (targetIndex < 0 || targetIndex >= photos.length) return;
+      const next = [...photos];
+      const [item] = next.splice(index, 1);
+      next.splice(targetIndex, 0, item);
+      const updated = next.map((p, i) => ({ ...p, sort_order: i + 1 }));
+      setPhotos(updated);
+      await Promise.all(
+        updated.map((p) => supabase.from('stage_photos').update({ sort_order: p.sort_order }).eq('id', p.id))
+      );
+      showNotice('Order updated!');
     }
   };
 
@@ -270,12 +296,13 @@ export default function AdminPage() {
 
   const fetchData = async () => {
     setLoading(true);
-    const [sRes, mRes, vRes, gRes, setRes] = await Promise.all([
+    const [sRes, mRes, vRes, gRes, setRes, pRes] = await Promise.all([
       supabase.from('edited_songs').select('*').order('sort_order', { ascending: true }),
       supabase.from('mixtapes').select('*').order('sort_order', { ascending: true }),
       supabase.from('venues').select('*').order('sort_order', { ascending: true }),
       supabase.from('genres').select('*').order('sort_order', { ascending: true }),
       supabase.from('site_settings').select('*').eq('id', 'general').maybeSingle(),
+      supabase.from('stage_photos').select('*').order('sort_order', { ascending: true }),
     ]);
 
     if (sRes.data) setSongs(sRes.data);
@@ -283,6 +310,7 @@ export default function AdminPage() {
     if (vRes.data) setVenues(vRes.data);
     if (gRes.data) setGenres(gRes.data);
     if (setRes.data) setSettings(setRes.data);
+    if (pRes.data) setPhotos(pRes.data);
     setLoading(false);
   };
 
@@ -503,6 +531,59 @@ export default function AdminPage() {
     }
   };
 
+  // --- Gallery Photo Handlers ---
+  const handleAddPhoto = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPhotoUrl.trim()) return;
+
+    const maxOrder = photos.reduce((max, p) => Math.max(max, p.sort_order || 0), 0);
+    const { error } = await supabase.from('stage_photos').insert({
+      image_url: newPhotoUrl.trim(),
+      sort_order: maxOrder + 1,
+    });
+
+    if (error) {
+      alert(error.message);
+    } else {
+      setNewPhotoUrl('');
+      showNotice('Photo added to gallery!');
+      fetchData();
+    }
+  };
+
+  const handleDeletePhoto = async (id: string) => {
+    if (!confirm('Delete this photo?')) return;
+    const { error } = await supabase.from('stage_photos').delete().eq('id', id);
+    if (error) alert(error.message);
+    else {
+      showNotice('Photo deleted.');
+      setPhotos(photos.filter((p) => p.id !== id));
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage.from('stage-photos').upload(fileName, file);
+
+    if (uploadError) {
+      alert('Upload error: ' + uploadError.message + '\n\nTip: Pastikan bucket "stage-photos" sudah dibuat di Supabase Storage & diset Public.');
+      setUploading(false);
+      return;
+    }
+
+    const { data: publicUrlData } = supabase.storage.from('stage-photos').getPublicUrl(fileName);
+    if (publicUrlData?.publicUrl) {
+      setNewPhotoUrl(publicUrlData.publicUrl);
+      showNotice('Foto terupload ke Supabase Storage!');
+    }
+    setUploading(false);
+  };
+
   // --- Settings Handler ---
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -615,6 +696,19 @@ export default function AdminPage() {
           >
             <Activity className="h-4 w-4 shrink-0" />
             Genres ({genres.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('gallery')}
+            className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs sm:text-sm font-bold whitespace-nowrap transition ${
+              activeTab === 'gallery'
+                ? 'bg-amber-400 text-slate-950 shadow-md'
+                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+            }`}
+          >
+            <Camera className="h-4 w-4 shrink-0" />
+            Gallery ({photos.length})
           </button>
 
           <button
@@ -1107,6 +1201,166 @@ export default function AdminPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab: GALLERY / STAGE PHOTOS */}
+        {activeTab === 'gallery' && (
+          <div className="space-y-6 sm:space-y-8">
+            <div className="glass-panel rounded-2xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-6 shadow-xl">
+              <h2 className="mb-4 text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <Plus className="h-4 w-4 text-amber-300" /> Add Stage Photo
+              </h2>
+              <form onSubmit={handleAddPhoto} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    Image Source (Upload from device or paste image URL)
+                  </label>
+                  <div className="flex flex-col sm:flex-row gap-2.5">
+                    <input
+                      type="url"
+                      required
+                      placeholder="https://... (URL foto atau upload file di samping)"
+                      value={newPhotoUrl}
+                      onChange={(e) => setNewPhotoUrl(e.target.value)}
+                      className="flex-1 rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    />
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileUpload}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      disabled={uploading}
+                      onClick={() => fileInputRef.current?.click()}
+                      className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border border-amber-400/30 bg-slate-950/80 px-4 py-2 text-xs sm:text-sm font-semibold text-amber-200 transition hover:bg-slate-900 disabled:opacity-50"
+                    >
+                      <Upload className="h-3.5 w-3.5" />
+                      {uploading ? 'Uploading...' : 'Upload File'}
+                    </button>
+                  </div>
+                  <p className="mt-1.5 text-[11px] text-slate-400">
+                    Foto rasio apapun akan otomatis disesuaikan ke rasio 3:4 (tengah).
+                  </p>
+                </div>
+
+                {newPhotoUrl && (
+                  <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-950/50 p-2.5">
+                    <div className="relative aspect-[3/4] h-20 overflow-hidden rounded-lg bg-slate-900 border border-white/10">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={newPhotoUrl}
+                        alt="Preview"
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-white">Preview Rasio 3:4</p>
+                      <p className="text-[11px] text-slate-400 truncate max-w-xs sm:max-w-md">{newPhotoUrl}</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-1 pt-2 flex justify-end">
+                  <button
+                    type="submit"
+                    disabled={uploading || !newPhotoUrl.trim()}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-amber-400 px-5 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 hover:bg-amber-300 disabled:opacity-50 shadow-md transition"
+                  >
+                    <Plus className="h-4 w-4" /> Save Photo
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div className="space-y-3.5 sm:space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+                  Current Stage Photos ({photos.length})
+                </h3>
+                <span className="text-[11px] text-amber-200/80">
+                  Use ▲▼ arrows to reorder
+                </span>
+              </div>
+
+              {photos.length === 0 ? (
+                <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-8 text-center text-xs sm:text-sm text-slate-400">
+                  No photos in gallery yet. Add your first photo above!
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {photos.map((photo, index) => (
+                    <div
+                      key={photo.id}
+                      className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        {/* 1-Click Pure Arrow Reordering */}
+                        <div className="flex flex-col -space-y-0.5 shrink-0">
+                          <button
+                            type="button"
+                            disabled={index === 0}
+                            onClick={() => moveItem(index, 'up')}
+                            className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                            title="Move up"
+                            aria-label="Move up"
+                          >
+                            <ChevronUp className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={index === photos.length - 1}
+                            onClick={() => moveItem(index, 'down')}
+                            className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                            title="Move down"
+                            aria-label="Move down"
+                          >
+                            <ChevronDown className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+
+                        {/* Thumbnail 3:4 */}
+                        <div className="relative aspect-[3/4] h-16 w-12 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-950">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={photo.image_url}
+                            alt="Stage Photo"
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-white">Order: #{photo.sort_order || index + 1}</p>
+                          <a
+                            href={photo.image_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] text-amber-200/80 hover:text-amber-200 truncate max-w-[180px] sm:max-w-xs"
+                          >
+                            <span className="truncate">{photo.image_url}</span>
+                            <ExternalLink className="h-3 w-3 shrink-0" />
+                          </a>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => handleDeletePhoto(photo.id)}
+                          className="rounded-lg p-2 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
+                          aria-label="Delete photo"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
