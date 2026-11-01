@@ -557,13 +557,40 @@ export default function AdminPage() {
     }
   };
 
-  const handleDeletePhoto = async (id: string) => {
+  const extractStorageFileName = (url: string, bucket = 'stage-photos'): string | null => {
+    try {
+      const marker = `/${bucket}/`;
+      const idx = url.indexOf(marker);
+      if (idx !== -1) {
+        const pathWithQuery = url.substring(idx + marker.length);
+        return decodeURIComponent(pathWithQuery.split('?')[0]);
+      }
+    } catch {
+      // ignore
+    }
+    return null;
+  };
+
+  const handleDeletePhoto = async (photo: StagePhotoItem) => {
     if (!confirm('Delete this photo?')) return;
-    const { error } = await supabase.from('stage_photos').delete().eq('id', id);
+
+    // 1. Hapus file fisik dari Supabase Storage jika tersimpan di bucket
+    const storagePath = extractStorageFileName(photo.image_url, 'stage-photos');
+    if (storagePath) {
+      const { error: storageError } = await supabase.storage
+        .from('stage-photos')
+        .remove([storagePath]);
+      if (storageError) {
+        console.warn('Storage delete warning:', storageError.message);
+      }
+    }
+
+    // 2. Hapus row di database
+    const { error } = await supabase.from('stage_photos').delete().eq('id', photo.id);
     if (error) alert(error.message);
     else {
-      showNotice('Photo deleted.');
-      setPhotos(photos.filter((p) => p.id !== id));
+      showNotice('Photo deleted from database & storage.');
+      setPhotos((prev) => prev.filter((p) => p.id !== photo.id));
     }
   };
 
@@ -760,6 +787,15 @@ export default function AdminPage() {
       const { data: publicUrlData } = supabase.storage.from('stage-photos').getPublicUrl(fileName);
       if (publicUrlData?.publicUrl) {
         const url = publicUrlData.publicUrl;
+
+        // Bersihkan foto hero lama di bucket agar tidak menumpuk
+        if (settings.hero_image_url) {
+          const oldPath = extractStorageFileName(settings.hero_image_url, 'stage-photos');
+          if (oldPath && oldPath !== fileName) {
+            await supabase.storage.from('stage-photos').remove([oldPath]);
+          }
+        }
+
         setSettings((prev) => ({ ...prev, hero_image_url: url }));
 
         // Ambil semua baris site_settings yang ada
@@ -816,6 +852,15 @@ export default function AdminPage() {
 
   const handleHeroReset = async () => {
     if (!confirm('Kembalikan foto Hero ke foto default bawaan?')) return;
+
+    // Bersihkan file hero lama dari Supabase Storage jika ada
+    if (settings.hero_image_url) {
+      const storagePath = extractStorageFileName(settings.hero_image_url, 'stage-photos');
+      if (storagePath) {
+        await supabase.storage.from('stage-photos').remove([storagePath]);
+      }
+    }
+
     setSettings((prev) => ({ ...prev, hero_image_url: '' }));
 
     const { data: allSettings } = await supabase
@@ -1635,7 +1680,7 @@ export default function AdminPage() {
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           type="button"
-                          onClick={() => handleDeletePhoto(photo.id)}
+                          onClick={() => handleDeletePhoto(photo)}
                           className="rounded-lg p-2 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
                           aria-label="Delete photo"
                         >

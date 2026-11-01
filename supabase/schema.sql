@@ -132,3 +132,36 @@ create policy "Admin all site_settings" on site_settings for all to authenticate
 
 drop policy if exists "Admin all stage_photos" on stage_photos;
 create policy "Admin all stage_photos" on stage_photos for all to authenticated using (true) with check (true);
+
+-- ==========================================
+-- STORAGE POLICIES (Bucket: stage-photos)
+-- ==========================================
+
+-- Ensure bucket exists and is public
+insert into storage.buckets (id, name, public)
+values ('stage-photos', 'stage-photos', true)
+on conflict (id) do update set public = true;
+
+-- Public can view photos
+drop policy if exists "Public view stage photos" on storage.objects;
+create policy "Public view stage photos" on storage.objects
+  for select to anon, authenticated
+  using (bucket_id = 'stage-photos');
+
+-- Authenticated admin can upload photos
+drop policy if exists "Authenticated insert stage photos" on storage.objects;
+create policy "Authenticated insert stage photos" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = 'stage-photos');
+
+-- Authenticated admin can update photos
+drop policy if exists "Authenticated update stage photos" on storage.objects;
+create policy "Authenticated update stage photos" on storage.objects
+  for update to authenticated
+  using (bucket_id = 'stage-photos');
+
+-- Authenticated admin can delete photos
+drop policy if exists "Authenticated delete stage photos" on storage.objects;
+create policy "Authenticated delete stage photos" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'stage-photos');
