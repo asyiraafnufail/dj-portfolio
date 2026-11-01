@@ -2,13 +2,25 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import StageArchive from '@/src/components/StageArchive';
+import { createClient } from '@/src/lib/supabase/server';
 
 export const metadata: Metadata = {
   title: 'Stage Archive & Photos | CANKZ',
   description: 'Live performance photos, booth moments, and stage presence of DJ CANKZ.',
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('stage_photos')
+    .select('*')
+    .order('sort_order', { ascending: true });
+
+  const initialPhotos = (data || []).map((d) => ({
+    id: d.id,
+    imageUrl: d.image_url || d.imageUrl,
+  }));
+
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       {/* Back to Home Button (Option 2 - Static at top) */}
@@ -25,7 +37,7 @@ export default function GalleryPage() {
       </div>
 
       {/* Gallery Section */}
-      <StageArchive isPage={true} />
+      <StageArchive isPage={true} initialPhotos={initialPhotos} />
 
       {/* Footer */}
       <footer className="border-t border-white/10 py-8 text-center text-xs text-slate-500">

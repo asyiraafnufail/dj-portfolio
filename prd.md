@@ -37,7 +37,7 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 *Urutan komponen paling atas.*
 
 - **Desktop Layout (`lg:flex-row` / `lg:grid-cols-2`):**
-  - **Sisi Kiri:** 1 Foto Formal DJ dari aset lokal `aset/fotoporto.jpeg` (rasio aspek 4:5 atau 1:1) dengan border tipis dan shadow halus. Jangan gunakan neon glow kuat.
+  - **Sisi Kiri:** 1 Foto Formal DJ dari Supabase Storage dinamis (`site_settings.hero_image_url`) dengan fallback otomatis ke aset lokal `aset/1.jpg` (rasio aspek 4:5 atau 1:1) dengan border tipis dan shadow halus. Foto diambil via Server-Side Rendering (SSR) di `app/page.tsx` dan dipassing via prop `initialHeroImage` guna menjamin nol kedip (*zero-flash architecture*).
   - **Sisi Kanan:** 
     1. Nama Panggung: **CANKZ** (Typography besar, bold, white text, tanpa gradient ramai).
     2. Lokasi / Subtitle: **Sleman, Yogyakarta** (Subtitle sedang).
@@ -88,8 +88,12 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Header: *"Stage Archive"*.
   - Sub-header: *"Raw energy, crowd connection, and stage presence captured across recent gigs"*.
   - Badge Header: `Live Moments` dengan icon `Camera`.
+  - **Arsitektur Rendering & Performance Lock:**
+    - Seluruh foto dummy Unsplash dihapus total dari kode sumber.
+    - Menggunakan **Server-Side Rendering (SSR)** di `app/page.tsx` (cuplikan 4 foto) dan `app/gallery/page.tsx` (seluruh arsip foto) lewat prop `initialPhotos`.
+    - Dilengkapi **Skeleton Loader** (`animate-pulse`, rasio 3:4) dan clean empty state jika database kosong. Zero flash foto dummy saat transisi koneksi lambat.
   - **Tampilan Beranda (`/`):**
-    - Menampilkan cuplikan 4 foto aksi panggung pilihan.
+    - Menampilkan cuplikan 4 foto aksi panggung pilihan langsung dari data SSR.
     - Rasio foto potret 3:4 (`aspect-[3/4]`), sudut `rounded-2xl`, border `border-white/10` dengan hover amber tipis `border-amber-400/35`.
     - Murni foto visual bersih tanpa overlay nama tempat, event, atau lokasi agar tampil estetik dan modern.
     - Hover zoom halus (`scale-105`) dengan icon expand (`Maximize2`) di pojok kanan bawah.
@@ -111,8 +115,9 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 - **Fitur & Konten:**
   - Header: *"Latest Mixtapes & Sets"*.
   - Sub-header: *"Watch live recordings and club sets directly on YouTube"*.
-- **Tampilan Integrasi:**
+- **Tampilan Integrasi & Optimisasi:**
   - Menyediakan *container* responsif untuk menampung **YouTube Embed Player** (iFrame) dengan rasio aspek 16:9 (`aspect-video`), border radius `rounded-xl`, dan pembungkus card `rounded-2xl`.
+  - Terpasang atribut `loading="lazy"` pada iframe guna menghemat alokasi memori dan bandwidth browser mobile/iPhone 8 saat initial page load.
   - Terkunci pada kontainer `mx-auto max-w-4xl` dengan grid `gap-3 sm:gap-5` selaras dengan section lainnya.
   - **Desktop:** Grid 2 player bersisian (`lg:grid-cols-2`).
   - **Mobile:** Player bertumpuk vertikal (`grid-cols-1`).
@@ -180,13 +185,17 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
     - Endpoint login di `/login` dengan Next.js Edge Middleware (`middleware.ts`) memproteksi `/admin/*`.
     - User terautentikasi otomatis diarahkan dari `/login` ke `/admin`, dan user tanpa sesi dialihkan ke `/login`.
   - **Control Panel Dashboard (`/admin`):**
-    - 5 Tab navigasi: `songs`, `mixtapes`, `venues`, `genres`, `settings`.
+    - 6 Tab navigasi: `songs`, `mixtapes`, `venues`, `genres`, `gallery`, `settings`.
     - **Operasi CRUD Lengkap:** Tambah baru, hapus item, dan edit item via modal pop-up interaktif untuk setiap kategori data.
     - **Edited Songs:** Input text bebas untuk genre (agar fleksibel memasukkan kombinasi/subgenre), pemilihan audio quality (`WAV` / `MP3`), judul, artist, dan link download/drive.
     - **Custom Dropdown Lock:** Semua select dropdown menggunakan komponen React `CustomSelect` custom dengan icon panah `ChevronDown` presisi, bebas dari bug displacement OS/Safari WebKit.
     - **Admin Tab Bar & Form Layout Symmetry Lock:** Tab navigation bar terkunci `py-3.5 sm:py-4 border-b border-white/10`, button tabs berukuran seragam `h-10 shrink-0 whitespace-nowrap px-4 rounded-xl`, kontainer `main` memakai `pt-0 pb-8 sm:pb-12` agar jarak garis atas (header) dan garis bawah (tab) presisi dan simetris. Spacing form terkunci konsisten (label `mb-1.5`, input `px-3.5 py-2`, separator tombol aksi `pt-2 border-t border-white/5`, list header `pb-1.5 border-b border-white/10`).
-    - **Pure 1-Click Arrow Reordering Lock (No Drag-and-Drop):** Urutan item diatur murni menggunakan kontrol tombol panah 1-klik (`ChevronUp` / `ChevronDown`) di sisi kiri setiap kartu item di 4 tab admin (`songs`, `mixtapes`, `venues`, `genres`). Seluruh implementasi drag-and-drop dihapus total guna menghindari konflik scrolling layar sentuh dan gesture trackpad Safari/macOS. Urutan item otomatis langsung di-swap dan disinkronkan ke kolom `sort_order` di Supabase.
-    - **Site Settings:** Pengaturan dinamis link folder Google Drive aset promosi, nomor WhatsApp booking, pesan template WhatsApp, email booking, dan lokasi artis.
+    - **Pure 1-Click Arrow Reordering Lock (No Drag-and-Drop):** Urutan item diatur murni menggunakan kontrol tombol panah 1-klik (`ChevronUp` / `ChevronDown`) di sisi kiri setiap kartu item di 5 tab admin (`songs`, `mixtapes`, `venues`, `genres`, `gallery`). Seluruh implementasi drag-and-drop dihapus total guna menghindari konflik scrolling layar sentuh dan gesture trackpad Safari/macOS. Urutan item otomatis langsung di-swap dan disinkronkan ke kolom `sort_order` di Supabase.
+    - **Image Engine & Auto-Compression Lock:**
+      - Upload foto di Tab `gallery` dan Tab `settings` (Hero Photo) wajib melewati pipeline client-side canvas kompresi sebelum dikirim ke Supabase Storage.
+      - Resize otomatis max lebar/tinggi 1600px dengan konversi mutlak ke format `.webp` (quality 0.82), memangkas bobot file dari 8–12 MB kamera mentah menjadi ~150–250 KB.
+      - Penanganan native format Apple HEIC/HEIF via `createImageBitmap` di Safari dan fallback dinamis `heic2any` di browser non-Safari.
+    - **Site Settings & Hero Photo Management:** Pengaturan dinamis link folder Google Drive aset promosi, nomor WhatsApp booking, pesan template WhatsApp, email booking, lokasi artis, serta upload/update foto profil Hero DJ dengan opsi Reset ke Default.
   - **Resilient Fallback Data Fetching:** Komponen publik memuat data lokal instan saat hidrasi agar nol kedip (*zero loading flash*), kemudian melakukan silent sync dengan Supabase cloud.
   - **Keep-Alive Automation:** GitHub Actions workflow (`.github/workflows/keep-alive-supabase.yml`) melakukan ping terjadwal tiap 3 hari untuk menjaga proyek Supabase tier gratis tetap aktif (*anti-inactivity pause*).
 

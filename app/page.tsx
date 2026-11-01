@@ -11,13 +11,16 @@ import { createClient } from "@/src/lib/supabase/server";
 
 export default async function Home() {
   const supabase = await createClient();
-  const { data } = await supabase
-    .from('site_settings')
-    .select('hero_image_url')
-    .eq('id', 'general')
-    .maybeSingle();
+  const [{ data: settingsData }, { data: photosData }] = await Promise.all([
+    supabase.from('site_settings').select('hero_image_url').eq('id', 'general').maybeSingle(),
+    supabase.from('stage_photos').select('*').order('sort_order', { ascending: true }).limit(4),
+  ]);
 
-  const initialHeroImage = data?.hero_image_url || null;
+  const initialHeroImage = settingsData?.hero_image_url || null;
+  const initialPhotos = (photosData || []).map((d) => ({
+    id: d.id,
+    imageUrl: d.image_url || d.imageUrl,
+  }));
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
@@ -25,7 +28,7 @@ export default async function Home() {
       <HeroAbout initialHeroImage={initialHeroImage} />
       <Genres />
       <Experience />
-      <StageArchive />
+      <StageArchive initialPhotos={initialPhotos} />
       <YouTubePlayer />
       <EditedSongs />
       <AssetsFile />

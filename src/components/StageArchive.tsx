@@ -6,27 +6,35 @@ import Link from 'next/link';
 import { ArrowRight, Camera, Maximize2, X } from 'lucide-react';
 import { createClient } from '@/src/lib/supabase/client';
 
-interface StagePhoto {
+export interface StagePhoto {
   id: string;
   imageUrl: string;
 }
 
 interface StageArchiveProps {
   isPage?: boolean;
+  initialPhotos?: StagePhoto[];
 }
 
-export default function StageArchive({ isPage = false }: StageArchiveProps) {
-  const [photos, setPhotos] = useState<StagePhoto[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function StageArchive({ isPage = false, initialPhotos = [] }: StageArchiveProps) {
+  const [photos, setPhotos] = useState<StagePhoto[]>(initialPhotos);
+  const [loading, setLoading] = useState(initialPhotos.length === 0);
   const [selectedPhoto, setSelectedPhoto] = useState<StagePhoto | null>(null);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase
-      .from('stage_photos')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data }) => {
+    if (initialPhotos.length > 0) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchPhotos = async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('stage_photos')
+          .select('*')
+          .order('sort_order', { ascending: true });
+
         if (data && data.length > 0) {
           setPhotos(
             data.map((d) => ({
@@ -35,11 +43,15 @@ export default function StageArchive({ isPage = false }: StageArchiveProps) {
             }))
           );
         }
-      })
-      .finally(() => {
+      } catch {
+        // Fallback gracefully
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchPhotos();
+  }, [initialPhotos]);
 
   useEffect(() => {
     if (selectedPhoto) {
