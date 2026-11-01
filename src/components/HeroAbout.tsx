@@ -26,20 +26,26 @@ export default function HeroAbout() {
       .select('hero_image_url')
       .eq('id', 'general')
       .maybeSingle()
-      .then(({ data }) => {
-        if (data?.hero_image_url) {
-          setHeroImage(data.hero_image_url);
-          try {
-            localStorage.setItem('cankz_hero_image', data.hero_image_url);
-          } catch {
-            // Storage unavailable
-          }
-        } else {
-          setHeroImage(null);
-          try {
-            localStorage.removeItem('cankz_hero_image');
-          } catch {
-            // Storage unavailable
+      .then(({ data, error }) => {
+        if (error) {
+          // Error query atau kolom belum ada: jangan wipe cache
+          return;
+        }
+        if (data && 'hero_image_url' in data) {
+          if (data.hero_image_url) {
+            setHeroImage(data.hero_image_url);
+            try {
+              localStorage.setItem('cankz_hero_image', data.hero_image_url);
+            } catch {
+              // Storage unavailable
+            }
+          } else {
+            setHeroImage(null);
+            try {
+              localStorage.removeItem('cankz_hero_image');
+            } catch {
+              // Storage unavailable
+            }
           }
         }
       });

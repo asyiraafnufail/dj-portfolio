@@ -761,9 +761,39 @@ export default function AdminPage() {
       if (publicUrlData?.publicUrl) {
         const url = publicUrlData.publicUrl;
         setSettings((prev) => ({ ...prev, hero_image_url: url }));
-        const origKb = (file.size / 1024).toFixed(0);
-        const compKb = (blob.size / 1024).toFixed(0);
-        showNotice(`Foto About terkompres (${origKb}KB → ${compKb}KB) & siap disimpan!`);
+
+        // Auto-save langsung ke table site_settings Supabase
+        const { error: dbError } = await supabase.from('site_settings').upsert({
+          id: 'general',
+          google_drive_url: settings.google_drive_url,
+          whatsapp_number: settings.whatsapp_number,
+          whatsapp_message: settings.whatsapp_message,
+          booking_email: settings.booking_email,
+          location: settings.location,
+          hero_image_url: url,
+          updated_at: new Date().toISOString(),
+        });
+
+        if (dbError) {
+          if (dbError.message.includes('hero_image_url')) {
+            alert(
+              'PENTING: Kolom hero_image_url belum ada di Supabase database!\n\n' +
+              'Buka Supabase -> SQL Editor, lalu jalankan query ini:\n' +
+              'ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS hero_image_url text;'
+            );
+          } else {
+            alert('Gagal simpan ke database: ' + dbError.message);
+          }
+        } else {
+          try {
+            localStorage.setItem('cankz_hero_image', url);
+          } catch {
+            // Storage unavailable
+          }
+          const origKb = (file.size / 1024).toFixed(0);
+          const compKb = (blob.size / 1024).toFixed(0);
+          showNotice(`Foto About tersimpan ke database (${origKb}KB → ${compKb}KB)!`);
+        }
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Upload gagal';
@@ -771,6 +801,33 @@ export default function AdminPage() {
     } finally {
       setUploadingHero(false);
       if (heroFileInputRef.current) heroFileInputRef.current.value = '';
+    }
+  };
+
+  const handleHeroReset = async () => {
+    if (!confirm('Kembalikan foto Hero ke foto default bawaan?')) return;
+    setSettings((prev) => ({ ...prev, hero_image_url: '' }));
+
+    const { error: dbError } = await supabase.from('site_settings').upsert({
+      id: 'general',
+      google_drive_url: settings.google_drive_url,
+      whatsapp_number: settings.whatsapp_number,
+      whatsapp_message: settings.whatsapp_message,
+      booking_email: settings.booking_email,
+      location: settings.location,
+      hero_image_url: null,
+      updated_at: new Date().toISOString(),
+    });
+
+    if (dbError) {
+      alert('Gagal reset foto di database: ' + dbError.message);
+    } else {
+      try {
+        localStorage.removeItem('cankz_hero_image');
+      } catch {
+        // Storage unavailable
+      }
+      showNotice('Foto Hero dikembalikan ke default!');
     }
   };
 
@@ -1612,7 +1669,7 @@ export default function AdminPage() {
                       {settings.hero_image_url && (
                         <button
                           type="button"
-                          onClick={() => setSettings({ ...settings, hero_image_url: '' })}
+                          onClick={handleHeroReset}
                           className="inline-flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-400 hover:text-red-400 transition"
                         >
                           <X className="h-3.5 w-3.5" /> Reset ke Default
