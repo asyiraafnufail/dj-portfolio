@@ -54,9 +54,9 @@ export default function Navbar() {
           <a
             href="#hero-about"
             onClick={(e) => handleNavClick(e, '#hero-about')}
-            className="flex items-center gap-3"
+            className="flex shrink-0 items-center gap-3"
           >
-            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-amber-400/30 bg-slate-900">
+            <div className="relative flex h-10 w-10 shrink-0 aspect-square items-center justify-center overflow-hidden rounded-full border border-amber-400/30 bg-slate-900">
               <Image
                 src={logoDj}
                 alt="Logo CANKZ"
@@ -66,7 +66,7 @@ export default function Navbar() {
                 priority
               />
             </div>
-            <span className="text-xl font-extrabold tracking-[0.18em] text-white">CANKZ</span>
+            <span className="shrink-0 text-xl font-extrabold tracking-[0.18em] text-white">CANKZ</span>
           </a>
 
           <nav className="hidden items-center space-x-8 md:flex">

@@ -138,13 +138,17 @@ export default function EditedSongs({ isPage = false }: EditedSongsProps) {
   return (
     <section
       id="edited-songs"
-      className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16"
+      className={`relative overflow-hidden bg-slate-950 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16 ${
+        isPage ? 'pt-4 sm:pt-6' : 'pt-10 sm:pt-14'
+      }`}
     >
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-6 sm:mb-8 max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-slate-900/80 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-200">
-            <Music2 className="h-3.5 w-3.5 text-amber-300" /> Bootlegs &amp; Edits
-          </div>
+          {!isPage && (
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-slate-900/80 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-200">
+              <Music2 className="h-3.5 w-3.5 text-amber-300" /> Bootlegs &amp; Edits
+            </div>
+          )}
           <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
             My Edited Songs
           </h2>
