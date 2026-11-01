@@ -24,6 +24,7 @@ export default function HeroAbout() {
     supabase
       .from('site_settings')
       .select('hero_image_url')
+      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle()
       .then(({ data, error }) => {
@@ -35,7 +36,8 @@ export default function HeroAbout() {
             } catch {
               // Storage unavailable
             }
-          } else {
+          } else if (data.hero_image_url === '') {
+            // Hanya hapus jika admin secara eksplisit menekan tombol 'Reset ke Default'
             setHeroImage(null);
             try {
               localStorage.removeItem('cankz_hero_image');

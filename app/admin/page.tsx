@@ -762,23 +762,28 @@ export default function AdminPage() {
         const url = publicUrlData.publicUrl;
         setSettings((prev) => ({ ...prev, hero_image_url: url }));
 
-        // Cek baris site_settings yang sudah ada agar tidak bentrok ID
-        const { data: existingSettings } = await supabase
+        // Ambil semua baris site_settings yang ada
+        const { data: allSettings } = await supabase
           .from('site_settings')
           .select('id')
-          .limit(1)
-          .maybeSingle();
+          .order('updated_at', { ascending: false });
 
         let dbError: { message: string } | null = null;
-        if (existingSettings?.id) {
-          const { error } = await supabase
-            .from('site_settings')
-            .update({
-              hero_image_url: url,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', existingSettings.id);
-          dbError = error;
+        if (allSettings && allSettings.length > 0) {
+          // Update SEMUA baris site_settings yang ada agar tidak ada row nyasar
+          const results = await Promise.all(
+            allSettings.map((s) =>
+              supabase
+                .from('site_settings')
+                .update({
+                  hero_image_url: url,
+                  updated_at: new Date().toISOString(),
+                })
+                .eq('id', s.id)
+            )
+          );
+          const failed = results.find((r) => r.error);
+          if (failed) dbError = failed.error;
         } else {
           const { error } = await supabase
             .from('site_settings')
@@ -816,25 +821,22 @@ export default function AdminPage() {
     if (!confirm('Kembalikan foto Hero ke foto default bawaan?')) return;
     setSettings((prev) => ({ ...prev, hero_image_url: '' }));
 
-    const { data: existingSettings } = await supabase
+    const { data: allSettings } = await supabase
       .from('site_settings')
-      .select('id')
-      .limit(1)
-      .maybeSingle();
+      .select('id');
 
-    if (existingSettings?.id) {
-      const { error: dbError } = await supabase
-        .from('site_settings')
-        .update({
-          hero_image_url: null,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', existingSettings.id);
-
-      if (dbError) {
-        alert('Gagal reset foto di database: ' + dbError.message);
-        return;
-      }
+    if (allSettings && allSettings.length > 0) {
+      await Promise.all(
+        allSettings.map((s) =>
+          supabase
+            .from('site_settings')
+            .update({
+              hero_image_url: '',
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', s.id)
+        )
+      );
     }
 
     try {
@@ -849,11 +851,10 @@ export default function AdminPage() {
   const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { data: existingSettings } = await supabase
+    const { data: allSettings } = await supabase
       .from('site_settings')
       .select('id')
-      .limit(1)
-      .maybeSingle();
+      .order('updated_at', { ascending: false });
 
     const payload = {
       google_drive_url: settings.google_drive_url,
@@ -861,17 +862,22 @@ export default function AdminPage() {
       whatsapp_message: settings.whatsapp_message,
       booking_email: settings.booking_email,
       location: settings.location,
-      hero_image_url: settings.hero_image_url || null,
+      hero_image_url: settings.hero_image_url || '',
       updated_at: new Date().toISOString(),
     };
 
     let saveError: { message: string } | null = null;
-    if (existingSettings?.id) {
-      const { error } = await supabase
-        .from('site_settings')
-        .update(payload)
-        .eq('id', existingSettings.id);
-      saveError = error;
+    if (allSettings && allSettings.length > 0) {
+      const results = await Promise.all(
+        allSettings.map((s) =>
+          supabase
+            .from('site_settings')
+            .update(payload)
+            .eq('id', s.id)
+        )
+      );
+      const failed = results.find((r) => r.error);
+      if (failed) saveError = failed.error;
     } else {
       const { error } = await supabase
         .from('site_settings')
