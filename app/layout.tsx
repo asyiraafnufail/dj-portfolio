@@ -14,45 +14,64 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://www.cankz.my.id"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.cankz.web.id"
   ),
+  alternates: {
+    canonical: "https://www.cankz.web.id",
+  },
   title: {
     default: "CANKZ | DJ & Music Producer Yogyakarta",
     template: "%s | CANKZ",
   },
   description:
-    "Official portfolio of DJ CANKZ. Club sets, mixtapes, custom edits & booking desk in Sleman, Yogyakarta.",
+    "Official portfolio of DJ CANKZ (Rafa). Club sets, mixtapes, custom edits & booking desk in Sleman, Yogyakarta.",
   keywords: [
+    "CANKZ",
     "DJ CANKZ",
+    "Cankz DJ",
+    "Rafa",
+    "Rafa Cankz",
+    "rafacankz",
+    "@rafacankz",
     "DJ Yogyakarta",
     "DJ Sleman",
     "DJ Jogja",
     "Club DJ Jogja",
     "Booking DJ Jogja",
+    "DJ Event Jogja",
+    "cankz.web.id",
+    "cankz.my.id",
     "Commercial EDM",
     "Custom Edits",
     "Bootlegs",
   ],
-  authors: [{ name: "CANKZ" }],
+  authors: [{ name: "CANKZ", url: "https://www.cankz.web.id" }],
   creator: "CANKZ",
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://www.cankz.my.id",
+    url: "https://www.cankz.web.id",
     title: "CANKZ | DJ & Music Producer Yogyakarta",
     description:
-      "Official portfolio of DJ CANKZ. Club sets, mixtapes, custom edits & booking desk in Sleman, Yogyakarta.",
+      "Official portfolio of DJ CANKZ (Rafa). Club sets, mixtapes, custom edits & booking desk in Sleman, Yogyakarta.",
     siteName: "DJ CANKZ Portfolio",
   },
   twitter: {
     card: "summary_large_image",
     title: "CANKZ | DJ & Music Producer Yogyakarta",
     description:
-      "Official portfolio of DJ CANKZ. Club sets, mixtapes, custom edits & booking desk in Sleman, Yogyakarta.",
+      "Official portfolio of DJ CANKZ (Rafa). Club sets, mixtapes, custom edits & booking desk in Sleman, Yogyakarta.",
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -60,10 +79,24 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": ["Person", "MusicGroup"],
   name: "CANKZ",
-  alternateName: ["DJ CANKZ", "Cankz"],
-  url: "https://www.cankz.my.id",
+  givenName: "Rafa",
+  alternateName: [
+    "DJ CANKZ",
+    "Cankz",
+    "Rafa",
+    "Rafa Cankz",
+    "rafacankz",
+    "@rafacankz",
+  ],
+  url: "https://www.cankz.web.id",
+  sameAs: [
+    "https://instagram.com/rafacnkz",
+    "https://soundcloud.com/cankz-685282173",
+    "https://tiktok.com/@rafanuf",
+    "https://youtube.com/@rafacnkz",
+  ],
   description:
-    "DJ & Music Producer based in Sleman, Yogyakarta. Available for club bookings, festivals, and private events.",
+    "DJ & Music Producer based in Sleman, Yogyakarta. Stage name CANKZ (Rafa). Available for club bookings, festivals, and private events.",
   jobTitle: "DJ & Music Producer",
   genre: ["Commercial EDM", "Bass House", "Tech House", "Afrobeat", "Hip-Hop"],
   address: {

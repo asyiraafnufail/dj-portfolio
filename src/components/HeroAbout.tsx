@@ -92,7 +92,7 @@ export default function HeroAbout() {
                     <Image
                       key={heroImage}
                       src={heroImage}
-                      alt="Foto portfolio CANKZ"
+                      alt="DJ CANKZ (Rafa) - DJ & Music Producer Yogyakarta"
                       fill
                       priority
                       loading="eager"
