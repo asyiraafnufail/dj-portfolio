@@ -11,18 +11,27 @@ export const metadata: Metadata = {
 export default function SongsPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
-      {/* Back to Home Button (Option 2 - Static at top) */}
-      <div className="pt-6 sm:pt-8">
+      {/* Subpage Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="pt-6 sm:pt-8">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/#edited-songs"
-            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/80 px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-300 transition hover:border-amber-400/30 hover:text-amber-200"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 text-amber-300" />
-            Back to Home
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/#edited-songs"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-slate-900/80 px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-300 transition hover:border-amber-400/30 hover:text-amber-200"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 text-amber-300" />
+              Back to Home
+            </Link>
+            <div className="hidden sm:flex items-center gap-2 text-xs text-slate-500">
+              <Link href="/" className="hover:text-slate-300 transition">
+                Home
+              </Link>
+              <span className="text-slate-700">/</span>
+              <span className="font-semibold text-amber-200/90">Edited Songs</span>
+            </div>
+          </div>
         </div>
-      </div>
+      </nav>
 
       {/* Songs Section */}
       <EditedSongs isPage={true} />
