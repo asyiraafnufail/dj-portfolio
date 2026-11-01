@@ -769,29 +769,29 @@ export default function AdminPage() {
           .limit(1)
           .maybeSingle();
 
-        const targetId = existingSettings?.id || 'general';
-
-        // Auto-save langsung ke table site_settings Supabase
-        const { error: dbError } = await supabase.from('site_settings').upsert({
-          id: targetId,
-          google_drive_url: settings.google_drive_url || '',
-          whatsapp_number: settings.whatsapp_number || '',
-          whatsapp_message: settings.whatsapp_message || '',
-          booking_email: settings.booking_email || '',
-          location: settings.location || '',
-          hero_image_url: url,
-          updated_at: new Date().toISOString(),
-        });
+        let dbError: { message: string } | null = null;
+        if (existingSettings?.id) {
+          const { error } = await supabase
+            .from('site_settings')
+            .update({
+              hero_image_url: url,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', existingSettings.id);
+          dbError = error;
+        } else {
+          const { error } = await supabase
+            .from('site_settings')
+            .insert({
+              hero_image_url: url,
+              updated_at: new Date().toISOString(),
+            });
+          dbError = error;
+        }
 
         if (dbError) {
           console.error('Error saving hero_image_url:', dbError);
-          alert(
-            'FOTO SUDAH MASUK STORAGE, TAPI GAGAL SIMPAN KE DATABASE!\n\n' +
-            'Pesan error database: ' + dbError.message + '\n\n' +
-            'Penyebab umum: Kolom hero_image_url belum ada di Supabase.\n' +
-            'Solusi: Jalankan query ini di Supabase SQL Editor:\n' +
-            'ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS hero_image_url text;'
-          );
+          alert('Gagal simpan URL ke database: ' + dbError.message);
         } else {
           try {
             localStorage.setItem('cankz_hero_image', url);
@@ -822,29 +822,27 @@ export default function AdminPage() {
       .limit(1)
       .maybeSingle();
 
-    const targetId = existingSettings?.id || 'general';
+    if (existingSettings?.id) {
+      const { error: dbError } = await supabase
+        .from('site_settings')
+        .update({
+          hero_image_url: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existingSettings.id);
 
-    const { error: dbError } = await supabase.from('site_settings').upsert({
-      id: targetId,
-      google_drive_url: settings.google_drive_url || '',
-      whatsapp_number: settings.whatsapp_number || '',
-      whatsapp_message: settings.whatsapp_message || '',
-      booking_email: settings.booking_email || '',
-      location: settings.location || '',
-      hero_image_url: null,
-      updated_at: new Date().toISOString(),
-    });
-
-    if (dbError) {
-      alert('Gagal reset foto di database: ' + dbError.message);
-    } else {
-      try {
-        localStorage.removeItem('cankz_hero_image');
-      } catch {
-        // Storage unavailable
+      if (dbError) {
+        alert('Gagal reset foto di database: ' + dbError.message);
+        return;
       }
-      showNotice('Foto Hero dikembalikan ke default!');
     }
+
+    try {
+      localStorage.removeItem('cankz_hero_image');
+    } catch {
+      // Storage unavailable
+    }
+    showNotice('Foto Hero dikembalikan ke default!');
   };
 
   // --- Settings Handler ---
@@ -857,10 +855,7 @@ export default function AdminPage() {
       .limit(1)
       .maybeSingle();
 
-    const targetId = existingSettings?.id || 'general';
-
-    const { error } = await supabase.from('site_settings').upsert({
-      id: targetId,
+    const payload = {
       google_drive_url: settings.google_drive_url,
       whatsapp_number: settings.whatsapp_number,
       whatsapp_message: settings.whatsapp_message,
@@ -868,7 +863,28 @@ export default function AdminPage() {
       location: settings.location,
       hero_image_url: settings.hero_image_url || null,
       updated_at: new Date().toISOString(),
-    });
+    };
+
+    let saveError: { message: string } | null = null;
+    if (existingSettings?.id) {
+      const { error } = await supabase
+        .from('site_settings')
+        .update(payload)
+        .eq('id', existingSettings.id);
+      saveError = error;
+    } else {
+      const { error } = await supabase
+        .from('site_settings')
+        .insert(payload);
+      saveError = error;
+    }
+
+    if (saveError) {
+      alert('Gagal simpan settings: ' + saveError.message);
+    } else {
+      showNotice('Settings saved successfully!');
+    }
+  };
       whatsapp_number: settings.whatsapp_number,
       whatsapp_message: settings.whatsapp_message,
       booking_email: settings.booking_email,
