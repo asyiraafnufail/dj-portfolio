@@ -8,18 +8,18 @@ import { createClient } from '@/src/lib/supabase/client';
 import photoPorto from '../../aset/1.jpg';
 
 export default function HeroAbout() {
-  const [heroImage, setHeroImage] = useState<string | null>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        return localStorage.getItem('cankz_hero_image');
-      } catch {
-        return null;
-      }
-    }
-    return null;
-  });
+  const [heroImage, setHeroImage] = useState<string | null>(null);
 
   useEffect(() => {
+    // 1. Baca cache client-side setelah hydration selesai (hindari hydration mismatch)
+    try {
+      const cached = localStorage.getItem('cankz_hero_image');
+      if (cached) setHeroImage(cached);
+    } catch {
+      // Storage unavailable
+    }
+
+    // 2. Fetch data terbaru dari Supabase
     const supabase = createClient();
     supabase
       .from('site_settings')
@@ -65,6 +65,7 @@ export default function HeroAbout() {
             <div className="relative aspect-[4/5] w-full max-w-xs sm:max-w-md overflow-hidden rounded-3xl border border-white/10 bg-slate-900 p-1 shadow-2xl transition-transform duration-500 hover:scale-[1.01]">
               <div className="relative h-full w-full overflow-hidden rounded-[22px] bg-slate-900">
                 <Image
+                  key={heroImage || 'default'}
                   src={heroImage || photoPorto}
                   alt="Foto portfolio CANKZ"
                   fill
