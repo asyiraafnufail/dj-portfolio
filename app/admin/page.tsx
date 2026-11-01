@@ -885,28 +885,6 @@ export default function AdminPage() {
       showNotice('Settings saved successfully!');
     }
   };
-      whatsapp_number: settings.whatsapp_number,
-      whatsapp_message: settings.whatsapp_message,
-      booking_email: settings.booking_email,
-      location: settings.location,
-      hero_image_url: settings.hero_image_url || null,
-      updated_at: new Date().toISOString(),
-    });
-
-    if (error) {
-      if (error.message.includes('hero_image_url')) {
-        alert(
-          'Kolom hero_image_url belum ada di Supabase database!\n\n' +
-          'Buka Supabase -> SQL Editor, lalu jalankan query ini:\n' +
-          'ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS hero_image_url text;'
-        );
-      } else {
-        alert(error.message);
-      }
-    } else {
-      showNotice('Settings saved successfully!');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
