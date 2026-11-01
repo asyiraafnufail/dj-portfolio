@@ -34,12 +34,14 @@ export default function YouTubePlayer() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase
-      .from('mixtapes')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data }) => {
+    const fetchMixtapes = async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('mixtapes')
+          .select('*')
+          .order('sort_order', { ascending: true });
+
         if (data && data.length > 0) {
           setMixtapeList(
             data.map((d) => ({
@@ -53,13 +55,14 @@ export default function YouTubePlayer() {
         } else {
           setMixtapeList(mixtapes);
         }
-      })
-      .catch(() => {
+      } catch {
         setMixtapeList(mixtapes);
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchMixtapes();
   }, []);
 
   return (

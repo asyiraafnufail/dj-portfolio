@@ -23,13 +23,15 @@ export default function HeroAbout() {
     }
 
     // 2. Fetch data terbaru dari Supabase
-    const supabase = createClient();
-    supabase
-      .from('site_settings')
-      .select('hero_image_url')
-      .limit(1)
-      .maybeSingle()
-      .then(({ data, error }) => {
+    const fetchHero = async () => {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('hero_image_url')
+          .limit(1)
+          .maybeSingle();
+
         if (error) {
           console.error('[HeroAbout] Supabase fetch error:', error);
           return;
@@ -49,10 +51,14 @@ export default function HeroAbout() {
             // Storage unavailable
           }
         }
-      })
-      .finally(() => {
+      } catch {
+        // Network or client error
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchHero();
   }, []);
 
   return (

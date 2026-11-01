@@ -53,12 +53,35 @@ create table if not exists site_settings (
   whatsapp_message text,
   booking_email text,
   location text,
-  hero_image_url text,
-  updated_at timestamp with time zone default timezone('utc'::text, now())
+  hero_image_url text
 );
 
--- Migration for existing installations
-alter table site_settings add column if not exists hero_image_url text;
+-- Ensure single-row integrity
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'site_settings_single_row'
+  ) then
+    alter table site_settings add constraint site_settings_single_row check (id = 'general');
+  end if;
+end $$;
+
+-- 6. Table: Stage Photos (Live Moments)
+create table if not exists stage_photos (
+  id uuid primary key default gen_random_uuid(),
+  image_url text not null,
+  sort_order int default 0,
+  created_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- ==========================================
+-- PERFORMANCE INDEXES (B-Tree on Sort Order)
+-- ==========================================
+create index if not exists idx_venues_sort_order on venues (sort_order asc);
+create index if not exists idx_genres_sort_order on genres (sort_order asc);
+create index if not exists idx_mixtapes_sort_order on mixtapes (sort_order asc);
+create index if not exists idx_edited_songs_sort_order on edited_songs (sort_order asc);
+create index if not exists idx_stage_photos_sort_order on stage_photos (sort_order asc);
 
 -- ==========================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
@@ -70,22 +93,26 @@ alter table genres enable row level security;
 alter table mixtapes enable row level security;
 alter table edited_songs enable row level security;
 alter table site_settings enable row level security;
+alter table stage_photos enable row level security;
 
--- Public READ (SELECT) Policies - allow everyone to view the portfolio
+-- Public READ (SELECT) Policies - allow everyone (anon + authenticated) to view
 drop policy if exists "Public read venues" on venues;
-create policy "Public read venues" on venues for select using (true);
+create policy "Public read venues" on venues for select to anon, authenticated using (true);
 
 drop policy if exists "Public read genres" on genres;
-create policy "Public read genres" on genres for select using (true);
+create policy "Public read genres" on genres for select to anon, authenticated using (true);
 
 drop policy if exists "Public read mixtapes" on mixtapes;
-create policy "Public read mixtapes" on mixtapes for select using (true);
+create policy "Public read mixtapes" on mixtapes for select to anon, authenticated using (true);
 
 drop policy if exists "Public read edited_songs" on edited_songs;
-create policy "Public read edited_songs" on edited_songs for select using (true);
+create policy "Public read edited_songs" on edited_songs for select to anon, authenticated using (true);
 
 drop policy if exists "Public read site_settings" on site_settings;
-create policy "Public read site_settings" on site_settings for select using (true);
+create policy "Public read site_settings" on site_settings for select to anon, authenticated using (true);
+
+drop policy if exists "Public read stage_photos" on stage_photos;
+create policy "Public read stage_photos" on stage_photos for select to anon, authenticated using (true);
 
 -- Authenticated Admin Policies - allow logged-in user full access (insert/update/delete)
 drop policy if exists "Admin all venues" on venues;
@@ -102,3 +129,6 @@ create policy "Admin all edited_songs" on edited_songs for all to authenticated 
 
 drop policy if exists "Admin all site_settings" on site_settings;
 create policy "Admin all site_settings" on site_settings for all to authenticated using (true) with check (true);
+
+drop policy if exists "Admin all stage_photos" on stage_photos;
+create policy "Admin all stage_photos" on stage_photos for all to authenticated using (true) with check (true);

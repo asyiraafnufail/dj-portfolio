@@ -83,12 +83,14 @@ export default function EditedSongs({ isPage = false }: EditedSongsProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase
-      .from('edited_songs')
-      .select('*')
-      .order('sort_order', { ascending: true })
-      .then(({ data }) => {
+    const fetchSongs = async () => {
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('edited_songs')
+          .select('*')
+          .order('sort_order', { ascending: true });
+
         if (data && data.length > 0) {
           setSongList(
             data.map((d) => ({
@@ -104,13 +106,14 @@ export default function EditedSongs({ isPage = false }: EditedSongsProps) {
         } else {
           setSongList(editedSongs);
         }
-      })
-      .catch(() => {
+      } catch {
         setSongList(editedSongs);
-      })
-      .finally(() => {
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchSongs();
   }, []);
 
   const displayedSongs = isPage
