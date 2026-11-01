@@ -159,7 +159,7 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
           ) : photos.length === 0 ? (
             <div className="col-span-2 rounded-2xl border border-white/10 bg-slate-900/40 p-8 text-center text-xs sm:text-sm text-slate-400">
               <Camera className="mx-auto mb-2.5 h-6 w-6 text-slate-600" />
-              Belum ada foto aksi panggung yang diunggah.
+              No live stage photos uploaded yet.
             </div>
           ) : (
             displayedPhotos.map((photo) => (

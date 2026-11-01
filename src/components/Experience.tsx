@@ -137,7 +137,7 @@ export default function Experience() {
             <Flame className="h-3.5 w-3.5" /> Gigs &amp; Experiences
           </div>
           <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-            Which venues have i played at?
+            Which venues have I played at?
           </h2>
           <p className="mt-3 sm:mt-4 text-sm text-slate-400 sm:text-lg">
             Coffee shop residencies, club nights, private events, weddings, corporate events &amp; rooftop parties across Sleman &amp; Yogyakarta — steady vibe, clean curation.

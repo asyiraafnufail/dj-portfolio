@@ -115,7 +115,7 @@ export default function HeroAbout() {
                       <User className="h-7 w-7" />
                     </div>
                     <p className="text-xs text-slate-400">
-                      Foto profil belum diatur di panel admin.
+                      Profile photo not configured yet in admin panel.
                     </p>
                   </div>
                 ) : null}

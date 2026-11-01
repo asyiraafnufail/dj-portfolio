@@ -90,10 +90,10 @@ const jsonLd = {
   ],
   url: "https://www.cankz.web.id",
   sameAs: [
-    "https://instagram.com/rafacnkz",
+    "https://instagram.com/rafacankz",
     "https://soundcloud.com/cankz-685282173",
     "https://tiktok.com/@rafanuf",
-    "https://youtube.com/@rafacnkz",
+    "https://youtube.com/@rafacankz",
   ],
   description:
     "DJ & Music Producer based in Sleman, Yogyakarta. Stage name CANKZ (Rafa). Available for club bookings, festivals, and private events.",

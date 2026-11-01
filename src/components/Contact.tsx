@@ -57,11 +57,11 @@ export default function Contact() {
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const text = form.name.trim()
-      ? `Halo DJ CANKZ, saya ${form.name.trim()}. Ingin booking performance untuk:\n` +
-        `- Tanggal Event: ${form.eventDate || '-'}\n` +
-        `- Venue / Lokasi: ${form.venue || '-'}\n` +
-        (form.notes ? `- Catatan: ${form.notes}\n` : '') +
-        `Mohon info ketersediaan tanggal & riders. Terima kasih!`
+      ? `Hi DJ CANKZ, I'm ${form.name.trim()}. Inquiring about performance booking for:\n` +
+        `- Event Date: ${form.eventDate || '-'}\n` +
+        `- Venue / Location: ${form.venue || '-'}\n` +
+        (form.notes ? `- Notes: ${form.notes}\n` : '') +
+        `Please share your availability and technical rider. Thank you!`
       : settings.whatsapp_message;
 
     const url = `https://wa.me/${cleanWaNumber}?text=${encodeURIComponent(text)}`;
@@ -96,19 +96,19 @@ export default function Contact() {
               Quick Booking Inquiry
             </h3>
             <p className="mt-1 text-xs text-slate-400">
-              Isi detail acara Anda di bawah ini untuk langsung generate format pesan WhatsApp resmi CANKZ.
+              Fill in your event details below to automatically generate a structured booking message on WhatsApp.
             </p>
 
             <form onSubmit={handleBookingSubmit} className="mt-5 space-y-3.5 sm:space-y-4">
               <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Nama Penyelenggara / Event
+                    Organizer / Event Name
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Contoh: Peggasus Club / Sarah"
+                    placeholder="e.g. Peggasus Club / Sarah"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
@@ -116,7 +116,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Rencana Tanggal Event
+                    Planned Event Date
                   </label>
                   <input
                     type="date"
@@ -129,11 +129,11 @@ export default function Contact() {
 
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Venue / Lokasi Acara
+                  Venue / Event Location
                 </label>
                 <input
                   type="text"
-                  placeholder="Contoh: Yogyakarta / Rooftop Session / Private Party"
+                  placeholder="e.g. Yogyakarta / Rooftop Session / Private Club"
                   value={form.venue}
                   onChange={(e) => setForm({ ...form, venue: e.target.value })}
                   className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
@@ -142,11 +142,11 @@ export default function Contact() {
 
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                  Catatan Tambahan (Durasi Set / Preferensi Genre)
+                  Additional Notes (Set Duration / Genre Preference)
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="Contoh: 2 jam set, Commercial EDM & Bass House..."
+                  placeholder="e.g. 2-hour set, Commercial EDM & Bass House..."
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
                   className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50 resize-none"
@@ -155,14 +155,14 @@ export default function Contact() {
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
                 <span className="text-[11px] text-slate-400">
-                  Pesan terstruktur otomatis terbuka di WhatsApp Anda.
+                  Pre-formatted message will open directly in your WhatsApp.
                 </span>
                 <button
                   type="submit"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-amber-400 px-5 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 hover:bg-amber-300 transition shadow-md"
                 >
                   <Send className="h-4 w-4" />
-                  Kirim via WhatsApp
+                  Send via WhatsApp
                 </button>
               </div>
             </form>
