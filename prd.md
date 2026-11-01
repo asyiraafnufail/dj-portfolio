@@ -76,9 +76,10 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`) di seluruh perangkat dan ukuran layar (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac).
   - Tinggi card dibuat kompak dan simetris (`p-3 sm:p-4`, margin icon `mb-2 sm:mb-2.5`, pembungkus icon `p-1.5 sm:p-2`, ukuran teks `text-sm sm:text-base`) agar proporsional dan tidak memakan ruang vertikal berlebih.
 - **Setiap Card Venue Berisi:**
-  - Foto Venue/Klub saat acara (background card).
-  - Overlay gradient gelap agar teks terbaca.
-  - Nama Tempat / Nama Event / Kota (misal: *Club Dragonfly - Jakarta*, *DDP Festival - Bali*).
+  - Icon kategori venue (Bar/Wine, Lounge/Martini, Coffee Shop, Club/CircleDot, Gym/Dumbbell) di dalam kontainer `rounded-xl`.
+  - Lokasi/Kota (`MapPin` Sleman/Yogyakarta/Klaten).
+  - Nama Tempat / Venue / Event (dikelola murni via Admin Panel oleh admin).
+  - Dilarang keras memakai gambar dummy atau foto dari Unsplash/eksternal. Seluruh data venue murni dari database Supabase yang diinput oleh admin.
 
 ---
 
@@ -214,7 +215,7 @@ Saat mengeksekusi kode berdasarkan dokumen ini, AI Agent harus mematuhi aturan b
    - Gunakan Tailwind breakpoint `sm:`, `md:`, `lg:`, `xl:` untuk memastikan tampilan mobile (`<768px`) dan desktop (`>=1024px`) sesuai dengan spesifikasi di atas.
 4. **Media:**
    - Hero foto profil sepenuhnya dinamis dari Supabase Storage (`site_settings.hero_image_url`) dengan Skeleton Loader. Aset lokal `1.jpg` dihapus permanen.
-   - Foto venue boleh memakai Unsplash resolusi tinggi kategori *Nightclub* atau *Festival* selama tetap selaras dengan tema gelap elegant.
+   - Dilarang keras memakai gambar dummy atau foto dari Unsplash / URL eksternal liar di seluruh section (termasuk Venue, Hero, dan Stage Archive). Seluruh data dan media wajib murni bersumber dari apa yang ditambah/diunggah admin di panel admin Supabase.
 5. **YouTube & Media Integration:**
    - Gunakan YouTube Embed Player (iFrame) responsif dengan rasio `aspect-video`.
 6. **Single Source of Truth:**
