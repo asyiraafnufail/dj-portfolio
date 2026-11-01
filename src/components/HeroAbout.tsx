@@ -24,7 +24,6 @@ export default function HeroAbout() {
     supabase
       .from('site_settings')
       .select('hero_image_url')
-      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle()
       .then(({ data, error }) => {

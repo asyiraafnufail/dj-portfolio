@@ -765,8 +765,7 @@ export default function AdminPage() {
         // Ambil semua baris site_settings yang ada
         const { data: allSettings } = await supabase
           .from('site_settings')
-          .select('id')
-          .order('updated_at', { ascending: false });
+          .select('id');
 
         let dbError: { message: string } | null = null;
         if (allSettings && allSettings.length > 0) {
@@ -777,7 +776,6 @@ export default function AdminPage() {
                 .from('site_settings')
                 .update({
                   hero_image_url: url,
-                  updated_at: new Date().toISOString(),
                 })
                 .eq('id', s.id)
             )
@@ -789,7 +787,6 @@ export default function AdminPage() {
             .from('site_settings')
             .insert({
               hero_image_url: url,
-              updated_at: new Date().toISOString(),
             });
           dbError = error;
         }
@@ -832,7 +829,6 @@ export default function AdminPage() {
             .from('site_settings')
             .update({
               hero_image_url: '',
-              updated_at: new Date().toISOString(),
             })
             .eq('id', s.id)
         )
@@ -853,8 +849,7 @@ export default function AdminPage() {
 
     const { data: allSettings } = await supabase
       .from('site_settings')
-      .select('id')
-      .order('updated_at', { ascending: false });
+      .select('id');
 
     const payload = {
       google_drive_url: settings.google_drive_url,
@@ -863,7 +858,6 @@ export default function AdminPage() {
       booking_email: settings.booking_email,
       location: settings.location,
       hero_image_url: settings.hero_image_url || '',
-      updated_at: new Date().toISOString(),
     };
 
     let saveError: { message: string } | null = null;
