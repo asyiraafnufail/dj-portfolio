@@ -96,7 +96,8 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
     - Tombol aksi utama di bawah grid: *"View All Photos"* mengarahkan ke halaman mandiri `/gallery`. Desain seragam tombol Google Drive di Assets File (`inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg transition hover:bg-amber-300 hover:shadow-amber-400/20`, dengan icon `Camera` dan `ArrowRight`).
   - **Halaman Mandiri Dedicated (`/gallery`):**
     - Rute mandiri publik bagi pengunjung untuk melihat seluruh arsip foto perform CANKZ.
-    - Sticky top navigation bar minimalis dengan logo CANKZ dan tombol *"Back to Home"* yang kembali dan mendarat presisi di anchor section `/#stage-archive`.
+    - Navbar bilah atas dihapus total (bebas dari logo CANKZ dan garis border). Tombol *"Back to Home"* ditaruh statis di atas container (`max-w-4xl mx-auto`, `pt-6 sm:pt-8`), mendarat presisi di anchor section `/#stage-archive`.
+    - Badge header `Live Moments` disembunyikan eksklusif di halaman ini, langsung menampilkan judul *Stage Archive* dengan jarak rapat proporsional (`pt-4 sm:pt-6`) dari tombol Back.
     - Menampilkan seluruh katalog foto dengan grid 2 kolom (`grid-cols-2`, `max-w-4xl mx-auto`, `gap-3 sm:gap-5`, `rounded-2xl`, `aspect-[3/4]`).
   - **Interaksi Lightbox Modal (Beranda & `/gallery`):**
     - Klik pada kartu foto membuka modal lightbox tampilan penuh dengan backdrop blur transparan (`bg-slate-950/90 backdrop-blur-md`).
@@ -130,7 +131,8 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
     - Di bawah grid kartu terdapat tombol aksi utama: *"View All Edited Songs"* yang mengarahkan ke halaman mandiri `/songs`. Tombol menggunakan desain seragam seperti tombol Google Drive di section Assets File (`inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg transition hover:bg-amber-300 hover:shadow-amber-400/20`, dengan icon `Music2` dan `ArrowRight`).
   - **Halaman Mandiri Dedicated (`/songs`):**
     - Rute mandiri publik bagi pengunjung untuk melihat dan mencari seluruh katalog lagu editan CANKZ.
-    - Sticky top navigation bar minimalis dengan logo CANKZ dan tombol *"Back to Home"* yang saat diklik otomatis kembali dan mendarat presisi di anchor section `/#edited-songs`.
+    - Navbar bilah atas dihapus total (bebas dari logo CANKZ dan garis border). Tombol *"Back to Home"* ditaruh statis di atas container (`max-w-4xl mx-auto`, `pt-6 sm:pt-8`), mendarat presisi di anchor section `/#edited-songs`.
+    - Badge header `Bootlegs & Edits` disembunyikan eksklusif di halaman ini, langsung menampilkan judul *My Edited Songs* dengan jarak rapat proporsional (`pt-4 sm:pt-6`) dari tombol Back.
     - **Fitur Pencarian (Search Bar):** Terletak eksklusif di halaman ini (`bg-slate-900/60`, border amber halus `border-amber-400/25`, icon `Search`), memfilter seluruh katalog lagu secara real-time berdasarkan judul lagu, nama artis, dan genre, lengkap dengan tombol reset silang (`X`) dan tampilan *empty state*.
   - **Tampilan Grid (Beranda & `/songs`):**
     - Terkunci mutlak 2 kolom horizontal (`grid-cols-2`, `max-w-4xl mx-auto`, `gap-3 sm:gap-5`) di seluruh perangkat dan ukuran layar (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac).
