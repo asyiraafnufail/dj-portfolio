@@ -73,6 +73,14 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon.png", type: "image/png" },
+    ],
+  },
   verification: {
     google: "8qnwel0OWWb660AUTFu5EqPvLM4zHC4m8MqpnpRcuCw",
   },
