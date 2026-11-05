@@ -10,7 +10,7 @@ import YouTubePlayer from "@/src/components/YouTubePlayer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main className="min-h-screen bg-stone-50 text-stone-900 transition-colors duration-200 dark:bg-slate-950 dark:text-white">
       <Navbar />
       <HeroAbout />
       <Genres />

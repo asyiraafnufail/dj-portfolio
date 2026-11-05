@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Calendar, Menu, X } from 'lucide-react';
 import logoDj from '../../aset/logodj.png';
+import ThemeToggle from './ThemeToggle';
 
 const navLinks = [
   { name: 'About', href: '#hero-about' },
@@ -58,7 +59,7 @@ export default function Navbar() {
     <header
       className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
         scrolled
-          ? 'border-white/10 bg-slate-950/85 py-3 shadow-lg backdrop-blur-md'
+          ? 'border-stone-200/80 bg-stone-50/85 py-3 shadow-md backdrop-blur-md dark:border-white/10 dark:bg-slate-950/85'
           : 'border-transparent bg-transparent py-5'
       }`}
     >
@@ -69,7 +70,7 @@ export default function Navbar() {
             onClick={(e) => handleNavClick(e, '#hero-about')}
             className="flex shrink-0 items-center gap-3"
           >
-            <div className="relative flex h-10 w-10 shrink-0 aspect-square items-center justify-center overflow-hidden rounded-full border border-amber-400/30 bg-slate-900">
+            <div className="relative flex h-10 w-10 shrink-0 aspect-square items-center justify-center overflow-hidden rounded-full border border-amber-400/30 bg-slate-900 shadow-sm">
               <Image
                 src={logoDj}
                 alt="Logo CANKZ"
@@ -79,7 +80,7 @@ export default function Navbar() {
                 priority
               />
             </div>
-            <span className="shrink-0 text-xl font-extrabold tracking-[0.18em] text-white">CANKZ</span>
+            <span className="shrink-0 text-xl font-extrabold tracking-[0.18em] text-stone-900 dark:text-white">CANKZ</span>
           </a>
 
           <nav className="hidden items-center space-x-8 md:flex">
@@ -88,41 +89,47 @@ export default function Navbar() {
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="text-sm font-medium text-slate-300 transition hover:text-amber-200"
+                className="text-sm font-medium text-stone-700 transition hover:text-amber-600 dark:text-slate-300 dark:hover:text-amber-200"
               >
                 {link.name}
               </a>
             ))}
           </nav>
 
-          <a
-            href="#contact"
-            onClick={(e) => handleNavClick(e, '#contact')}
-            className="hidden items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-slate-950 transition hover:bg-amber-300 md:inline-flex"
-          >
-            <Calendar className="h-4 w-4" />
-            Book Event
-          </a>
+          <div className="hidden items-center gap-3 md:flex">
+            <ThemeToggle />
+            <a
+              href="#contact"
+              onClick={(e) => handleNavClick(e, '#contact')}
+              className="items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-slate-950 shadow-sm transition hover:bg-amber-300 inline-flex"
+            >
+              <Calendar className="h-4 w-4" />
+              Book Event
+            </a>
+          </div>
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="rounded-lg border border-white/10 bg-slate-900 p-2 text-slate-200 md:hidden"
-            aria-label="Toggle navigation"
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="rounded-lg border border-stone-200 bg-white p-2 text-stone-700 dark:border-white/10 dark:bg-slate-900 dark:text-slate-200"
+              aria-label="Toggle navigation"
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {isOpen && (
-        <div className="border-b border-white/10 bg-slate-950/95 px-4 pb-6 pt-4 backdrop-blur-xl md:hidden">
+        <div className="border-b border-stone-200/80 bg-stone-50/95 px-4 pb-6 pt-4 backdrop-blur-xl dark:border-white/10 dark:bg-slate-950/95 md:hidden">
           <div className="space-y-2">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className="block rounded-xl px-3 py-3 text-base font-semibold text-slate-200 transition hover:bg-white/5 hover:text-amber-200"
+                className="block rounded-xl px-3 py-3 text-base font-semibold text-stone-800 transition hover:bg-stone-200/60 hover:text-amber-600 dark:text-slate-200 dark:hover:bg-white/5 dark:hover:text-amber-200"
               >
                 {link.name}
               </a>
@@ -131,7 +138,7 @@ export default function Navbar() {
           <a
             href="#contact"
             onClick={(e) => handleNavClick(e, '#contact')}
-            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 py-3 text-sm font-bold uppercase tracking-wider text-slate-950 transition hover:bg-amber-300"
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-amber-400 py-3 text-sm font-bold uppercase tracking-wider text-slate-950 transition hover:bg-amber-300 shadow-sm"
           >
             <Calendar className="h-4 w-4" />
             Book Event

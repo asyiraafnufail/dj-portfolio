@@ -66,16 +66,16 @@ export default function YouTubePlayer() {
   }, []);
 
   return (
-    <section id="mixtapes" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
+    <section id="mixtapes" className="relative overflow-hidden bg-stone-50 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16 dark:bg-slate-950">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-6 sm:mb-8 max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-slate-900/80 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-200">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-700 dark:border-amber-400/25 dark:bg-slate-900/80 dark:text-amber-200">
             <Youtube className="h-3.5 w-3.5 text-red-500" /> YouTube Mixtapes &amp; Sets
           </div>
-          <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          <h2 className="text-2xl font-extrabold tracking-tight text-stone-900 sm:text-4xl lg:text-5xl dark:text-white">
             Latest Mixtapes &amp; Sets
           </h2>
-          <p className="mt-3 sm:mt-4 text-sm text-slate-400 sm:text-lg">
+          <p className="mt-3 sm:mt-4 text-sm text-stone-600 sm:text-lg dark:text-slate-400">
             Watch live recordings and club sets directly on YouTube.
           </p>
         </div>
@@ -85,15 +85,15 @@ export default function YouTubePlayer() {
             Array.from({ length: 2 }).map((_, idx) => (
               <div
                 key={`mixtape-skel-${idx}`}
-                className="glass-panel flex flex-col justify-between space-y-4 rounded-2xl border border-white/5 bg-slate-900/40 p-5 sm:p-6 animate-pulse"
+                className="glass-panel flex flex-col justify-between space-y-4 rounded-2xl border border-stone-200 bg-white/70 p-5 sm:p-6 animate-pulse dark:border-white/5 dark:bg-slate-900/40"
               >
-                <div className="h-6 w-3/4 rounded-md bg-white/10" />
-                <div className="relative aspect-video w-full rounded-xl border border-white/5 bg-slate-950/80 flex items-center justify-center">
-                  <Youtube className="h-10 w-10 text-white/10" />
+                <div className="h-6 w-3/4 rounded-md bg-stone-200 dark:bg-white/10" />
+                <div className="relative aspect-video w-full rounded-xl border border-stone-200 bg-stone-100 flex items-center justify-center dark:border-white/5 dark:bg-slate-950/80">
+                  <Youtube className="h-10 w-10 text-stone-300 dark:text-white/10" />
                 </div>
                 <div className="flex items-center justify-between pt-2">
-                  <div className="h-3 w-28 rounded-md bg-white/5" />
-                  <div className="h-3 w-24 rounded-md bg-white/10" />
+                  <div className="h-3 w-28 rounded-md bg-stone-200 dark:bg-white/5" />
+                  <div className="h-3 w-24 rounded-md bg-stone-200 dark:bg-white/10" />
                 </div>
               </div>
             ))
@@ -101,13 +101,13 @@ export default function YouTubePlayer() {
             mixtapeList.map((mixtape) => (
               <div
                 key={mixtape.id}
-                className={`glass-panel flex flex-col justify-between space-y-4 rounded-2xl border ${mixtape.border} p-5 sm:p-6 transition hover:border-amber-400/35 hover:shadow-xl`}
+                className="glass-panel flex flex-col justify-between space-y-4 rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm transition hover:border-amber-500 hover:shadow-md dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none dark:hover:border-amber-400/35 dark:hover:shadow-xl"
               >
-                <h3 className="line-clamp-2 text-base sm:text-lg font-bold text-white">
+                <h3 className="line-clamp-2 text-base sm:text-lg font-bold text-stone-900 dark:text-white">
                   {mixtape.title}
                 </h3>
 
-                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-white/10 bg-slate-900 shadow-lg">
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-stone-200 bg-stone-100 shadow-md dark:border-white/10 dark:bg-slate-900">
                   <iframe
                     width="100%"
                     height="100%"
@@ -120,13 +120,13 @@ export default function YouTubePlayer() {
                   />
                 </div>
 
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pt-2 text-xs text-slate-400">
-                  <span className="font-medium text-amber-200">Available on YouTube</span>
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pt-2 text-xs text-stone-500 dark:text-slate-400">
+                  <span className="font-semibold text-amber-700 dark:font-medium dark:text-amber-200">Available on YouTube</span>
                   <a
                     href={mixtape.youtubeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 font-semibold text-white underline underline-offset-4 hover:text-amber-200"
+                    className="inline-flex items-center gap-1.5 font-semibold text-stone-900 underline underline-offset-4 hover:text-amber-600 dark:text-white dark:hover:text-amber-200"
                   >
                     <Youtube className="h-4 w-4 text-red-500" />
                     Watch on YouTube &rarr;

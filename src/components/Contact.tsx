@@ -74,35 +74,35 @@ export default function Contact() {
     : `+${settings.whatsapp_number}`;
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-slate-950 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16">
+    <section id="contact" className="relative overflow-hidden bg-stone-50 pt-10 sm:pt-14 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16 dark:bg-slate-950">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-6 sm:mb-8 max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-slate-900/80 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-200">
-            <MessageCircle className="h-3.5 w-3.5" /> Booking Desk
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-700 dark:border-amber-400/25 dark:bg-slate-900/80 dark:text-amber-200">
+            <MessageCircle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-300" /> Booking Desk
           </div>
-          <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          <h2 className="text-2xl font-extrabold tracking-tight text-stone-900 sm:text-4xl lg:text-5xl dark:text-white">
             Get In Touch &amp; Booking
           </h2>
-          <p className="mt-3 sm:mt-4 text-sm text-slate-400 sm:text-lg">
+          <p className="mt-3 sm:mt-4 text-sm text-stone-600 sm:text-lg dark:text-slate-400">
             Clubs, private events/parties, coffee shop gigs, rooftop sessions, corporate events &amp; weddings. Direct contact below — response within 24 hours.
           </p>
         </div>
 
         <div className="mx-auto max-w-3xl space-y-6">
           {/* Quick Booking Inquiry Form */}
-          <div className="glass-panel rounded-3xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-8 shadow-xl">
-            <h3 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
-              <MessageCircle className="h-5 w-5 text-amber-300" />
+          <div className="glass-panel rounded-3xl border border-stone-200/90 bg-white/90 p-5 sm:p-8 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
+            <h3 className="text-xl sm:text-2xl font-bold text-stone-900 flex items-center gap-2 dark:text-white">
+              <MessageCircle className="h-5 w-5 text-amber-600 dark:text-amber-300" />
               Quick Booking Inquiry
             </h3>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs text-stone-500 dark:text-slate-400">
               Fill in your event details below to automatically generate a structured booking message on WhatsApp.
             </p>
 
             <form onSubmit={handleBookingSubmit} className="mt-5 space-y-3.5 sm:space-y-4">
               <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                     Organizer / Event Name
                   </label>
                   <input
@@ -111,24 +111,24 @@ export default function Contact() {
                     placeholder="e.g. Peggasus Club / Sarah"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                     Planned Event Date
                   </label>
                   <input
                     type="date"
                     value={form.eventDate}
                     onChange={(e) => setForm({ ...form, eventDate: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                   Venue / Event Location
                 </label>
                 <input
@@ -136,12 +136,12 @@ export default function Contact() {
                   placeholder="e.g. Yogyakarta / Rooftop Session / Private Club"
                   value={form.venue}
                   onChange={(e) => setForm({ ...form, venue: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                   Additional Notes (Set Duration / Genre Preference)
                 </label>
                 <textarea
@@ -149,12 +149,12 @@ export default function Contact() {
                   placeholder="e.g. 2-hour set, Commercial EDM & Bass House..."
                   value={form.notes}
                   onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50 resize-none"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 resize-none dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                 />
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-stone-500 dark:text-slate-400">
                   Pre-formatted message will open directly in your WhatsApp.
                 </span>
                 <button
@@ -168,45 +168,45 @@ export default function Contact() {
             </form>
           </div>
 
-          <div className="glass-panel rounded-3xl border border-white/10 p-5 sm:p-8">
-            <h3 className="text-xl sm:text-2xl font-bold text-white text-center sm:text-left">Direct Contact</h3>
+          <div className="glass-panel rounded-3xl border border-stone-200/90 bg-white/90 p-5 sm:p-8 shadow-sm dark:border-white/10 dark:bg-slate-900/60 dark:shadow-none">
+            <h3 className="text-xl sm:text-2xl font-bold text-stone-900 text-center sm:text-left dark:text-white">Direct Contact</h3>
             <div className="mt-6 space-y-3.5 sm:space-y-4">
               <a
                 href={defaultWaUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-amber-400/25 bg-slate-900/70 p-3.5 sm:p-4 text-amber-200 transition hover:border-amber-300 hover:shadow-md"
+                className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-stone-200 bg-stone-50 p-3.5 sm:p-4 text-amber-700 transition hover:border-amber-500 hover:bg-white hover:shadow-sm dark:border-amber-400/25 dark:bg-slate-900/70 dark:text-amber-200 dark:hover:border-amber-300 dark:hover:bg-slate-900/70 dark:hover:shadow-md"
               >
-                <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
+                <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-amber-600 dark:text-amber-200" />
                 <span className="min-w-0">
-                  <span className="block text-sm font-bold text-white">WhatsApp Booking</span>
-                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">{displayWaNumber}</span>
+                  <span className="block text-sm font-bold text-stone-900 dark:text-white">WhatsApp Booking</span>
+                  <span className="text-xs sm:text-sm text-amber-700 dark:text-amber-200/90 break-all">{displayWaNumber}</span>
                 </span>
               </a>
 
               <a
                 href={`mailto:${settings.booking_email}`}
-                className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-amber-400/25 bg-slate-900/70 p-3.5 sm:p-4 text-amber-200 transition hover:border-amber-300 hover:shadow-md"
+                className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-stone-200 bg-stone-50 p-3.5 sm:p-4 text-amber-700 transition hover:border-amber-500 hover:bg-white hover:shadow-sm dark:border-amber-400/25 dark:bg-slate-900/70 dark:text-amber-200 dark:hover:border-amber-300 dark:hover:bg-slate-900/70 dark:hover:shadow-md"
               >
-                <Mail className="h-5 w-5 sm:h-6 sm:w-6 shrink-0" />
+                <Mail className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-amber-600 dark:text-amber-200" />
                 <span className="min-w-0">
-                  <span className="block text-sm font-bold text-white">Email Booking</span>
-                  <span className="text-xs sm:text-sm text-amber-200/90 break-all">{settings.booking_email}</span>
+                  <span className="block text-sm font-bold text-stone-900 dark:text-white">Email Booking</span>
+                  <span className="text-xs sm:text-sm text-amber-700 dark:text-amber-200/90 break-all">{settings.booking_email}</span>
                 </span>
               </a>
 
-              <div className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-white/10 bg-slate-900/70 p-3.5 sm:p-4 text-slate-300">
-                <MapPin className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-amber-200" />
+              <div className="flex items-center gap-3.5 sm:gap-4 rounded-2xl border border-stone-200 bg-stone-50 p-3.5 sm:p-4 text-stone-600 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-300">
+                <MapPin className="h-5 w-5 sm:h-6 sm:w-6 shrink-0 text-amber-600 dark:text-amber-200" />
                 <span className="min-w-0">
-                  <span className="block text-sm font-bold text-white">Based In</span>
-                  <span className="text-xs sm:text-sm">{settings.location}</span>
+                  <span className="block text-sm font-bold text-stone-900 dark:text-white">Based In</span>
+                  <span className="text-xs sm:text-sm text-stone-600 dark:text-slate-300">{settings.location}</span>
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="mt-6 glass-panel rounded-3xl border border-white/10 p-5 sm:p-8">
-            <h3 className="text-xl sm:text-2xl font-bold text-white text-center sm:text-left">Social Media</h3>
+          <div className="glass-panel rounded-3xl border border-stone-200/90 bg-white/90 p-5 sm:p-8 shadow-sm dark:border-white/10 dark:bg-slate-900/60 dark:shadow-none">
+            <h3 className="text-xl sm:text-2xl font-bold text-stone-900 text-center sm:text-left dark:text-white">Social Media</h3>
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
               {socials.map((social) => (
                 <a
@@ -214,19 +214,19 @@ export default function Contact() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-3 text-sm transition hover:border-amber-400/35 hover:bg-slate-900 hover:text-amber-200"
+                  className="flex items-center justify-between rounded-2xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm transition hover:border-amber-500 hover:bg-white hover:text-amber-700 dark:border-white/10 dark:bg-slate-900/70 dark:hover:border-amber-400/35 dark:hover:bg-slate-900 dark:hover:text-amber-200"
                 >
-                  <span className="font-bold text-white">{social.name}</span>
-                  <span className="text-slate-400 text-xs sm:text-sm">{social.label}</span>
+                  <span className="font-bold text-stone-900 dark:text-white">{social.name}</span>
+                  <span className="text-stone-500 text-xs sm:text-sm dark:text-slate-400">{social.label}</span>
                 </a>
               ))}
             </div>
           </div>
         </div>
 
-        <footer className="mt-12 sm:mt-16 border-t border-white/10 pt-8 text-center text-xs sm:text-sm text-slate-500">
-          <div className="flex items-center justify-center gap-2 font-bold text-slate-300">
-            <Youtube className="h-4 w-4 text-amber-200" /> CANKZ
+        <footer className="mt-12 sm:mt-16 border-t border-stone-200 pt-8 text-center text-xs sm:text-sm text-stone-500 dark:border-white/10 dark:text-slate-500">
+          <div className="flex items-center justify-center gap-2 font-bold text-stone-800 dark:text-slate-300">
+            <Youtube className="h-4 w-4 text-red-500" /> CANKZ
           </div>
           <p className="mt-2">© 2026 CANKZ. All rights reserved.</p>
         </footer>

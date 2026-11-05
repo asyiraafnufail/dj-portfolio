@@ -6,11 +6,12 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 ---
 
 ## 2. Tech Stack & Setup Guidelines
-- **Framework:** Next.js (App Router)
-- **Styling:** Tailwind CSS (Dark Mode, Elegant Amber Accents, Glassmorphism ringan)
+- **Framework:** Next.js (App Router, version locked at `16.4.3`)
+- **Styling:** Tailwind CSS (Dual Theme: Warm Studio Light Mode & Slate 950 Dark Mode, Elegant Amber Accents, Glassmorphism ringan)
+- **Theme Engine:** Native Zero-Dependency Theme Engine (Inline head script, localStorage, `prefers-color-scheme`, zero-FOUC)
 - **Icons:** `lucide-react`
 - **Animations:** `framer-motion`
-- **Media Integrations:** SoundCloud iFrame Embed, Next.js `<Image />` component.
+- **Media Integrations:** SoundCloud iFrame Embed, YouTube Player Embed, Next.js `<Image />` component.
 
 ---
 
@@ -18,12 +19,25 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
 
 ### **Prinsip Responsivitas:**
 - **Mobile First & Responsive:** Layout harus otomatis menyesuaikan dari tampilan layar HP (`< 768px`) hingga Desktop (`>= 1024px`).
-- **Warna & Tema Terkunci:** Background gelap (`bg-slate-950` / `bg-slate-900`), teks terang (`text-white`, `text-slate-300`, `text-slate-400`), aksen utama amber kalem (`bg-amber-400`, `text-amber-200`, `text-amber-300`, `border-amber-400/25`). Hindari warna neon mencolok seperti cyan terang, magenta, pink, purple glow, gradient ramai, efek bling, emoji, atau visual yang terasa generatif/AI.
-- **Design Lock:** Konsep visual wajib simple elegant: gelap, bersih, profesional, whitespace cukup, radius lembut, border tipis, glassmorphism ringan, shadow halus. Jangan menambah efek berlebihan, animasi heboh, badge bouncing, ping indicator, atau glow kuat.
+- **Warna & Dual-Theme System Terkunci:**
+  - **Dark Mode (Default & Native OS Dark):** Background gelap solid (`bg-slate-950`), card glassmorphism (`bg-slate-900/40`), teks terang (`text-white`, `text-slate-300`, `text-slate-400`), aksen utama amber kalem (`bg-amber-400`, `text-amber-200`, `text-amber-300`, `border-amber-400/25`).
+  - **Light Mode (Warm Studio):** Background cream/stone solid hangat (`bg-stone-50`), card putih bersih bertepi halus (`bg-white/90`, `border-stone-200/90`, shadow halus), teks arang kontras tinggi (`text-stone-900`, `text-stone-600`), aksen amber studio tegas (`text-amber-600/700`, `border-amber-500/30`, tombol `bg-amber-400 text-slate-950`).
+  - Hindari warna neon mencolok seperti cyan terang, magenta, pink, purple glow, gradient ramai, efek bling, emoji, atau visual yang terasa generatif/AI di kedua tema.
+- **Zero-Flicker & OS Preference Engine Lock:**
+  - Sistem mendeteksi otomatis preferensi OS pengunjung (`prefers-color-scheme: dark`) dan mengingat pilihan manual via `localStorage('cankz_theme')`.
+  - Inisialisasi tema dijalankan via script sinkron inline di dalam `<head>` (`app/layout.tsx`) sebelum first paint browser, meniadakan Flash of Unstyled Content (FOUC).
+  - Sinkronisasi instan antar-komponen/tab browser menggunakan native custom event `cankz-theme-change`, tanpa dependensi eksternal (`next-themes`) demi menjaga web tetap ringan di perangkat low-end.
+- **Theme Toggle Button Placement Lock:**
+  - Beranda Desktop: tombol toggle (`<ThemeToggle />`) terkunci mutlak di samping kiri tombol CTA "Book Event".
+  - Beranda Mobile: tombol toggle diletakkan di bar atas sebelah tombol hamburger menu.
+  - Subhalaman Publik (`/songs`, `/gallery`): diletakkan di bar navigasi atas sejajar tombol "Back to Home".
+  - Halaman Login (`/login`): diletakkan di pojok kanan atas layar.
+  - Control Panel (`/admin`): diletakkan di navbar atas sejajar tombol "Live Site" dan "Sign Out".
+- **Design Lock:** Konsep visual wajib simple elegant: bersih, profesional, whitespace cukup, radius lembut, border tipis, glassmorphism ringan, shadow halus. Jangan menambah efek berlebihan, animasi heboh, badge bouncing, ping indicator, atau glow kuat.
 - **Universal 2-Column Grid Lock:** Layout card box pada section **Genres**, **Experience**, **Stage Archive**, dan **My Edited Songs** terkunci mutlak pada **2 card horizontal (`grid-cols-2`)** di seluruh perangkat (Mobile portrait, Mobile landscape, Tablet, hingga Desktop/Safari Mac). Dilarang beralih ke 3 kolom (`lg:grid-cols-3`) atau 4 kolom (`lg:grid-cols-4`). Kontainer grid dibatasi `max-w-4xl mx-auto` agar proporsi 2 kartu tetap seimbang, padat, dan elegan di layar lebar.
 - **Universal Grid Gap & Alignment Symmetry Lock:** Seluruh container card grid pada 6 section utama (**Genres**, **Experience**, **Stage Archive**, **YouTube Player**, **My Edited Songs**, dan **Assets File**) terkunci seragam pada batas lebar maksimal **`mx-auto max-w-4xl`**, sehingga batas tepi kiri dan kanan kartu sejajar lurus secara vertikal dari atas ke bawah pada layar desktop. Jarak gap (horizontal antar-kolom dan vertikal antar-baris kartu) terkunci seragam dan simetris pada **`gap-3 sm:gap-5`** (12px di mobile, 20px di desktop/tablet). Dilarang memakai gap berbeda seperti `gap-4`.
 - **Card Box Radius Lock (`rounded-2xl`):** Seluruh content card box di semua section (Genres, Experience, Stage Archive, YouTube Mixtape Player, Edited Songs, Assets File, dan sub-item Direct Contact) terkunci seragam menggunakan radius `rounded-2xl`. Kotak pembungkus icon di dalam card terkunci `rounded-xl` (satu tingkat di bawah card). Kontainer video iframe di dalam card player terkunci `rounded-xl`.
-- **Background Clean Solid Lock:** Seluruh section wajib mempertahankan latar belakang hitam/gelap solid murni (`bg-slate-950`). Dilarang menambahkan elemen dekoratif lingkaran blur / ambient gradient liar (`bg-slate-700/20`, `blur-3xl`, dsb.) yang menyebabkan noda gradasi tipis, warna belang, atau garis patahan terpotong (`overflow-hidden`) saat ukuran kontainer berubah dinamis.
+- **Background Clean Solid Lock:** Seluruh section wajib mempertahankan latar belakang solid murni (`bg-stone-50` di light mode, `bg-slate-950` di dark mode). Dilarang menambahkan elemen dekoratif lingkaran blur / ambient gradient liar (`bg-slate-700/20`, `blur-3xl`, dsb.) yang menyebabkan noda gradasi tipis, warna belang, atau garis patahan terpotong (`overflow-hidden`) saat ukuran kontainer berubah dinamis.
 - **Spacing Vertikal Section Header Lock:** Jarak bawah container header (`badge`, `title`, `description`) menuju container card box atau konten di bawahnya terkunci rapi pada `mb-6 sm:mb-8` di semua section (Experience, Genres, Mixtapes, Edited Songs, Assets File, Contact). Dilarang memakai margin renggang berlebih (`mb-10 sm:mb-16`) agar ritme vertikal tetap proporsional dan padat.
 - **Brand Lock:** Semua nama panggung, metadata, copy, footer, social label, dan pesan booking wajib memakai nama **CANKZ**. Jangan memakai nama placeholder lain seperti DJ Vortex, Alex, atau nama buatan baru.
 - **Lokasi Lock:** Lokasi utama artis wajib **Sleman, Yogyakarta**.

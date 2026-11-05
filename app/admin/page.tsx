@@ -24,6 +24,7 @@ import {
   Youtube,
 } from 'lucide-react';
 import { createClient } from '@/src/lib/supabase/client';
+import ThemeToggle from '@/src/components/ThemeToggle';
 
 type Tab = 'songs' | 'mixtapes' | 'venues' | 'genres' | 'gallery' | 'settings';
 
@@ -79,18 +80,18 @@ function CustomSelect({
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-left text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50 cursor-pointer"
+        className="flex w-full items-center justify-between rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-left text-xs sm:text-sm text-stone-900 outline-none transition focus:border-amber-500 cursor-pointer dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:focus:border-amber-400/50"
       >
         <span className="truncate">{selectedOption ? selectedOption.label : placeholder || value}</span>
         <ChevronDown
-          className={`h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200 ${
-            open ? 'rotate-180 text-amber-300' : ''
+          className={`h-4 w-4 shrink-0 text-stone-400 transition-transform duration-200 dark:text-slate-400 ${
+            open ? 'rotate-180 text-amber-600 dark:text-amber-300' : ''
           }`}
         />
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-56 overflow-y-auto rounded-xl border border-amber-400/25 bg-slate-900 p-1 shadow-2xl backdrop-blur-md">
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-56 overflow-y-auto rounded-xl border border-stone-200 bg-white p-1 shadow-2xl backdrop-blur-md dark:border-amber-400/25 dark:bg-slate-900">
           {options.map((opt) => (
             <button
               key={opt.value}
@@ -101,12 +102,12 @@ function CustomSelect({
               }}
               className={`flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-xs sm:text-sm transition text-left ${
                 opt.value === value
-                  ? 'bg-amber-400/15 font-semibold text-amber-200'
-                  : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                  ? 'bg-amber-500/15 font-semibold text-amber-700 dark:bg-amber-400/15 dark:text-amber-200'
+                  : 'text-stone-700 hover:bg-stone-100 hover:text-stone-900 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white'
               }`}
             >
               <span>{opt.label}</span>
-              {opt.value === value && <Check className="h-3.5 w-3.5 text-amber-300" />}
+              {opt.value === value && <Check className="h-3.5 w-3.5 text-amber-600 dark:text-amber-300" />}
             </button>
           ))}
         </div>
@@ -944,22 +945,23 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-stone-50 text-stone-900 transition-colors duration-200 dark:bg-slate-950 dark:text-white">
       {/* Top Navbar */}
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-stone-200/90 bg-stone-50/85 backdrop-blur-md dark:border-white/10 dark:bg-slate-950/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
-            <span className="rounded-full border border-amber-400/25 bg-amber-400/10 px-2.5 py-1 text-xs font-bold uppercase tracking-widest text-amber-200">
+            <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-bold uppercase tracking-widest text-amber-700 dark:border-amber-400/25 dark:bg-amber-400/10 dark:text-amber-200">
               CANKZ CMS
             </span>
-            <span className="hidden text-xs text-slate-400 sm:inline">Portfolio Admin</span>
+            <span className="hidden text-xs text-stone-500 sm:inline dark:text-slate-400">Portfolio Admin</span>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
             <Link
               href="/"
               target="_blank"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:border-amber-400/35 hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-white px-3 py-1.5 text-xs font-semibold text-stone-700 shadow-sm transition hover:border-amber-500 hover:text-amber-600 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-300 dark:shadow-none dark:hover:border-amber-400/35 dark:hover:text-white"
             >
               Live Site
               <ExternalLink className="h-3.5 w-3.5" />
@@ -967,7 +969,7 @@ export default function AdminPage() {
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-red-500/25 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-300 transition hover:bg-red-500/20"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-red-500/25 bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-500/20 dark:text-red-300"
             >
               <LogOut className="h-3.5 w-3.5" />
               Sign Out
@@ -978,8 +980,8 @@ export default function AdminPage() {
 
       {/* Notice Toast */}
       {notice && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl border border-amber-400/40 bg-slate-900 px-4 py-3 text-xs font-bold text-amber-200 shadow-2xl">
-          <Check className="h-4 w-4 text-amber-300" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl border border-amber-500/40 bg-white px-4 py-3 text-xs font-bold text-amber-700 shadow-xl dark:border-amber-400/40 dark:bg-slate-900 dark:text-amber-200">
+          <Check className="h-4 w-4 text-amber-600 dark:text-amber-300" />
           {notice}
         </div>
       )}
@@ -987,14 +989,14 @@ export default function AdminPage() {
       {/* Main Container */}
       <main className="mx-auto max-w-6xl px-4 pb-8 sm:px-6 sm:pb-12">
         {/* Navigation Tabs */}
-        <div className="no-scrollbar mb-6 sm:mb-8 flex items-center gap-2 overflow-x-auto border-b border-white/10 py-3.5 sm:py-4">
+        <div className="no-scrollbar mb-6 sm:mb-8 flex items-center gap-2 overflow-x-auto border-b border-stone-200 py-3.5 sm:py-4 dark:border-white/10">
           <button
             type="button"
             onClick={() => setActiveTab('songs')}
             className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs sm:text-sm font-bold whitespace-nowrap transition ${
               activeTab === 'songs'
                 ? 'bg-amber-400 text-slate-950 shadow-md'
-                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                : 'text-stone-600 hover:bg-stone-200/60 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white'
             }`}
           >
             <Disc3 className="h-4 w-4 shrink-0" />
@@ -1007,7 +1009,7 @@ export default function AdminPage() {
             className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs sm:text-sm font-bold whitespace-nowrap transition ${
               activeTab === 'mixtapes'
                 ? 'bg-amber-400 text-slate-950 shadow-md'
-                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                : 'text-stone-600 hover:bg-stone-200/60 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white'
             }`}
           >
             <Youtube className="h-4 w-4 shrink-0" />
@@ -1020,7 +1022,7 @@ export default function AdminPage() {
             className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs sm:text-sm font-bold whitespace-nowrap transition ${
               activeTab === 'venues'
                 ? 'bg-amber-400 text-slate-950 shadow-md'
-                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                : 'text-stone-600 hover:bg-stone-200/60 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white'
             }`}
           >
             <Flame className="h-4 w-4 shrink-0" />
@@ -1033,7 +1035,7 @@ export default function AdminPage() {
             className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs sm:text-sm font-bold whitespace-nowrap transition ${
               activeTab === 'genres'
                 ? 'bg-amber-400 text-slate-950 shadow-md'
-                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                : 'text-stone-600 hover:bg-stone-200/60 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white'
             }`}
           >
             <Activity className="h-4 w-4 shrink-0" />
@@ -1046,7 +1048,7 @@ export default function AdminPage() {
             className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs sm:text-sm font-bold whitespace-nowrap transition ${
               activeTab === 'gallery'
                 ? 'bg-amber-400 text-slate-950 shadow-md'
-                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                : 'text-stone-600 hover:bg-stone-200/60 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white'
             }`}
           >
             <Camera className="h-4 w-4 shrink-0" />
@@ -1059,7 +1061,7 @@ export default function AdminPage() {
             className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-xl px-4 text-xs sm:text-sm font-bold whitespace-nowrap transition ${
               activeTab === 'settings'
                 ? 'bg-amber-400 text-slate-950 shadow-md'
-                : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                : 'text-stone-600 hover:bg-stone-200/60 hover:text-stone-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white'
             }`}
           >
             <FolderArchive className="h-4 w-4 shrink-0" />
@@ -1071,44 +1073,44 @@ export default function AdminPage() {
         {activeTab === 'songs' && (
           <div className="space-y-6 sm:space-y-8">
             {/* Add New Song Card */}
-            <div className="glass-panel rounded-2xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-6 shadow-xl">
-              <h2 className="mb-4 text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
+              <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                 <Plus className="h-4 w-4 text-amber-300" /> Add New Edited Track
               </h2>
               <form onSubmit={handleAddSong} className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Track Title</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Track Title</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Astaga Bercanda"
                     value={newSong.title}
                     onChange={(e) => setNewSong({ ...newSong, title: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Original Artist</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Original Artist</label>
                   <input
                     type="text"
                     placeholder="e.g. Mingse, Akbar Chalay"
                     value={newSong.original_artist}
                     onChange={(e) => setNewSong({ ...newSong, original_artist: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Genre</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Genre</label>
                   <input
                     type="text"
                     placeholder="e.g. Bounce / Afro House"
                     value={newSong.genre}
                     onChange={(e) => setNewSong({ ...newSong, genre: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Quality</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Quality</label>
                   <CustomSelect
                     value={newSong.quality}
                     onChange={(val) => setNewSong({ ...newSong, quality: val })}
@@ -1116,14 +1118,14 @@ export default function AdminPage() {
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Download / Google Drive Link</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Download / Google Drive Link</label>
                   <input
                     type="url"
                     required
                     placeholder="https://drive.google.com/..."
                     value={newSong.link}
                     onChange={(e) => setNewSong({ ...newSong, link: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div className="sm:col-span-2 lg:col-span-3 mt-1 pt-2 flex justify-end">
@@ -1139,9 +1141,9 @@ export default function AdminPage() {
 
             {/* List Songs */}
             <div className="space-y-3.5 sm:space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Tracks ({songs.length})</h3>
-                <span className="text-[11px] text-amber-200/80">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-stone-200 dark:border-white/10">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-stone-500 dark:text-slate-400">Current Tracks ({songs.length})</h3>
+                <span className="text-[11px] text-amber-700 dark:text-amber-200/80">
                   Use ▲▼ arrows to reorder
                 </span>
               </div>
@@ -1149,7 +1151,7 @@ export default function AdminPage() {
                 {songs.map((song, index) => (
                   <div
                     key={song.id}
-                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
+                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-stone-200/90 bg-white/90 p-3.5 shadow-sm transition duration-150 hover:border-amber-500 hover:shadow-md dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none dark:hover:border-white/20"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div className="flex flex-col -space-y-0.5 shrink-0">
@@ -1157,7 +1159,7 @@ export default function AdminPage() {
                           type="button"
                           disabled={index === 0}
                           onClick={() => moveItem(index, 'up')}
-                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                           title="Move up"
                           aria-label="Move up"
                         >
@@ -1167,7 +1169,7 @@ export default function AdminPage() {
                           type="button"
                           disabled={index === songs.length - 1}
                           onClick={() => moveItem(index, 'down')}
-                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                           title="Move down"
                           aria-label="Move down"
                         >
@@ -1176,20 +1178,20 @@ export default function AdminPage() {
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="truncate text-sm font-bold text-white">{song.title}</span>
+                          <span className="truncate text-sm font-bold text-stone-900 dark:text-white">{song.title}</span>
                           <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold text-amber-200 shrink-0">
                             {song.genre}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-400 truncate">{song.original_artist}</p>
-                        <p className="text-[11px] text-amber-200/80">Quality: {song.quality}</p>
+                        <p className="text-xs text-stone-500 dark:text-slate-400 truncate">{song.original_artist}</p>
+                        <p className="text-[11px] text-amber-700 dark:text-amber-200/80">Quality: {song.quality}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         type="button"
                         onClick={() => setEditingSong(song)}
-                        className="rounded-lg p-2 text-slate-400 hover:bg-amber-400/10 hover:text-amber-300 transition"
+                        className="rounded-lg p-2 text-stone-400 hover:bg-amber-500/10 hover:text-amber-600 transition dark:text-slate-400 dark:hover:bg-amber-400/10 dark:hover:text-amber-300"
                         aria-label="Edit song"
                       >
                         <Pencil className="h-4 w-4" />
@@ -1197,7 +1199,7 @@ export default function AdminPage() {
                       <button
                         type="button"
                         onClick={() => handleDeleteSong(song.id)}
-                        className="rounded-lg p-2 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
+                        className="rounded-lg p-2 text-stone-400 hover:bg-red-500/10 hover:text-red-600 transition dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
                         aria-label="Delete song"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -1214,41 +1216,41 @@ export default function AdminPage() {
         {activeTab === 'mixtapes' && (
           <div className="space-y-6 sm:space-y-8">
             {/* Add New Mixtape */}
-            <div className="glass-panel rounded-2xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-6 shadow-xl">
-              <h2 className="mb-4 text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
+              <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                 <Plus className="h-4 w-4 text-amber-300" /> Add YouTube Mixtape
               </h2>
               <form onSubmit={handleAddMixtape} className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Set Title</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Set Title</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. CANKZ - 2016 VIBES"
                     value={newMixtape.title}
                     onChange={(e) => setNewMixtape({ ...newMixtape, title: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Embed URL (https://www.youtube.com/embed/...)</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Embed URL (https://www.youtube.com/embed/...)</label>
                   <input
                     type="url"
                     required
                     placeholder="https://www.youtube.com/embed/VIDEO_ID"
                     value={newMixtape.embed_url}
                     onChange={(e) => setNewMixtape({ ...newMixtape, embed_url: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Watch Link (https://youtu.be/...)</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Watch Link (https://youtu.be/...)</label>
                   <input
                     type="url"
                     placeholder="https://youtu.be/VIDEO_ID"
                     value={newMixtape.youtube_url}
                     onChange={(e) => setNewMixtape({ ...newMixtape, youtube_url: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div className="sm:col-span-2 mt-1 pt-2 flex justify-end">
@@ -1264,9 +1266,9 @@ export default function AdminPage() {
 
             {/* List Mixtapes */}
             <div className="space-y-3.5 sm:space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Sets ({mixtapes.length})</h3>
-                <span className="text-[11px] text-amber-200/80">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-stone-200 dark:border-white/10">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-stone-500 dark:text-slate-400">Current Sets ({mixtapes.length})</h3>
+                <span className="text-[11px] text-amber-700 dark:text-amber-200/80">
                   Use ▲▼ arrows to reorder
                 </span>
               </div>
@@ -1274,7 +1276,7 @@ export default function AdminPage() {
                 {mixtapes.map((mix, index) => (
                   <div
                     key={mix.id}
-                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
+                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-stone-200/90 bg-white/90 p-3.5 shadow-sm transition duration-150 hover:border-amber-500 hover:shadow-md dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none dark:hover:border-white/20"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div className="flex flex-col -space-y-0.5 shrink-0">
@@ -1282,7 +1284,7 @@ export default function AdminPage() {
                           type="button"
                           disabled={index === 0}
                           onClick={() => moveItem(index, 'up')}
-                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                           title="Move up"
                           aria-label="Move up"
                         >
@@ -1292,7 +1294,7 @@ export default function AdminPage() {
                           type="button"
                           disabled={index === mixtapes.length - 1}
                           onClick={() => moveItem(index, 'down')}
-                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                           title="Move down"
                           aria-label="Move down"
                         >
@@ -1300,15 +1302,15 @@ export default function AdminPage() {
                         </button>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-bold text-white truncate">{mix.title}</p>
-                        <p className="text-xs text-slate-400 truncate">{mix.embed_url}</p>
+                        <p className="text-sm font-bold text-stone-900 dark:text-white truncate">{mix.title}</p>
+                        <p className="text-xs text-stone-500 dark:text-slate-400 truncate">{mix.embed_url}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         type="button"
                         onClick={() => setEditingMixtape(mix)}
-                        className="rounded-lg p-2 text-slate-400 hover:bg-amber-400/10 hover:text-amber-300 transition"
+                        className="rounded-lg p-2 text-stone-400 hover:bg-amber-500/10 hover:text-amber-600 transition dark:text-slate-400 dark:hover:bg-amber-400/10 dark:hover:text-amber-300"
                         aria-label="Edit mixtape"
                       >
                         <Pencil className="h-4 w-4" />
@@ -1316,7 +1318,7 @@ export default function AdminPage() {
                       <button
                         type="button"
                         onClick={() => handleDeleteMixtape(mix.id)}
-                        className="rounded-lg p-2 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
+                        className="rounded-lg p-2 text-stone-400 hover:bg-red-500/10 hover:text-red-600 transition dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
                         aria-label="Delete mixtape"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -1332,34 +1334,34 @@ export default function AdminPage() {
         {/* Tab 3: VENUES */}
         {activeTab === 'venues' && (
           <div className="space-y-6 sm:space-y-8">
-            <div className="glass-panel rounded-2xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-6 shadow-xl">
-              <h2 className="mb-4 text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
+              <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                 <Plus className="h-4 w-4 text-amber-300" /> Add Venue / Gig
               </h2>
               <form onSubmit={handleAddVenue} className="grid grid-cols-1 gap-3.5 sm:grid-cols-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Venue / Club Name</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Venue / Club Name</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Club Dragonfly"
                     value={newVenue.name}
                     onChange={(e) => setNewVenue({ ...newVenue, name: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">City / Region</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">City / Region</label>
                   <input
                     type="text"
                     placeholder="e.g. Sleman / Yogyakarta"
                     value={newVenue.city}
                     onChange={(e) => setNewVenue({ ...newVenue, city: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Icon Type</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Icon Type</label>
                   <CustomSelect
                     value={newVenue.icon}
                     onChange={(val) => setNewVenue({ ...newVenue, icon: val })}
@@ -1378,9 +1380,9 @@ export default function AdminPage() {
             </div>
 
             <div className="space-y-3.5 sm:space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Venues ({venues.length})</h3>
-                <span className="text-[11px] text-amber-200/80">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-stone-200 dark:border-white/10">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-stone-500 dark:text-slate-400">Current Venues ({venues.length})</h3>
+                <span className="text-[11px] text-amber-700 dark:text-amber-200/80">
                   Use ▲▼ arrows to reorder
                 </span>
               </div>
@@ -1388,7 +1390,7 @@ export default function AdminPage() {
                 {venues.map((venue, index) => (
                   <div
                     key={venue.id}
-                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
+                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-stone-200/90 bg-white/90 p-3.5 shadow-sm transition duration-150 hover:border-amber-500 hover:shadow-md dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none dark:hover:border-white/20"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div className="flex flex-col -space-y-0.5 shrink-0">
@@ -1396,7 +1398,7 @@ export default function AdminPage() {
                           type="button"
                           disabled={index === 0}
                           onClick={() => moveItem(index, 'up')}
-                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                           title="Move up"
                           aria-label="Move up"
                         >
@@ -1406,7 +1408,7 @@ export default function AdminPage() {
                           type="button"
                           disabled={index === venues.length - 1}
                           onClick={() => moveItem(index, 'down')}
-                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                           title="Move down"
                           aria-label="Move down"
                         >
@@ -1414,15 +1416,15 @@ export default function AdminPage() {
                         </button>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-bold text-white truncate">{venue.name}</p>
-                        <p className="text-xs text-slate-400 truncate">{venue.city} • Icon: {venue.icon}</p>
+                        <p className="text-sm font-bold text-stone-900 dark:text-white truncate">{venue.name}</p>
+                        <p className="text-xs text-stone-500 dark:text-slate-400 truncate">{venue.city} • Icon: {venue.icon}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         type="button"
                         onClick={() => setEditingVenue(venue)}
-                        className="rounded-lg p-2 text-slate-400 hover:bg-amber-400/10 hover:text-amber-300 transition"
+                        className="rounded-lg p-2 text-stone-400 hover:bg-amber-500/10 hover:text-amber-600 transition dark:text-slate-400 dark:hover:bg-amber-400/10 dark:hover:text-amber-300"
                         aria-label="Edit venue"
                       >
                         <Pencil className="h-4 w-4" />
@@ -1430,7 +1432,7 @@ export default function AdminPage() {
                       <button
                         type="button"
                         onClick={() => handleDeleteVenue(venue.id)}
-                        className="rounded-lg p-2 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
+                        className="rounded-lg p-2 text-stone-400 hover:bg-red-500/10 hover:text-red-600 transition dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
                         aria-label="Delete venue"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -1446,24 +1448,24 @@ export default function AdminPage() {
         {/* Tab 4: GENRES */}
         {activeTab === 'genres' && (
           <div className="space-y-6 sm:space-y-8">
-            <div className="glass-panel rounded-2xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-6 shadow-xl">
-              <h2 className="mb-4 text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
+              <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                 <Plus className="h-4 w-4 text-amber-300" /> Add New Genre
               </h2>
               <form onSubmit={handleAddGenre} className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Genre Name</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Genre Name</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Deep House"
                     value={newGenre.title}
                     onChange={(e) => setNewGenre({ ...newGenre, title: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Icon</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Icon</label>
                   <CustomSelect
                     value={newGenre.icon}
                     onChange={(val) => setNewGenre({ ...newGenre, icon: val })}
@@ -1482,9 +1484,9 @@ export default function AdminPage() {
             </div>
 
             <div className="space-y-3.5 sm:space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Current Genres ({genres.length})</h3>
-                <span className="text-[11px] text-amber-200/80">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-stone-200 dark:border-white/10">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-stone-500 dark:text-slate-400">Current Genres ({genres.length})</h3>
+                <span className="text-[11px] text-amber-700 dark:text-amber-200/80">
                   Use ▲▼ arrows to reorder
                 </span>
               </div>
@@ -1492,7 +1494,7 @@ export default function AdminPage() {
                 {genres.map((genre, index) => (
                   <div
                     key={genre.id}
-                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
+                    className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-stone-200/90 bg-white/90 p-3.5 shadow-sm transition duration-150 hover:border-amber-500 hover:shadow-md dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none dark:hover:border-white/20"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <div className="flex flex-col -space-y-0.5 shrink-0">
@@ -1500,7 +1502,7 @@ export default function AdminPage() {
                           type="button"
                           disabled={index === 0}
                           onClick={() => moveItem(index, 'up')}
-                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                           title="Move up"
                           aria-label="Move up"
                         >
@@ -1510,7 +1512,7 @@ export default function AdminPage() {
                           type="button"
                           disabled={index === genres.length - 1}
                           onClick={() => moveItem(index, 'down')}
-                          className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                          className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                           title="Move down"
                           aria-label="Move down"
                         >
@@ -1518,15 +1520,15 @@ export default function AdminPage() {
                         </button>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-bold text-white truncate">{genre.title}</p>
-                        <p className="text-xs text-slate-400 truncate">Icon: {genre.icon}</p>
+                        <p className="text-sm font-bold text-stone-900 dark:text-white truncate">{genre.title}</p>
+                        <p className="text-xs text-stone-500 dark:text-slate-400 truncate">Icon: {genre.icon}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
                       <button
                         type="button"
                         onClick={() => setEditingGenre(genre)}
-                        className="rounded-lg p-2 text-slate-400 hover:bg-amber-400/10 hover:text-amber-300 transition"
+                        className="rounded-lg p-2 text-stone-400 hover:bg-amber-500/10 hover:text-amber-600 transition dark:text-slate-400 dark:hover:bg-amber-400/10 dark:hover:text-amber-300"
                         aria-label="Edit genre"
                       >
                         <Pencil className="h-4 w-4" />
@@ -1534,7 +1536,7 @@ export default function AdminPage() {
                       <button
                         type="button"
                         onClick={() => handleDeleteGenre(genre.id)}
-                        className="rounded-lg p-2 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
+                        className="rounded-lg p-2 text-stone-400 hover:bg-red-500/10 hover:text-red-600 transition dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
                         aria-label="Delete genre"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -1550,13 +1552,13 @@ export default function AdminPage() {
         {/* Tab: GALLERY / STAGE PHOTOS */}
         {activeTab === 'gallery' && (
           <div className="space-y-6 sm:space-y-8">
-            <div className="glass-panel rounded-2xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-6 shadow-xl">
-              <h2 className="mb-4 text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
+              <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                 <Plus className="h-4 w-4 text-amber-300" /> Add Stage Photo
               </h2>
               <form onSubmit={handleAddPhoto} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                     Image Source (Upload from device or paste image URL)
                   </label>
                   <div className="flex flex-col sm:flex-row gap-2.5">
@@ -1566,7 +1568,7 @@ export default function AdminPage() {
                       placeholder="https://... (URL foto atau upload file di samping)"
                       value={newPhotoUrl}
                       onChange={(e) => setNewPhotoUrl(e.target.value)}
-                      className="flex-1 rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                      className="flex-1 rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                     />
                     <input
                       type="file"
@@ -1579,20 +1581,20 @@ export default function AdminPage() {
                       type="button"
                       disabled={uploading}
                       onClick={() => fileInputRef.current?.click()}
-                      className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border border-amber-400/30 bg-slate-950/80 px-4 py-2 text-xs sm:text-sm font-semibold text-amber-200 transition hover:bg-slate-900 disabled:opacity-50"
+                      className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs sm:text-sm font-semibold text-amber-700 transition hover:bg-amber-500/20 disabled:opacity-50 dark:border-amber-400/30 dark:bg-slate-950/80 dark:text-amber-200 dark:hover:bg-slate-900"
                     >
                       <Upload className="h-3.5 w-3.5" />
                       {uploading ? 'Uploading...' : 'Upload File'}
                     </button>
                   </div>
-                  <p className="mt-1.5 text-[11px] text-slate-400">
+                  <p className="mt-1.5 text-[11px] text-stone-500 dark:text-slate-400">
                     Foto rasio apapun akan otomatis disesuaikan ke rasio 3:4 (tengah).
                   </p>
                 </div>
 
                 {newPhotoUrl && (
-                  <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-950/50 p-2.5">
-                    <div className="relative aspect-[3/4] h-20 overflow-hidden rounded-lg bg-slate-900 border border-white/10">
+                  <div className="flex items-center gap-3 rounded-xl border border-stone-200 bg-stone-50 p-2.5 dark:border-white/10 dark:bg-slate-950/50">
+                    <div className="relative aspect-[3/4] h-20 overflow-hidden rounded-lg bg-stone-100 border border-stone-200 dark:bg-slate-900 dark:border-white/10">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={newPhotoUrl}
@@ -1601,8 +1603,8 @@ export default function AdminPage() {
                       />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-white">Preview Rasio 3:4</p>
-                      <p className="text-[11px] text-slate-400 truncate max-w-xs sm:max-w-md">{newPhotoUrl}</p>
+                      <p className="text-xs font-semibold text-stone-900 dark:text-white">Preview Rasio 3:4</p>
+                      <p className="text-[11px] text-stone-500 truncate max-w-xs sm:max-w-md dark:text-slate-400">{newPhotoUrl}</p>
                     </div>
                   </div>
                 )}
@@ -1620,11 +1622,11 @@ export default function AdminPage() {
             </div>
 
             <div className="space-y-3.5 sm:space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-white/10">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-stone-200 dark:border-white/10">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-stone-500 dark:text-slate-400">
                   Current Stage Photos ({photos.length})
                 </h3>
-                <span className="text-[11px] text-amber-200/80">
+                <span className="text-[11px] text-amber-700 dark:text-amber-200/80">
                   Use ▲▼ arrows to reorder
                 </span>
               </div>
@@ -1638,7 +1640,7 @@ export default function AdminPage() {
                   {photos.map((photo, index) => (
                     <div
                       key={photo.id}
-                      className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/40 p-3.5 transition duration-150 hover:border-white/20"
+                      className="glass-panel flex items-center justify-between gap-3 rounded-2xl border border-stone-200/90 bg-white/90 p-3.5 shadow-sm transition duration-150 hover:border-amber-500 hover:shadow-md dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none dark:hover:border-white/20"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         {/* 1-Click Pure Arrow Reordering */}
@@ -1647,7 +1649,7 @@ export default function AdminPage() {
                             type="button"
                             disabled={index === 0}
                             onClick={() => moveItem(index, 'up')}
-                            className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                            className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                             title="Move up"
                             aria-label="Move up"
                           >
@@ -1657,7 +1659,7 @@ export default function AdminPage() {
                             type="button"
                             disabled={index === photos.length - 1}
                             onClick={() => moveItem(index, 'down')}
-                            className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-amber-300 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-slate-500 transition"
+                            className="rounded p-1 text-stone-400 hover:bg-stone-100 hover:text-amber-600 disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-stone-300 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-amber-300 dark:disabled:hover:text-slate-500"
                             title="Move down"
                             aria-label="Move down"
                           >
@@ -1666,7 +1668,7 @@ export default function AdminPage() {
                         </div>
 
                         {/* Thumbnail 3:4 */}
-                        <div className="relative aspect-[3/4] h-16 w-12 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-950">
+                        <div className="relative aspect-[3/4] h-16 w-12 shrink-0 overflow-hidden rounded-xl border border-stone-200 bg-stone-100 dark:border-white/10 dark:bg-slate-950">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={photo.image_url}
@@ -1676,12 +1678,12 @@ export default function AdminPage() {
                         </div>
 
                         <div className="min-w-0">
-                          <p className="text-xs font-semibold text-white">Order: #{photo.sort_order || index + 1}</p>
+                          <p className="text-xs font-semibold text-stone-900 dark:text-white">Order: #{photo.sort_order || index + 1}</p>
                           <a
                             href={photo.image_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-[11px] text-amber-200/80 hover:text-amber-200 truncate max-w-[180px] sm:max-w-xs"
+                            className="inline-flex items-center gap-1 text-[11px] text-amber-700 hover:text-amber-800 truncate max-w-[180px] sm:max-w-xs dark:text-amber-200/80 dark:hover:text-amber-200"
                           >
                             <span className="truncate">{photo.image_url}</span>
                             <ExternalLink className="h-3 w-3 shrink-0" />
@@ -1693,7 +1695,7 @@ export default function AdminPage() {
                         <button
                           type="button"
                           onClick={() => handleDeletePhoto(photo)}
-                          className="rounded-lg p-2 text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition"
+                          className="rounded-lg p-2 text-stone-400 hover:bg-red-500/10 hover:text-red-600 transition dark:text-slate-400 dark:hover:bg-red-500/10 dark:hover:text-red-400"
                           aria-label="Delete photo"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -1709,18 +1711,18 @@ export default function AdminPage() {
 
         {/* Tab 5: SITE SETTINGS */}
         {activeTab === 'settings' && (
-          <div className="glass-panel max-w-2xl rounded-2xl border border-amber-400/25 bg-slate-900/60 p-5 sm:p-6 shadow-xl">
-            <h2 className="mb-4 text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          <div className="glass-panel max-w-2xl rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
+            <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
               <FolderArchive className="h-4 w-4 text-amber-300" /> Hero Photo, Contact &amp; Asset Settings
             </h2>
             <form onSubmit={handleSaveSettings} className="space-y-4">
               {/* Hero / About DJ Profile Photo */}
-              <div className="rounded-xl border border-white/10 bg-slate-950/60 p-3.5 space-y-3">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-amber-200">
+              <div className="rounded-xl border border-stone-200 bg-stone-50 p-3.5 space-y-3 dark:border-white/10 dark:bg-slate-950/60">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-200">
                   Hero / About DJ Profile Photo
                 </label>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                  <div className="relative aspect-[4/5] h-28 w-auto shrink-0 overflow-hidden rounded-xl border border-white/10 bg-slate-950 shadow-md">
+                  <div className="relative aspect-[4/5] h-28 w-auto shrink-0 overflow-hidden rounded-xl border border-stone-200 bg-stone-100 shadow-sm dark:border-white/10 dark:bg-slate-950 dark:shadow-md">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     {settings.hero_image_url ? (
                       <img
@@ -1732,7 +1734,7 @@ export default function AdminPage() {
                         }}
                       />
                     ) : (
-                      <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 p-2 text-center bg-slate-900 text-slate-500">
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 p-2 text-center bg-stone-100 text-stone-400 dark:bg-slate-900 dark:text-slate-500">
                         <Camera className="h-5 w-5" />
                         <span className="text-[10px]">No Photo</span>
                       </div>
@@ -1751,7 +1753,7 @@ export default function AdminPage() {
                         type="button"
                         disabled={uploadingHero}
                         onClick={() => heroFileInputRef.current?.click()}
-                        className="inline-flex items-center gap-1.5 rounded-xl border border-amber-400/30 bg-slate-900 px-3.5 py-2 text-xs font-semibold text-amber-200 transition hover:bg-slate-800 disabled:opacity-50"
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3.5 py-2 text-xs font-semibold text-amber-700 transition hover:bg-amber-500/20 disabled:opacity-50 dark:border-amber-400/30 dark:bg-slate-900 dark:text-amber-200 dark:hover:bg-slate-800"
                       >
                         <Upload className="h-3.5 w-3.5" />
                         {uploadingHero ? 'Compressing & Uploading...' : 'Upload Foto Baru'}
@@ -1760,7 +1762,7 @@ export default function AdminPage() {
                         <button
                           type="button"
                           onClick={handleHeroReset}
-                          className="inline-flex items-center gap-1 rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-400 hover:text-red-400 transition"
+                          className="inline-flex items-center gap-1 rounded-xl border border-stone-200 bg-white px-3 py-2 text-xs font-semibold text-stone-500 hover:text-red-600 transition dark:border-white/10 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-red-400"
                         >
                           <X className="h-3.5 w-3.5" /> Reset ke Default
                         </button>
@@ -1771,7 +1773,7 @@ export default function AdminPage() {
                       placeholder="Atau paste URL gambar langsung..."
                       value={settings.hero_image_url || ''}
                       onChange={(e) => setSettings({ ...settings, hero_image_url: e.target.value })}
-                      className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                      className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                     />
                     <p className="text-[11px] text-slate-400">
                       Otomatis dikonversi ke WebP &amp; dikompres (~150KB) sebelum upload. Jika dikosongkan, web menggunakan foto bawaan di folder aset.
@@ -1781,7 +1783,7 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                   Google Drive Folder URL (Promotional Assets &amp; Flyers)
                 </label>
                 <input
@@ -1789,12 +1791,12 @@ export default function AdminPage() {
                   value={settings.google_drive_url}
                   onChange={(e) => setSettings({ ...settings, google_drive_url: e.target.value })}
                   placeholder="https://drive.google.com/..."
-                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                   WhatsApp Booking Number
                 </label>
                 <input
@@ -1802,12 +1804,12 @@ export default function AdminPage() {
                   value={settings.whatsapp_number}
                   onChange={(e) => setSettings({ ...settings, whatsapp_number: e.target.value })}
                   placeholder="+628174957733"
-                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                   WhatsApp Default Message
                 </label>
                 <input
@@ -1815,12 +1817,12 @@ export default function AdminPage() {
                   value={settings.whatsapp_message}
                   onChange={(e) => setSettings({ ...settings, whatsapp_message: e.target.value })}
                   placeholder="Hi CANKZ, I want to book an event."
-                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                   Booking Email Address
                 </label>
                 <input
@@ -1828,12 +1830,12 @@ export default function AdminPage() {
                   value={settings.booking_email}
                   onChange={(e) => setSettings({ ...settings, booking_email: e.target.value })}
                   placeholder="contactcankz@gmail.com"
-                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">
                   Artist Location
                 </label>
                 <input
@@ -1841,11 +1843,11 @@ export default function AdminPage() {
                   value={settings.location}
                   onChange={(e) => setSettings({ ...settings, location: e.target.value })}
                   placeholder="Sleman, Yogyakarta"
-                  className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                  className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                 />
               </div>
 
-              <div className="mt-1 pt-2 border-t border-white/5 flex justify-end">
+              <div className="mt-1 pt-2 border-t border-stone-200 dark:border-white/5 flex justify-end">
                 <button
                   type="submit"
                   className="inline-flex items-center gap-2 rounded-xl bg-amber-400 px-6 py-2.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 hover:bg-amber-300 shadow-md transition"
@@ -1862,21 +1864,21 @@ export default function AdminPage() {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/80"
             onClick={() => setEditingSong(null)}
           >
             <div
-              className="glass-panel relative w-full max-w-lg rounded-2xl border border-amber-400/30 bg-slate-900/95 p-5 sm:p-6 shadow-2xl"
+              className="glass-panel relative w-full max-w-lg rounded-2xl border border-stone-200 bg-white p-5 sm:p-6 shadow-2xl dark:border-amber-400/30 dark:bg-slate-900/95"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                   <Pencil className="h-4 w-4 text-amber-300" /> Edit Track
                 </h3>
                 <button
                   type="button"
                   onClick={() => setEditingSong(null)}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"
+                  className="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100 hover:text-stone-900 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -1884,42 +1886,42 @@ export default function AdminPage() {
 
               <form onSubmit={handleUpdateSong} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Song Title</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Song Title</label>
                   <input
                     type="text"
                     required
                     value={editingSong.title}
                     onChange={(e) => setEditingSong({ ...editingSong, title: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Original Artist</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Original Artist</label>
                   <input
                     type="text"
                     required
                     value={editingSong.original_artist}
                     onChange={(e) => setEditingSong({ ...editingSong, original_artist: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1.5">Genre</label>
+                    <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Genre</label>
                     <input
                       type="text"
                       required
                       placeholder="e.g. Bounce / Afro House"
                       value={editingSong.genre}
                       onChange={(e) => setEditingSong({ ...editingSong, genre: e.target.value })}
-                      className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition focus:border-amber-400/50"
+                      className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1.5">Quality</label>
+                    <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Quality</label>
                     <CustomSelect
                       value={editingSong.quality}
                       onChange={(val) => setEditingSong({ ...editingSong, quality: val })}
@@ -1929,21 +1931,21 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Download / Drive Link</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Download / Drive Link</label>
                   <input
                     type="url"
                     required
                     value={editingSong.link}
                     onChange={(e) => setEditingSong({ ...editingSong, link: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
-                <div className="pt-3 mt-1 border-t border-white/5 flex items-center justify-end gap-2">
+                <div className="pt-3 mt-1 border-t border-stone-200 dark:border-white/5 flex items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setEditingSong(null)}
-                    className="rounded-xl border border-white/10 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 transition"
+                    className="rounded-xl border border-stone-200 bg-stone-100 px-4 py-2 text-xs font-semibold text-stone-700 hover:bg-stone-200 transition dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-300 dark:hover:bg-slate-900"
                   >
                     Cancel
                   </button>
@@ -1964,21 +1966,21 @@ export default function AdminPage() {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/80"
             onClick={() => setEditingMixtape(null)}
           >
             <div
-              className="glass-panel relative w-full max-w-lg rounded-2xl border border-amber-400/30 bg-slate-900/95 p-5 sm:p-6 shadow-2xl"
+              className="glass-panel relative w-full max-w-lg rounded-2xl border border-stone-200 bg-white p-5 sm:p-6 shadow-2xl dark:border-amber-400/30 dark:bg-slate-900/95"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                   <Pencil className="h-4 w-4 text-amber-300" /> Edit YouTube Mixtape
                 </h3>
                 <button
                   type="button"
                   onClick={() => setEditingMixtape(null)}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"
+                  className="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100 hover:text-stone-900 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -1986,42 +1988,42 @@ export default function AdminPage() {
 
               <form onSubmit={handleUpdateMixtape} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Set Title</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Set Title</label>
                   <input
                     type="text"
                     required
                     value={editingMixtape.title}
                     onChange={(e) => setEditingMixtape({ ...editingMixtape, title: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Embed URL</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Embed URL</label>
                   <input
                     type="url"
                     required
                     value={editingMixtape.embed_url}
                     onChange={(e) => setEditingMixtape({ ...editingMixtape, embed_url: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Watch Link</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Watch Link</label>
                   <input
                     type="url"
                     value={editingMixtape.youtube_url}
                     onChange={(e) => setEditingMixtape({ ...editingMixtape, youtube_url: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
-                <div className="pt-3 mt-1 border-t border-white/5 flex items-center justify-end gap-2">
+                <div className="pt-3 mt-1 border-t border-stone-200 dark:border-white/5 flex items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setEditingMixtape(null)}
-                    className="rounded-xl border border-white/10 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 transition"
+                    className="rounded-xl border border-stone-200 bg-stone-100 px-4 py-2 text-xs font-semibold text-stone-700 hover:bg-stone-200 transition dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-300 dark:hover:bg-slate-900"
                   >
                     Cancel
                   </button>
@@ -2042,21 +2044,21 @@ export default function AdminPage() {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/80"
             onClick={() => setEditingVenue(null)}
           >
             <div
-              className="glass-panel relative w-full max-w-lg rounded-2xl border border-amber-400/30 bg-slate-900/95 p-5 sm:p-6 shadow-2xl"
+              className="glass-panel relative w-full max-w-lg rounded-2xl border border-stone-200 bg-white p-5 sm:p-6 shadow-2xl dark:border-amber-400/30 dark:bg-slate-900/95"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                   <Pencil className="h-4 w-4 text-amber-300" /> Edit Venue
                 </h3>
                 <button
                   type="button"
                   onClick={() => setEditingVenue(null)}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"
+                  className="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100 hover:text-stone-900 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -2064,28 +2066,28 @@ export default function AdminPage() {
 
               <form onSubmit={handleUpdateVenue} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Venue / Club Name</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Venue / Club Name</label>
                   <input
                     type="text"
                     required
                     value={editingVenue.name}
                     onChange={(e) => setEditingVenue({ ...editingVenue, name: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">City / Region</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">City / Region</label>
                   <input
                     type="text"
                     value={editingVenue.city}
                     onChange={(e) => setEditingVenue({ ...editingVenue, city: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Icon Type</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Icon Type</label>
                   <CustomSelect
                     value={editingVenue.icon}
                     onChange={(val) => setEditingVenue({ ...editingVenue, icon: val })}
@@ -2093,11 +2095,11 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <div className="pt-3 mt-1 border-t border-white/5 flex items-center justify-end gap-2">
+                <div className="pt-3 mt-1 border-t border-stone-200 dark:border-white/5 flex items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setEditingVenue(null)}
-                    className="rounded-xl border border-white/10 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 transition"
+                    className="rounded-xl border border-stone-200 bg-stone-100 px-4 py-2 text-xs font-semibold text-stone-700 hover:bg-stone-200 transition dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-300 dark:hover:bg-slate-900"
                   >
                     Cancel
                   </button>
@@ -2118,21 +2120,21 @@ export default function AdminPage() {
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/80"
             onClick={() => setEditingGenre(null)}
           >
             <div
-              className="glass-panel relative w-full max-w-lg rounded-2xl border border-amber-400/30 bg-slate-900/95 p-5 sm:p-6 shadow-2xl"
+              className="glass-panel relative w-full max-w-lg rounded-2xl border border-stone-200 bg-white p-5 sm:p-6 shadow-2xl dark:border-amber-400/30 dark:bg-slate-900/95"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
                   <Pencil className="h-4 w-4 text-amber-300" /> Edit Genre
                 </h3>
                 <button
                   type="button"
                   onClick={() => setEditingGenre(null)}
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"
+                  className="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100 hover:text-stone-900 transition dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -2140,18 +2142,18 @@ export default function AdminPage() {
 
               <form onSubmit={handleUpdateGenre} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Genre Name</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Genre Name</label>
                   <input
                     type="text"
                     required
                     value={editingGenre.title}
                     onChange={(e) => setEditingGenre({ ...editingGenre, title: e.target.value })}
-                    className="w-full rounded-xl border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs sm:text-sm text-white outline-none transition focus:border-amber-400/50"
+                    className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs sm:text-sm text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">Icon</label>
+                  <label className="block text-xs font-medium text-stone-700 mb-1.5 dark:text-slate-300">Icon</label>
                   <CustomSelect
                     value={editingGenre.icon}
                     onChange={(val) => setEditingGenre({ ...editingGenre, icon: val })}
@@ -2159,11 +2161,11 @@ export default function AdminPage() {
                   />
                 </div>
 
-                <div className="pt-3 mt-1 border-t border-white/5 flex items-center justify-end gap-2">
+                <div className="pt-3 mt-1 border-t border-stone-200 dark:border-white/5 flex items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => setEditingGenre(null)}
-                    className="rounded-xl border border-white/10 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 transition"
+                    className="rounded-xl border border-stone-200 bg-stone-100 px-4 py-2 text-xs font-semibold text-stone-700 hover:bg-stone-200 transition dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-300 dark:hover:bg-slate-900"
                   >
                     Cancel
                   </button>

@@ -30,12 +30,12 @@ function StagePhotoCard({
       type="button"
       onClick={onSelect}
       aria-label="View photo in full size"
-      className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 transition duration-300 hover:-translate-y-1 hover:border-amber-400/35 hover:shadow-xl focus:outline-none focus:ring-1 focus:ring-amber-400/50"
+      className="group relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-stone-200 bg-white/90 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-amber-500 hover:shadow-md focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-white/10 dark:bg-slate-900/40 dark:shadow-none dark:hover:border-amber-400/35 dark:hover:shadow-xl dark:focus:ring-amber-400/50"
     >
       {/* Skeleton overlay pulsing sampai gambar selesai diunduh & dirender */}
       {!imageLoaded && (
-        <div className="absolute inset-0 z-10 bg-slate-950/90 animate-pulse flex flex-col items-center justify-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/5 bg-white/5 text-amber-200/20">
+        <div className="absolute inset-0 z-10 bg-stone-100/90 animate-pulse flex flex-col items-center justify-center gap-2 dark:bg-slate-950/90">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-300/40 bg-stone-200/50 text-amber-600/40 dark:border-white/5 dark:bg-white/5 dark:text-amber-200/20">
             <Camera className="h-4 w-4" />
           </div>
         </div>
@@ -54,8 +54,8 @@ function StagePhotoCard({
       />
 
       {/* Hover Dark Vignette & Expand Icon */}
-      <div className="absolute inset-0 bg-slate-950/0 transition-colors duration-300 group-hover:bg-slate-950/25 z-10" />
-      <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-950/80 text-slate-300 opacity-0 backdrop-blur-sm transition duration-300 group-hover:opacity-100 group-hover:text-amber-200">
+      <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/25 z-10" />
+      <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 flex h-8 w-8 items-center justify-center rounded-xl border border-stone-200 bg-white/90 text-stone-700 opacity-0 backdrop-blur-sm transition duration-300 group-hover:opacity-100 group-hover:text-amber-600 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-300 dark:group-hover:text-amber-200">
         <Maximize2 className="h-4 w-4" />
       </div>
     </button>
@@ -123,7 +123,7 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
   return (
     <section
       id="stage-archive"
-      className={`relative overflow-hidden bg-slate-950 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16 ${
+      className={`relative overflow-hidden bg-stone-50 pb-16 sm:pb-24 scroll-mt-14 sm:scroll-mt-16 dark:bg-slate-950 ${
         isPage ? 'pt-4 sm:pt-6' : 'pt-10 sm:pt-14'
       }`}
     >
@@ -131,14 +131,14 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
         {/* Section Header */}
         <div className="mx-auto mb-6 sm:mb-8 max-w-3xl text-center">
           {!isPage && (
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-slate-900/80 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-200">
-              <Camera className="h-3.5 w-3.5 text-amber-300" /> Live Moments
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-amber-700 dark:border-amber-400/25 dark:bg-slate-900/80 dark:text-amber-200">
+              <Camera className="h-3.5 w-3.5 text-amber-600 dark:text-amber-300" /> Live Moments
             </div>
           )}
-          <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          <h2 className="text-2xl font-extrabold tracking-tight text-stone-900 sm:text-4xl lg:text-5xl dark:text-white">
             Stage Archive
           </h2>
-          <p className="mt-3 sm:mt-4 text-sm text-slate-400 sm:text-lg">
+          <p className="mt-3 sm:mt-4 text-sm text-stone-600 sm:text-lg dark:text-slate-400">
             Raw energy, crowd connection, and stage presence captured across recent gigs.
           </p>
         </div>
@@ -149,16 +149,16 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
             Array.from({ length: isPage ? 8 : 4 }).map((_, idx) => (
               <div
                 key={`skel-${idx}`}
-                className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-white/5 bg-slate-900/60 animate-pulse flex flex-col items-center justify-center gap-2"
+                className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl border border-stone-200 bg-white/70 animate-pulse flex flex-col items-center justify-center gap-2 dark:border-white/5 dark:bg-slate-900/60"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/5 bg-white/5">
-                  <Camera className="h-4 w-4 text-amber-200/20" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-stone-200 bg-stone-100 dark:border-white/5 dark:bg-white/5">
+                  <Camera className="h-4 w-4 text-amber-600/40 dark:text-amber-200/20" />
                 </div>
               </div>
             ))
           ) : photos.length === 0 ? (
-            <div className="col-span-2 rounded-2xl border border-white/10 bg-slate-900/40 p-8 text-center text-xs sm:text-sm text-slate-400">
-              <Camera className="mx-auto mb-2.5 h-6 w-6 text-slate-600" />
+            <div className="col-span-2 rounded-2xl border border-stone-200 bg-white p-8 text-center text-xs sm:text-sm text-stone-500 dark:border-white/10 dark:bg-slate-900/40 dark:text-slate-400">
+              <Camera className="mx-auto mb-2.5 h-6 w-6 text-stone-400 dark:text-slate-600" />
               No live stage photos uploaded yet.
             </div>
           ) : (
@@ -177,7 +177,7 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
           <div className="mt-8 sm:mt-10 flex justify-center">
             <Link
               href="/gallery"
-              className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 shadow-lg transition hover:bg-amber-300 hover:shadow-amber-400/20"
+              className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-400 px-5 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-950 shadow-md transition hover:bg-amber-300 hover:shadow-amber-400/20"
             >
               <Camera className="h-4 w-4" />
               View All Photos
@@ -192,11 +192,11 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/60 p-4 backdrop-blur-md dark:bg-slate-950/90"
           onClick={() => setSelectedPhoto(null)}
         >
           <div
-            className="relative flex max-h-[90vh] max-w-xl flex-col items-center overflow-hidden rounded-2xl border border-amber-400/30 bg-slate-900 p-2 sm:p-3 shadow-2xl"
+            className="relative flex max-h-[90vh] max-w-xl flex-col items-center overflow-hidden rounded-2xl border border-amber-500/30 bg-white p-2 sm:p-3 shadow-2xl dark:border-amber-400/30 dark:bg-slate-900"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
@@ -204,13 +204,13 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
               type="button"
               onClick={() => setSelectedPhoto(null)}
               aria-label="Close photo"
-              className="absolute right-4 top-4 z-10 rounded-lg border border-white/10 bg-slate-950/80 p-1.5 text-slate-400 transition hover:border-amber-400/30 hover:text-white"
+              className="absolute right-4 top-4 z-10 rounded-lg border border-stone-200 bg-white/90 p-1.5 text-stone-600 transition hover:border-amber-500 hover:text-stone-900 dark:border-white/10 dark:bg-slate-950/80 dark:text-slate-400 dark:hover:border-amber-400/30 dark:hover:text-white"
             >
               <X className="h-4 w-4" />
             </button>
 
             {/* Photo in 3:4 portrait */}
-            <div className="relative aspect-[3/4] h-[75vh] max-h-[640px] w-auto overflow-hidden rounded-xl bg-slate-950">
+            <div className="relative aspect-[3/4] h-[75vh] max-h-[640px] w-auto overflow-hidden rounded-xl bg-stone-100 dark:bg-slate-950">
               <Image
                 src={selectedPhoto.imageUrl}
                 alt="DJ CANKZ Stage Performance Full"
