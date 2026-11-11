@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Activity,
-  ArrowLeft,
   Camera,
   Check,
   ChevronDown,
@@ -170,13 +169,16 @@ interface StagePhotoItem {
   created_at?: string;
 }
 
+function generateUploadFileName(ext: string, prefix?: string) {
+  const head = prefix ? `${prefix}-` : '';
+  return `${head}${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
+}
+
 export default function AdminPage() {
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [activeTab, setActiveTab] = useState<Tab>('songs');
-  const [loading, setLoading] = useState(true);
   const [notice, setNotice] = useState<string | null>(null);
-  const [, startTransition] = useTransition();
 
   // Data states
   const [songs, setSongs] = useState<EditedSong[]>([]);
@@ -301,8 +303,7 @@ export default function AdminPage() {
     setTimeout(() => setNotice(null), 3000);
   };
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = useCallback(async () => {
     const [sRes, mRes, vRes, gRes, setRes, pRes] = await Promise.all([
       supabase.from('edited_songs').select('*').order('sort_order', { ascending: true }),
       supabase.from('mixtapes').select('*').order('sort_order', { ascending: true }),
@@ -318,12 +319,13 @@ export default function AdminPage() {
     if (gRes.data) setGenres(gRes.data);
     if (setRes.data) setSettings(setRes.data);
     if (pRes.data) setPhotos(pRes.data);
-    setLoading(false);
-  };
+  }, [supabase]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    queueMicrotask(() => {
+      void fetchData();
+    });
+  }, [fetchData]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -750,7 +752,7 @@ export default function AdminPage() {
 
     try {
       const { blob, ext, contentType } = await compressImageForWeb(file);
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`;
+      const fileName = generateUploadFileName(ext);
 
       const { error: uploadError } = await supabase.storage
         .from('stage-photos')
@@ -785,7 +787,7 @@ export default function AdminPage() {
 
     try {
       const { blob, ext, contentType } = await compressImageForWeb(file);
-      const fileName = `hero-${Date.now()}-${Math.random().toString(36).substring(2, 6)}.${ext}`;
+      const fileName = generateUploadFileName(ext, 'hero');
 
       const { error: uploadError } = await supabase.storage
         .from('stage-photos')
@@ -1075,7 +1077,7 @@ export default function AdminPage() {
             {/* Add New Song Card */}
             <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
               <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                <Plus className="h-4 w-4 text-amber-300" /> Add New Edited Track
+                <Plus className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Add New Edited Track
               </h2>
               <form onSubmit={handleAddSong} className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
@@ -1179,7 +1181,7 @@ export default function AdminPage() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="truncate text-sm font-bold text-stone-900 dark:text-white">{song.title}</span>
-                          <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold text-amber-200 shrink-0">
+                          <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-200 shrink-0">
                             {song.genre}
                           </span>
                         </div>
@@ -1218,7 +1220,7 @@ export default function AdminPage() {
             {/* Add New Mixtape */}
             <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
               <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                <Plus className="h-4 w-4 text-amber-300" /> Add YouTube Mixtape
+                <Plus className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Add YouTube Mixtape
               </h2>
               <form onSubmit={handleAddMixtape} className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 <div className="sm:col-span-2">
@@ -1336,7 +1338,7 @@ export default function AdminPage() {
           <div className="space-y-6 sm:space-y-8">
             <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
               <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                <Plus className="h-4 w-4 text-amber-300" /> Add Venue / Gig
+                <Plus className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Add Venue / Gig
               </h2>
               <form onSubmit={handleAddVenue} className="grid grid-cols-1 gap-3.5 sm:grid-cols-3">
                 <div>
@@ -1450,7 +1452,7 @@ export default function AdminPage() {
           <div className="space-y-6 sm:space-y-8">
             <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
               <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                <Plus className="h-4 w-4 text-amber-300" /> Add New Genre
+                <Plus className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Add New Genre
               </h2>
               <form onSubmit={handleAddGenre} className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 <div>
@@ -1554,7 +1556,7 @@ export default function AdminPage() {
           <div className="space-y-6 sm:space-y-8">
             <div className="glass-panel rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
               <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                <Plus className="h-4 w-4 text-amber-300" /> Add Stage Photo
+                <Plus className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Add Stage Photo
               </h2>
               <form onSubmit={handleAddPhoto} className="space-y-4">
                 <div>
@@ -1632,7 +1634,7 @@ export default function AdminPage() {
               </div>
 
               {photos.length === 0 ? (
-                <div className="rounded-2xl border border-white/10 bg-slate-900/40 p-8 text-center text-xs sm:text-sm text-slate-400">
+                <div className="rounded-2xl border border-stone-200 bg-white p-8 text-center text-xs sm:text-sm text-stone-500 dark:border-white/10 dark:bg-slate-900/40 dark:text-slate-400">
                   No photos in gallery yet. Add your first photo above!
                 </div>
               ) : (
@@ -1713,7 +1715,7 @@ export default function AdminPage() {
         {activeTab === 'settings' && (
           <div className="glass-panel max-w-2xl rounded-2xl border border-stone-200/90 bg-white/90 p-5 sm:p-6 shadow-sm dark:border-amber-400/25 dark:bg-slate-900/60 dark:shadow-xl">
             <h2 className="mb-4 text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-              <FolderArchive className="h-4 w-4 text-amber-300" /> Hero Photo, Contact &amp; Asset Settings
+              <FolderArchive className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Hero Photo, Contact &amp; Asset Settings
             </h2>
             <form onSubmit={handleSaveSettings} className="space-y-4">
               {/* Hero / About DJ Profile Photo */}
@@ -1723,16 +1725,18 @@ export default function AdminPage() {
                 </label>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                   <div className="relative aspect-[4/5] h-28 w-auto shrink-0 overflow-hidden rounded-xl border border-stone-200 bg-stone-100 shadow-sm dark:border-white/10 dark:bg-slate-950 dark:shadow-md">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     {settings.hero_image_url ? (
-                      <img
-                        src={settings.hero_image_url}
-                        alt="Hero preview"
-                        className="h-full w-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="125" viewBox="0 0 100 125" fill="%231e293b"><rect width="100" height="125"/><text x="50" y="65" fill="%2394a3b8" font-size="10" text-anchor="middle">Broken Image</text></svg>';
-                        }}
-                      />
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={settings.hero_image_url}
+                          alt="Hero preview"
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="125" viewBox="0 0 100 125" fill="%231e293b"><rect width="100" height="125"/><text x="50" y="65" fill="%2394a3b8" font-size="10" text-anchor="middle">Broken Image</text></svg>';
+                          }}
+                        />
+                      </>
                     ) : (
                       <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 p-2 text-center bg-stone-100 text-stone-400 dark:bg-slate-900 dark:text-slate-500">
                         <Camera className="h-5 w-5" />
@@ -1775,7 +1779,7 @@ export default function AdminPage() {
                       onChange={(e) => setSettings({ ...settings, hero_image_url: e.target.value })}
                       className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2 text-xs text-stone-900 placeholder-stone-400 outline-none transition focus:border-amber-500 focus:ring-1 focus:ring-amber-500/40 dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:placeholder-slate-500 dark:focus:border-amber-400/50 dark:focus:ring-0"
                     />
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-stone-500 dark:text-slate-400">
                       Otomatis dikonversi ke WebP &amp; dikompres (~150KB) sebelum upload. Jika dikosongkan, web menggunakan foto bawaan di folder aset.
                     </p>
                   </div>
@@ -1873,7 +1877,7 @@ export default function AdminPage() {
             >
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                  <Pencil className="h-4 w-4 text-amber-300" /> Edit Track
+                  <Pencil className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Edit Track
                 </h3>
                 <button
                   type="button"
@@ -1975,7 +1979,7 @@ export default function AdminPage() {
             >
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                  <Pencil className="h-4 w-4 text-amber-300" /> Edit YouTube Mixtape
+                  <Pencil className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Edit YouTube Mixtape
                 </h3>
                 <button
                   type="button"
@@ -2053,7 +2057,7 @@ export default function AdminPage() {
             >
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                  <Pencil className="h-4 w-4 text-amber-300" /> Edit Venue
+                  <Pencil className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Edit Venue
                 </h3>
                 <button
                   type="button"
@@ -2129,7 +2133,7 @@ export default function AdminPage() {
             >
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2 dark:text-white">
-                  <Pencil className="h-4 w-4 text-amber-300" /> Edit Genre
+                  <Pencil className="h-4 w-4 text-amber-600 dark:text-amber-300" /> Edit Genre
                 </h3>
                 <button
                   type="button"

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { THEME_INIT_SCRIPT } from "@/src/lib/theme.mjs";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -130,7 +131,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script
           id="cankz-theme-init"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem('cankz_theme');var p=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p)){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}})();`,
+            __html: THEME_INIT_SCRIPT,
           }}
         />
         <script

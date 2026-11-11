@@ -69,7 +69,6 @@ export default function StageArchive({ isPage = false, initialPhotos = [] }: Sta
 
   useEffect(() => {
     if (initialPhotos.length > 0) {
-      setLoading(false);
       return;
     }
 

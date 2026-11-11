@@ -16,7 +16,9 @@ envContent.split('\n').forEach((line) => {
   }
 });
 
-const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+const supabaseKey =
+  env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, supabaseKey);
 
 async function testFetch() {
   const { data: venues, error: vErr } = await supabase.from('venues').select('*').order('sort_order', { ascending: true });

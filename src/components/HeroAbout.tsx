@@ -12,16 +12,18 @@ export default function HeroAbout() {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
-    // 1. Baca cache client-side
-    try {
-      const cached = localStorage.getItem('cankz_hero_image');
-      if (cached) {
-        setHeroImage(cached);
-        setLoading(false);
+    // 1. Baca cache client-side secara asinkron agar tidak memicu cascading render
+    queueMicrotask(() => {
+      try {
+        const cached = localStorage.getItem('cankz_hero_image');
+        if (cached) {
+          setHeroImage(cached);
+          setLoading(false);
+        }
+      } catch {
+        // Storage unavailable
       }
-    } catch {
-      // Storage unavailable
-    }
+    });
 
     // 2. Fetch data terbaru dari Supabase
     const fetchHero = async () => {
