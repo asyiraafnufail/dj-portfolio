@@ -24,9 +24,10 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
   - **Light Mode (Warm Studio):** Background cream/stone solid hangat (`bg-stone-50`), card putih bersih bertepi halus (`bg-white/90`, `border-stone-200/90`, shadow halus), teks arang kontras tinggi (`text-stone-900`, `text-stone-600`), aksen amber studio tegas (`text-amber-600/700`, `border-amber-500/30`, tombol `bg-amber-400 text-slate-950`).
   - Hindari warna neon mencolok seperti cyan terang, magenta, pink, purple glow, gradient ramai, efek bling, emoji, atau visual yang terasa generatif/AI di kedua tema.
 - **Zero-Flicker & OS Preference Engine Lock:**
-  - Sistem mendeteksi otomatis preferensi OS pengunjung (`prefers-color-scheme: dark`) dan mengingat pilihan manual via `localStorage('cankz_theme')`.
-  - Inisialisasi tema dijalankan via script sinkron inline di dalam `<head>` (`app/layout.tsx`) sebelum first paint browser, meniadakan Flash of Unstyled Content (FOUC).
-  - Sinkronisasi instan antar-komponen/tab browser menggunakan native custom event `cankz-theme-change`, tanpa dependensi eksternal (`next-themes`) demi menjaga web tetap ringan di perangkat low-end.
+  - Sistem mendeteksi otomatis preferensi OS pengunjung (`prefers-color-scheme: dark`) dan mengingat pilihan manual via `localStorage('cankz_theme')` dengan fallback ke preferensi OS untuk nilai invalid/kosong.
+  - Inisialisasi tema dijalankan via script sinkron inline `THEME_INIT_SCRIPT` (single source dari `src/lib/theme.mjs`) di dalam `<head>` (`app/layout.tsx`) sebelum first paint browser, meniadakan Flash of Unstyled Content (FOUC).
+  - Sinkronisasi instan antar-komponen menggunakan `useSyncExternalStore` + native custom event `cankz-theme-change`, serta antar-tab browser via native `storage` event, tanpa dependensi eksternal (`next-themes`) demi menjaga web tetap ringan di perangkat low-end.
+  - Class glassmorphism (`.glass-panel`, `.glass-panel-hover`) di `app/globals.css` wajib dibungkus dalam `@layer components` agar utility border, background, dan hover Tailwind v4 tetap berlaku.
 - **Theme Toggle Button Placement Lock:**
   - Beranda Desktop: tombol toggle (`<ThemeToggle />`) terkunci mutlak di samping kiri tombol CTA "Book Event".
   - Beranda Mobile: tombol toggle diletakkan di bar atas sebelah tombol hamburger menu.
@@ -213,7 +214,8 @@ Buat website landing page *Single Page Application* (SPA) portofolio DJ CANKZ ya
       - Penanganan native format Apple HEIC/HEIF via `createImageBitmap` di Safari dan fallback dinamis `heic2any` di browser non-Safari.
     - **Site Settings & Hero Photo Management:** Pengaturan dinamis link folder Google Drive aset promosi, nomor WhatsApp booking, pesan template WhatsApp, email booking, lokasi artis, serta upload/update foto profil Hero DJ dengan opsi Reset ke Default.
   - **Resilient Fallback Data Fetching:** Komponen publik memuat data lokal instan saat hidrasi agar nol kedip (*zero loading flash*), kemudian melakukan silent sync dengan Supabase cloud.
-  - **Keep-Alive Automation:** GitHub Actions workflow (`.github/workflows/keep-alive-supabase.yml`) melakukan ping terjadwal tiap 3 hari untuk menjaga proyek Supabase tier gratis tetap aktif (*anti-inactivity pause*).
+  - **Supabase API Key Lock (New Publishable Key Support):** Client browser, server, middleware (`src/lib/supabase/`), dan script utilitas (`scripts/`) memprioritaskan `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (`sb_pub_...`) dengan fallback ke `NEXT_PUBLIC_SUPABASE_ANON_KEY` (serta `SUPABASE_SECRET_KEY` pada script seeding).
+  - **Keep-Alive Automation:** GitHub Actions workflow (`.github/workflows/keep-alive-supabase.yml`) melakukan ping terjadwal tiap 3 hari ke REST API Supabase menggunakan header `-H "apikey: ..."` saja (tanpa `Authorization: Bearer` agar kompatibel dengan non-JWT publishable key) dan `curl -fsS` untuk menjaga proyek Supabase tier gratis tetap aktif (*anti-inactivity pause*).
 
 ---
 
